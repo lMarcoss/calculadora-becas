@@ -4,16 +4,16 @@ import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import static edu.calc.becas.common.utils.Constant.*;
 
 @RestController
 @RequestMapping("/cicloescolar")
+@Api(description = "Servicios para consulta de ciclos escolares")
 public class CicloEscolarAPI {
 
     private CicloEscolarService cicloEscolarService;
@@ -25,12 +25,13 @@ public class CicloEscolarAPI {
 
 
     @GetMapping
-    public WrapperData getAll(
-    ) {
-        return cicloEscolarService.getAllByStatus(0, 0, null);
+    @ApiOperation(value = "Obtiene la lista de ciclos escolares")
+    public WrapperData getAll() throws GenericException {
+        return cicloEscolarService.getAll();
     }
 
     @GetMapping("/actual")
+    @ApiOperation(value = "Obtiene el ciclo escolar actual")
     public CicloEscolarVo getCicloEscolarActual() throws GenericException {
         return cicloEscolarService.getCicloEscolarActual();
     }

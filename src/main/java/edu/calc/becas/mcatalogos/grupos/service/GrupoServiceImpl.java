@@ -1,11 +1,28 @@
 package edu.calc.becas.mcatalogos.grupos.service;
 
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.exceptions.GenericException;
+import edu.calc.becas.mcatalogos.CommonMethodToRestTemplate;
 import edu.calc.becas.mcatalogos.grupos.model.Grupo;
+import edu.calc.becas.mcatalogos.grupos.model.GrupoDtoSHorario;
+import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
+import edu.calc.becas.mcatalogos.licenciaturas.service.LicenciaturaService;
+import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
+import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static edu.calc.becas.common.utils.Constant.LICENCIATURA_DEFAULT;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -14,515 +31,98 @@ import java.util.List;
  * Date: 3/26/19
  */
 @Service
-public class GrupoServiceImpl implements GrupoService {
+@Slf4j
+public class GrupoServiceImpl extends CommonMethodToRestTemplate implements GrupoService {
 
+    @Value("${prop.sistema.horarios.api.grupos}")
+    private String pathGrupos;
 
-    @Override
-    public WrapperData getAllByStatus(int page, int pageSize, String status) {
-        return null;
+    private final LicenciaturaService licenciaturaService;
+    private final CicloEscolarService cicloEscolarService;
+
+    public GrupoServiceImpl(RestTemplate restTemplate, MessageApplicationProperty messageApplicationProperty,
+                            LicenciaturaService licenciaturaService, CicloEscolarService cicloEscolarService) {
+        super(restTemplate, messageApplicationProperty);
+        this.licenciaturaService = licenciaturaService;
+        this.cicloEscolarService = cicloEscolarService;
     }
 
     @Override
-    public WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String licenciatura) {
-        WrapperData<Grupo> wrapperData = new WrapperData<>();
+    public WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String licenciatura) throws GenericException {
+        CicloEscolarVo cicloEscolarVo = cicloEscolarService.getCicloEscolarActual();
+        String path = urlSistemaHorarios + pathGrupos + "?periodo=" + cicloEscolarVo.getClave();
+        try {
+            HttpEntity entity = new HttpEntity(headers);
+            HttpEntity<GrupoDtoSHorario[]> response = restTemplate.exchange(path, HttpMethod.GET, entity, GrupoDtoSHorario[].class);
 
+            List<GrupoDtoSHorario> grupoDtoSHorarios = Arrays.asList(response.getBody());
+
+
+            WrapperData<Grupo> wrapperData = new WrapperData<>();
+            List<Grupo> grupos = convertGruposDtoToGrupoList(grupoDtoSHorarios);
+
+
+            if (!licenciatura.equalsIgnoreCase(LICENCIATURA_DEFAULT)) {
+                grupos = filterGroupsByLicenciatura(grupos, licenciatura);
+            }
+            wrapperData.setData(grupos);
+
+            List<Licenciatura> licenciaturas = licenciaturaService.getAll().getData();
+
+            if (!wrapperData.getData().isEmpty()) {
+                // add name career
+                addNameCareerByGroup(grupos, licenciaturas);
+            }
+            wrapperData.setPage(0);
+            wrapperData.setPageSize(grupos.size());
+            wrapperData.setLengthData(grupos.size());
+
+            return wrapperData;
+        } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+            throw new GenericException(e, messageApplicationProperty.getErrorObtenerGrupos());
+        }
+    }
+
+    private void addNameCareerByGroup(List<Grupo> grupos, List<Licenciatura> licenciaturas) {
+        for (Grupo grupo : grupos) {
+            grupo.setNombreLicenciatura(findNameCarrer(licenciaturas, grupo));
+        }
+    }
+
+    private String findNameCarrer(List<Licenciatura> licenciaturas, Grupo grupo) {
+        Licenciatura lic = licenciaturas.stream().filter(licenciatura -> licenciatura.getCveLicenciatura().equalsIgnoreCase(grupo.getCveLicenciatura())).findAny().orElse(null);
+        if (lic != null) {
+            return lic.getNombreLicenciatura();
+        } else {
+            return null;
+        }
+    }
+
+    private List<Grupo> filterGroupsByLicenciatura(List<Grupo> grupos, String licenciatura) {
+        List<Grupo> list = new ArrayList<>();
+        grupos.forEach(grupo -> {
+            if (grupo.getCveLicenciatura().equalsIgnoreCase(licenciatura)) {
+                list.add(grupo);
+            }
+        });
+        return list;
+    }
+
+    private List<Grupo> convertGruposDtoToGrupoList(List<GrupoDtoSHorario> grupoDtoSHorarios) {
         List<Grupo> grupos = new ArrayList<>();
-
-        //todo : por grupo ir por la descripcion de la carrera al que pertenece
-        grupos.add(createGrupo("201",
-                "201",
-                "01B",
-                "1819B"));
-
-        grupos.add(createGrupo(
-                "401",
-                "401",
-                "01B",
-                "1819B"));
-        grupos.add(createGrupo(
-                "601",
-                "601",
-                "01B",
-                "1819B"));
-        grupos.add(createGrupo(
-                "801",
-                "801",
-                "01B",
-                "1819B"));
-        grupos.add(createGrupo(
-                "1001",
-                "1001",
-                "01",
-                "1819B"));
-        grupos.add(createGrupo(
-                "203A",
-                "203A",
-                "03C",
-                "1819B"));
-        grupos.add(createGrupo(
-                "203B",
-                "203B",
-                "03C",
-                "1819B"));
-        grupos.add(createGrupo(
-                "203C",
-                "203C",
-                "03C",
-                "1819B"));
-        grupos.add(createGrupo(
-                "203D",
-                "203D",
-                "03C",
-                "1819B"));
-        grupos.add(createGrupo(
-                "203E",
-                "203E",
-                "03C",
-                "1819B"));
-        grupos.add(createGrupo(
-                "203F",
-                "203F",
-                "03C",
-                "1819B"));
-        grupos.add(createGrupo(
-                "203G",
-                "203G",
-                "03C",
-                "1819B"));
-        grupos.add(createGrupo(
-                "203H",
-                "203H",
-                "03C",
-                "1819B"));
-        grupos.add(createGrupo(
-                "403A",
-                "403A",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "403B",
-                "403B",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "403C",
-                "403C",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "403D",
-                "403D",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "403E",
-                "403E",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "403F",
-                "403F",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "403G",
-                "403G",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "603A",
-                "603A",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "603B",
-                "603B",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "603C",
-                "603C",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "603D",
-                "603D",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "603E",
-                "603E",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "803A",
-                "803A",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "803B",
-                "803B",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "803C",
-                "803C",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "803D",
-                "803D",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "803E",
-                "803E",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "1003A",
-                "1003A",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "1003B",
-                "1003B",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "1003C",
-                "1003C",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "1003D",
-                "1003D",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "1003E",
-                "1003E",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "204A",
-                "204A",
-                "04B",
-                "1819B"));
-        grupos.add(createGrupo(
-                "204B",
-                "204B",
-                "04B",
-                "1819B"));
-        grupos.add(createGrupo(
-                "204C",
-                "204C",
-                "04B",
-                "1819B"));
-        grupos.add(createGrupo(
-                "404A",
-                "404A",
-                "04B",
-                "1819B"));
-        grupos.add(createGrupo(
-                "404B",
-                "404B",
-                "04",
-                "1819B"));
-        grupos.add(createGrupo(
-                "604",
-                "604",
-                "04",
-                "1819B"));
-        grupos.add(createGrupo(
-                "804",
-                "804",
-                "04",
-                "1819B"));
-        grupos.add(createGrupo(
-                "1004",
-                "1004",
-                "04",
-                "1819B"));
-        grupos.add(createGrupo(
-                "205A",
-                "205A",
-                "05",
-                "1819B"));
-        grupos.add(createGrupo(
-                "205B",
-                "205B",
-                "05",
-                "1819B"));
-        grupos.add(createGrupo(
-                "405",
-                "405",
-                "05",
-                "1819B"));
-        grupos.add(createGrupo(
-                "605",
-                "605",
-                "05",
-                "1819B"));
-        grupos.add(createGrupo(
-                "805",
-                "805",
-                "05",
-                "1819B"));
-        grupos.add(createGrupo(
-                "1005",
-                "1005",
-                "05",
-                "1819B"));
-        grupos.add(createGrupo(
-                "206A",
-                "206A",
-                "06",
-                "1819B"));
-        grupos.add(createGrupo(
-                "206B",
-                "206B",
-                "06",
-                "1819B"));
-        grupos.add(createGrupo(
-                "406",
-                "406",
-                "06",
-                "1819B"));
-        grupos.add(createGrupo(
-                "606",
-                "606",
-                "06",
-                "1819B"));
-        grupos.add(createGrupo(
-                "806",
-                "806",
-                "06",
-                "1819B"));
-        grupos.add(createGrupo(
-                "1006",
-                "1006",
-                "06",
-                "1819B"));
-        grupos.add(createGrupo(
-                "207A",
-                "207A",
-                "07B",
-                "1819B"));
-        grupos.add(createGrupo(
-                "207B",
-                "207B",
-                "07B",
-                "1819B"));
-        grupos.add(createGrupo(
-                "607A",
-                "607A",
-                "07",
-                "1819B"));
-        grupos.add(createGrupo(
-                "607B",
-                "607B",
-                "07",
-                "1819B"));
-        grupos.add(createGrupo(
-                "807A",
-                "807A",
-                "07",
-                "1819B"));
-        grupos.add(createGrupo(
-                "807B",
-                "807B",
-                "07",
-                "1819B"));
-        grupos.add(createGrupo(
-                "1007",
-                "1007",
-                "07",
-                "1819B"));
-        grupos.add(createGrupo(
-                "213A",
-                "213A",
-                "14",
-                "1819B"));
-        grupos.add(createGrupo(
-                "213B",
-                "213B",
-                "14",
-                "1819B"));
-        grupos.add(createGrupo(
-                "213C",
-                "213C",
-                "14",
-                "1819B"));
-        grupos.add(createGrupo(
-                "413A",
-                "413A",
-                "14",
-                "1819B"));
-        grupos.add(createGrupo(
-                "413B",
-                "413B",
-                "14",
-                "1819B"));
-        grupos.add(createGrupo(
-                "214A",
-                "214A",
-                "15",
-                "1819B"));
-        grupos.add(createGrupo(
-                "214B",
-                "214B",
-                "15",
-                "1819B"));
-        grupos.add(createGrupo(
-                "214C",
-                "214C",
-                "15",
-                "1819B"));
-        grupos.add(createGrupo(
-                "214D",
-                "214D",
-                "15",
-                "1819B"));
-        grupos.add(createGrupo(
-                "214E",
-                "214E",
-                "15",
-                "1819B"));
-        grupos.add(createGrupo(
-                "214F",
-                "214F",
-                "15",
-                "1819B"));
-        grupos.add(createGrupo(
-                "214G",
-                "214G",
-                "15",
-                "1819B"));
-        grupos.add(createGrupo(
-                "214H",
-                "214H",
-                "15",
-                "1819B"));
-        grupos.add(createGrupo(
-                "407",
-                "407",
-                "07B",
-                "1819B"));
-        grupos.add(createGrupo(
-                "208",
-                "208",
-                "08",
-                "1819B"));
-        grupos.add(createGrupo(
-                "408",
-                "408",
-                "08",
-                "1819B"));
-        grupos.add(createGrupo(
-                "209",
-                "209",
-                "09",
-                "1819B"));
-        grupos.add(createGrupo(
-                "409",
-                "409",
-                "09",
-                "1819B"));
-        grupos.add(createGrupo(
-                "210",
-                "210",
-                "10",
-                "1819B"));
-        grupos.add(createGrupo(
-                "410",
-                "410",
-                "10",
-                "1819B"));
-        grupos.add(createGrupo(
-                "213D",
-                "213D",
-                "14",
-                "1819B"));
-        grupos.add(createGrupo(
-                "611",
-                "611",
-                "11",
-                "1819B"));
-        grupos.add(createGrupo(
-                "212A",
-                "212A",
-                "12",
-                "1819B"));
-        grupos.add(createGrupo(
-                "212C",
-                "212C",
-                "12",
-                "1819B"));
-        grupos.add(createGrupo(
-                "212D",
-                "212D",
-                "12",
-                "1819B"));
-        grupos.add(createGrupo(
-                "212E",
-                "212E",
-                "12",
-                "1819B"));
-        grupos.add(createGrupo(
-                "212B",
-                "212B",
-                "12",
-                "1819B"));
-        grupos.add(createGrupo(
-                "212F",
-                "212F",
-                "12",
-                "1819B"));
-        grupos.add(createGrupo(
-                "212G",
-                "212G",
-                "12",
-                "1819B"));
-        grupos.add(createGrupo(
-                "203I",
-                "203I",
-                "03",
-                "1819B"));
-        grupos.add(createGrupo(
-                "212H",
-                "212H",
-                "12",
-                "1819B"));
-        grupos.add(createGrupo(
-                "212I",
-                "212I",
-                "12",
-                "1819B"));
-
-        wrapperData.setData(grupos);
-        wrapperData.setPage(0);
-        wrapperData.setPageSize(grupos.size());
-        wrapperData.setLengthData(grupos.size());
-        return wrapperData;
+        grupoDtoSHorarios.forEach(grupoDtoSHorario -> {
+            grupos.add(createGrupo(grupoDtoSHorario));
+        });
+        return grupos;
     }
 
-    private Grupo createGrupo(String cveGrupo, String nombreGrupo, String carrera, String periodo) {
+    private Grupo createGrupo(GrupoDtoSHorario grupoDtoSHorario) {
         Grupo grupo = new Grupo();
-        grupo.setCveGrupo(cveGrupo);
-        grupo.setNombreGrupo(nombreGrupo);
-        grupo.setCveLicenciatura(carrera);
-        grupo.setCvePeriodo(periodo);
+        grupo.setCveGrupo(grupoDtoSHorario.getClave());
+        grupo.setNombreGrupo(grupoDtoSHorario.getNombre());
+        grupo.setCveLicenciatura(grupoDtoSHorario.getCarrera());
+        grupo.setCvePeriodo(grupoDtoSHorario.getPeriodo());
         return grupo;
-    }
-
-    @Override
-    public Grupo add(Grupo grupo) {
-        return null;
-    }
-
-    @Override
-    public Grupo update(Grupo grupo) {
-        return null;
     }
 }

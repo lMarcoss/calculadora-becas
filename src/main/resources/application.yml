@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-      context-path: /calc-becas
+    context-path: /calc-becas
 spring:
   datasource:
     url: jdbc:mysql://${HOST_NAME:127.0.0.1}:${BD_PORT:3311}/${BD_NAME:calcbecabd}?useSSL=false
@@ -12,9 +12,21 @@ key:
   encode:
     crypto: $#u1!N51*5M412&
 location:
-  file: /Users/vampiro/workspace-leo/ServicioSocial/files-dev/
+  file: /Users/lmarcoss/workspace-leo/servicio-social/file-dev/
 
 prop:
+  sistema:
+    horarios:
+      url: https://json-horarios.herokuapp.com/horarios/api
+      api:
+        carreras:
+          vigentes: /carreras/vigentes
+          detallecarrera: /carreras/detalle-carrera
+        grupos: /grupos
+        periodo:
+          actual: /periodo/actual
+          lista: /periodo/lista
+
   carga:
     hrs:
       biblioteca:

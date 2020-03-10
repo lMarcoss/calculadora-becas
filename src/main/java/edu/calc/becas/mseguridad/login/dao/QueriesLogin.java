@@ -1,4 +1,4 @@
-package edu.calc.becas.mconfiguracion.login.dao;
+package edu.calc.becas.mseguridad.login.dao;
 
 public class QueriesLogin {
 
@@ -6,5 +6,5 @@ public class QueriesLogin {
     "WHERE USERNAME = ?\n" +
     "UNION\n" +
     "SELECT ID_ALUMNO,NOMBRES, APE_PATERNO, APE_MATERNO, '3' ID_ROL, 'ALUMNO' ROL, MATRICULA as USERNAME FROM ALUMNOS AL\n" +
-    "WHERE MATRICULA = ?";
+    "WHERE MATRICULA = ? and ESTATUS = 'S'";
 }

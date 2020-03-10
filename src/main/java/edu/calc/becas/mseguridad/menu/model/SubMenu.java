@@ -1,4 +1,4 @@
-package edu.calc.becas.mconfiguracion.menu.model;
+package edu.calc.becas.mseguridad.menu.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,13 +11,10 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Menu {
-    private int idMenu;
-    private int idPadre;
+public class SubMenu {
     private String nombre;
-    private boolean isCollapsed;
-    private String icon;
     private String url;
-    private List<Menu> childs;
-
+    private String path;
+    private String outlet;
+    private List<String> permisos;
 }

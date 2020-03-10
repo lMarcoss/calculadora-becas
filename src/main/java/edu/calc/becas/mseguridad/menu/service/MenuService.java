@@ -1,7 +1,7 @@
-package edu.calc.becas.mconfiguracion.menu.service;
+package edu.calc.becas.mseguridad.menu.service;
 
 import edu.calc.becas.exceptions.GenericException;
-import edu.calc.becas.mconfiguracion.menu.model.Menu;
+import edu.calc.becas.mseguridad.menu.model.Menu;
 
 import java.util.List;
 
