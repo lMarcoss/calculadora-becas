@@ -3,11 +3,13 @@ package edu.calc.becas.mconfiguracion.cicloescolar.service;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mcatalogos.CommonMethodToRestTemplate;
+import edu.calc.becas.mconfiguracion.cicloescolar.dao.CicloEscolarDao;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.PeriodoDtoSHorario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -29,8 +31,12 @@ public class CicloEscolarServiceImpl extends CommonMethodToRestTemplate implemen
     @Value("${prop.sistema.horarios.api.periodo.lista}")
     private String pathPeriodoLista;
 
-    public CicloEscolarServiceImpl(RestTemplate restTemplate, MessageApplicationProperty messageApplicationProperty) {
+    private final CicloEscolarDao cicloEscolarDao;
+
+    public CicloEscolarServiceImpl(RestTemplate restTemplate, MessageApplicationProperty messageApplicationProperty,
+                                   CicloEscolarDao cicloEscolarDao) {
         super(restTemplate, messageApplicationProperty);
+        this.cicloEscolarDao = cicloEscolarDao;
     }
 
     @Override
@@ -53,7 +59,8 @@ public class CicloEscolarServiceImpl extends CommonMethodToRestTemplate implemen
 
     @Override
     public WrapperData getAll() throws GenericException {
-        String path = urlSistemaHorarios + pathPeriodoLista;
+        return cicloEscolarDao.getAll();
+        /*String path = urlSistemaHorarios + pathPeriodoLista;
         try {
             HttpEntity entity = new HttpEntity(headers);
             HttpEntity<PeriodoDtoSHorario[]> response = restTemplate.exchange(path, HttpMethod.GET, entity, PeriodoDtoSHorario[].class);
@@ -71,7 +78,7 @@ public class CicloEscolarServiceImpl extends CommonMethodToRestTemplate implemen
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
             throw new GenericException(e, messageApplicationProperty.getErrorObtenerPeriodoActual());
-        }
+        }*/
     }
 
     private List<CicloEscolarVo> convertPeriodosDtoToCicloEscolarList(List<PeriodoDtoSHorario> periodosDto) {
