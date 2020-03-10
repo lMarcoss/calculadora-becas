@@ -78,6 +78,8 @@ public class AlumnoActividadDaoImpl extends BaseDao implements AlumnoActividadDa
         actividadVo.setNombre(rs.getString("NOMBRES"));
         actividadVo.setAPaterno(rs.getString("APE_PATERNO"));
         actividadVo.setAMaterno(rs.getString("APE_MATERNO"));
+        actividadVo.setHorario(rs.getString("HORARIO"));
+        actividadVo.setGrupo(rs.getString("DESC_GRUPO"));
         return actividadVo;
     }
 }

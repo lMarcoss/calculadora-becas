@@ -16,6 +16,9 @@ public class ActividadesAlumnos extends CommonData {
   private String nombre;
   private String aPaterno;
   private String aMaterno;
+  private String horario;
+  private String grupo;
+
 
   public ActividadesAlumnos(){
 

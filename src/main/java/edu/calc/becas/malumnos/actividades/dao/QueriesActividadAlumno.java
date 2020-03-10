@@ -23,7 +23,9 @@ final class QueriesActividadAlumno {
       "       ALM.MATRICULA,\n" +
       "       ALM.NOMBRES,\n" +
       "       ALM.APE_PATERNO,\n" +
-      "       ALM.APE_MATERNO\n" +
+      "       ALM.APE_MATERNO,\n" +
+      "       Concat ( AC.HORA,':',AC.AM_PM) HORARIO, " +
+      "       AL.DESC_GRUPO " +
       "FROM ALUMNOS ALM, HORARIO_ACTIVIDAD AC, ACTIVIDAD_ALUMNO CAL, ALUMNOS_DAT_PERIODO AL, ACTIVIDADES AT\n" +
       "WHERE\n" +
       "AC.ID_HORARIO_ACTIVIDAD = CAL.ID_HORARIO_ACTIVIDAD\n" +

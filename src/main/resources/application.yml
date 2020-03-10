@@ -35,3 +35,14 @@ prop:
         asistencia:
           asistencia: .
           falta: /
+    alumnos:
+      alumnos:
+        id: 1
+        posicion:
+          matricula: 0
+          curp: 1
+          apePaterno: 2
+          apeMaterno: 3
+          nombres: 4
+          celda:
+            final: 5
