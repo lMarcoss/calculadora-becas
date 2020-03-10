@@ -1,6 +1,7 @@
 package edu.calc.becas.common.service;
 
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.exceptions.GenericException;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -14,7 +15,7 @@ public interface CrudGenericService<T> {
     WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String param1);
 
 
-    T add(T t);
+    T add(T t) throws GenericException;
 
     T update(T t);
 }

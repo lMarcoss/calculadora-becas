@@ -1,6 +1,7 @@
 package edu.calc.becas.malumnos.service;
 
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.dao.AlumnosDao;
 import edu.calc.becas.malumnos.model.Alumno;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class AlumnosServiceImpl implements AlumnosService {
     }
 
     @Override
-    public Alumno add(Alumno alumno) {
+    public Alumno add(Alumno alumno) throws GenericException {
         return alumnosDao.add(alumno);
     }
 

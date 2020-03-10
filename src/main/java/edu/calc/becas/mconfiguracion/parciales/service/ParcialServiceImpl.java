@@ -1,6 +1,7 @@
 package edu.calc.becas.mconfiguracion.parciales.service;
 
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mconfiguracion.parciales.dao.ParcialDao;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class ParcialServiceImpl implements ParcialService {
     }
 
     @Override
-    public Parcial add(Parcial parcial) {
+    public Parcial add(Parcial parcial) throws GenericException {
         return parcialDao.add(parcial);
     }
 

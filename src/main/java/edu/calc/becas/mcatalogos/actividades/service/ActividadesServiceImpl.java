@@ -2,6 +2,7 @@ package edu.calc.becas.mcatalogos.actividades.service;
 
 import edu.calc.becas.common.model.LabelValueData;
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mcatalogos.actividades.dao.ActividadesDao;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.actividades.model.DetalleActividadVo;
@@ -30,7 +31,7 @@ public class ActividadesServiceImpl implements ActividadesService{
     }
 
     @Override
-    public ActividadVo add(ActividadVo actividad) {
+    public ActividadVo add(ActividadVo actividad) throws GenericException {
         return actividadesDao.add(actividad);
     }
 

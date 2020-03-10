@@ -1,6 +1,7 @@
 package edu.calc.becas.common.base.dao;
 
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.exceptions.GenericException;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -13,7 +14,7 @@ public interface CrudGenericDao<T> {
 
     WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String param1);
 
-    T add(T object);
+    T add(T object) throws GenericException;
 
     T update(T object);
 }

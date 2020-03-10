@@ -31,15 +31,16 @@ public class Usuario extends CommonData implements Serializable {
     @ApiModelProperty(value = "Apellido materno del usuario")
     private String apeMaterno;
 
-    @ApiModelProperty(value = "Tipo de usuario: Rol", required = true)
-    private String tipoUsuario;
-
+    @ApiModelProperty(value = "Rol del usuario")
     private Rol rol;
 
     @ApiModelProperty(value = "correo del usuario para sesión", required = true)
     private String username;
     @ApiModelProperty("Contraseña del usuario")
     private String password;
+
+    @ApiModelProperty("Días de tolerania para reporte de asistencias")
+    private int diasRetrocesoReporte;
 
     public Usuario(String estatus) {
         super(estatus);

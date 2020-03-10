@@ -42,7 +42,6 @@ public class LoginAPIDaoImpl extends BaseDao implements LoginAPIDao {
         usuario.setNombres(rs.getString("NOMBRES"));
         usuario.setApePaterno(rs.getString("APE_PATERNO"));
         usuario.setApeMaterno(rs.getString("APE_MATERNO"));
-        usuario.setTipoUsuario(rs.getString("ID_ROL"));
         usuario.setUsername(rs.getString("USERNAME"));
         rol.setIdRol(rs.getInt("ID_ROL"));
         rol.setNombre(rs.getString("ROL"));
