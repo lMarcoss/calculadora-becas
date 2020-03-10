@@ -1,16 +1,14 @@
-package edu.calc.becas.mconfiguracion.menu.api;
+package edu.calc.becas.mseguridad.menu.api;
 
 import edu.calc.becas.exceptions.GenericException;
-import edu.calc.becas.mconfiguracion.menu.model.Menu;
-import edu.calc.becas.mconfiguracion.menu.service.MenuService;
+import edu.calc.becas.mseguridad.menu.model.Menu;
+import edu.calc.becas.mseguridad.menu.service.MenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static edu.calc.becas.common.utils.Constant.DEFAULT_PAGE;
 
 @RestController
 @RequestMapping("/menu")

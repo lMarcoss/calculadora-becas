@@ -1,7 +1,7 @@
-package edu.calc.becas.mconfiguracion.login.api;
+package edu.calc.becas.mseguridad.login.api;
 
 import edu.calc.becas.exceptions.GenericException;
-import edu.calc.becas.mconfiguracion.login.service.LoginAPIService;
+import edu.calc.becas.mseguridad.login.service.LoginAPIService;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

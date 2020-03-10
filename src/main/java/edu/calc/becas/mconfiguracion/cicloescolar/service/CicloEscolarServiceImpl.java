@@ -2,74 +2,94 @@ package edu.calc.becas.mconfiguracion.cicloescolar.service;
 
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
+import edu.calc.becas.mcatalogos.CommonMethodToRestTemplate;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
+import edu.calc.becas.mconfiguracion.cicloescolar.model.PeriodoDtoSHorario;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class CicloEscolarServiceImpl implements CicloEscolarService {
+@Slf4j
+public class CicloEscolarServiceImpl extends CommonMethodToRestTemplate implements CicloEscolarService {
 
 
-    @Override
-    public WrapperData getAllByStatus(int page, int pageSize, String status) {
-        WrapperData<CicloEscolarVo> wrapperData = new WrapperData<>();
+    @Value("${prop.sistema.horarios.api.periodo.actual}")
+    private String pathPeriodoActual;
 
-        List<CicloEscolarVo> ciclos = new ArrayList<>();
+    @Value("${prop.sistema.horarios.api.periodo.lista}")
+    private String pathPeriodoLista;
 
-        ciclos.add(createCicloEscolar("1213A", "SEM-oct/12-feb/13", "A", "2012-10-04", "2013-02-15"));
-
-        wrapperData.setData(ciclos);
-        wrapperData.setPage(0);
-        wrapperData.setPageSize(ciclos.size());
-        wrapperData.setLengthData(ciclos.size());
-        return wrapperData;
-    }
-
-    private CicloEscolarVo createCicloEscolar(String clave, String nombre, String tipo, String fechaInicio, String fechaFin) {
-        CicloEscolarVo ciclo = new CicloEscolarVo();
-        ciclo.setClave(clave);
-        ciclo.setNombre(nombre);
-        ciclo.setTipo(tipo);
-        ciclo.setFechaInicio(fechaInicio);
-        ciclo.setFechaFin(fechaFin);
-        return ciclo;
-    }
-
-    @Override
-    public WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String param1) {
-        return null;
-    }
-
-    @Override
-    public CicloEscolarVo add(CicloEscolarVo ciclo) {
-        return null;
-    }
-
-    @Override
-    public CicloEscolarVo update(CicloEscolarVo cicloEscolarVo) {
-        return null;
-    }
-
-
-    @Override
-    public CicloEscolarVo getParcialActual() throws Exception {
-        WrapperData<CicloEscolarVo> ciclos = this.getAllByStatus(0, 0, null);
-        if (ciclos != null && ciclos.getData() != null && !ciclos.getData().isEmpty()) {
-            return ciclos.getData().get(0);
-        }
-        throw new Exception("No hay datos de periodo escolar actual");
+    public CicloEscolarServiceImpl(RestTemplate restTemplate, MessageApplicationProperty messageApplicationProperty) {
+        super(restTemplate, messageApplicationProperty);
     }
 
     @Override
     public CicloEscolarVo getCicloEscolarActual() throws GenericException {
+
+        String path = urlSistemaHorarios + pathPeriodoActual;
         try {
-            return createCicloEscolar("1213A", "SEM-MAR/19-JUN/19", "B", "2019-03-04", "2019-07-28");
+            HttpEntity entity = new HttpEntity(headers);
+            HttpEntity<PeriodoDtoSHorario> response = restTemplate.exchange(path, HttpMethod.GET, entity, PeriodoDtoSHorario.class);
+
+            PeriodoDtoSHorario periodoDtoSHorario = response.getBody();
+
+            return convertPeriodoDtoToCicloEscolar(periodoDtoSHorario);
         } catch (Exception e) {
-            throw new GenericException("Ciclo escolar no encontrado o el servicio de recuperación falló");
+            log.error(ExceptionUtils.getStackTrace(e));
+            throw new GenericException(e, messageApplicationProperty.getErrorObtenerPeriodoActual());
         }
 
+    }
+
+    @Override
+    public WrapperData getAll() throws GenericException {
+        String path = urlSistemaHorarios + pathPeriodoLista;
+        try {
+            HttpEntity entity = new HttpEntity(headers);
+            HttpEntity<PeriodoDtoSHorario[]> response = restTemplate.exchange(path, HttpMethod.GET, entity, PeriodoDtoSHorario[].class);
+
+            List<PeriodoDtoSHorario> periodosDto = Arrays.asList(response.getBody());
+
+
+            WrapperData<CicloEscolarVo> wrapperData = new WrapperData<>();
+            List<CicloEscolarVo> ciclos = convertPeriodosDtoToCicloEscolarList(periodosDto);
+            wrapperData.setPage(0);
+            wrapperData.setPageSize(ciclos.size());
+            wrapperData.setLengthData(ciclos.size());
+            wrapperData.setData(ciclos);
+            return wrapperData;
+        } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+            throw new GenericException(e, messageApplicationProperty.getErrorObtenerPeriodoActual());
+        }
+    }
+
+    private List<CicloEscolarVo> convertPeriodosDtoToCicloEscolarList(List<PeriodoDtoSHorario> periodosDto) {
+        List<CicloEscolarVo> list = new ArrayList<>();
+        periodosDto.forEach(periodoDtoSHorario -> {
+            list.add(convertPeriodoDtoToCicloEscolar(periodoDtoSHorario));
+        });
+        return list;
+    }
+
+    private CicloEscolarVo convertPeriodoDtoToCicloEscolar(PeriodoDtoSHorario periodoDtoSHorario) {
+        CicloEscolarVo cicloEscolarVo = new CicloEscolarVo();
+        cicloEscolarVo.setClave(periodoDtoSHorario.getClave());
+        cicloEscolarVo.setNombre(periodoDtoSHorario.getNombre());
+        cicloEscolarVo.setTipo(periodoDtoSHorario.getTipo());
+        cicloEscolarVo.setFechaInicio(periodoDtoSHorario.getFinicio());
+        cicloEscolarVo.setFechaFin(periodoDtoSHorario.getFfin());
+        return cicloEscolarVo;
     }
 
 }

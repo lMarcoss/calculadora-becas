@@ -1,6 +1,7 @@
 package edu.calc.becas.mseguridad.usuarios.service;
 
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mseguridad.usuarios.dao.UsuarioDao;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Usuario add(Usuario usuario) {
+    public Usuario add(Usuario usuario) throws GenericException {
         return this.usuarioDao.add(usuario);
     }
 

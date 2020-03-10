@@ -2,7 +2,12 @@ package edu.calc.becas.mseguridad.usuarios.dao;
 
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.exceptions.GenericException;
+import edu.calc.becas.mseguridad.rolesypermisos.model.Rol;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -21,6 +26,7 @@ import static edu.calc.becas.mseguridad.usuarios.dao.QueriesUsuario.*;
  * Date: 4/14/19
  */
 @Repository
+@Slf4j
 public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
 
     private final String secretKeyStart = "4^%m@=C*&c#L+%";
@@ -63,24 +69,36 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
     }
 
     @Override
-    public Usuario add(Usuario usuario) {
-        this.jdbcTemplate.update(QRY_ADD,
-                usuario.getNombres().trim(), usuario.getApePaterno().trim(), usuario.getApeMaterno().trim(),
-                usuario.getTipoUsuario().trim(), usuario.getUsername().trim(),
-                secretKeyStart, usuario.getPassword(), secretKeyEnd,
-                usuario.getEstatus().trim(), usuario.getAgregadoPor().trim());
-        return usuario;
+    public Usuario add(Usuario usuario) throws GenericException {
+        try {
+            this.jdbcTemplate.update(QRY_ADD,
+                    usuario.getNombres().trim(), usuario.getApePaterno().trim(), usuario.getApeMaterno().trim(),
+                    usuario.getRol().getIdRol(), usuario.getUsername().trim(),
+                    secretKeyStart, usuario.getPassword(), secretKeyEnd,
+                    usuario.getDiasRetrocesoReporte(),usuario.getEstatus().trim(), usuario.getAgregadoPor().trim());
+            return usuario;
+        }catch (DuplicateKeyException d){
+            log.error(ExceptionUtils.getStackTrace(d));
+            throw new GenericException("Usuario duplicado con el correo " + usuario.getUsername());
+        }catch (Exception e){
+            log.error(ExceptionUtils.getStackTrace(e));
+            throw new GenericException(ExceptionUtils.getStackTrace(e));
+        }
     }
 
     @Override
     public Usuario update(Usuario usuario) {
         String password = usuario.getPassword();
         if (password != null && !password.equalsIgnoreCase("")) {
-            this.jdbcTemplate.update(QRY_UPDATE_WITH_PASSWORD, usuario.getNombres().trim(), usuario.getApePaterno().trim(), usuario.getApeMaterno().trim(),
-                    usuario.getTipoUsuario().trim(), usuario.getUsername().trim(), secretKeyStart, usuario.getPassword(), secretKeyEnd, usuario.getEstatus().trim(), usuario.getActualizadoPor().trim());
+            this.jdbcTemplate.update(QRY_UPDATE_WITH_PASSWORD, usuario.getNombres().trim(), usuario.getApePaterno().trim(),
+                    usuario.getApeMaterno().trim(), usuario.getRol().getIdRol(), usuario.getUsername().trim(),
+                    secretKeyStart, usuario.getPassword(), secretKeyEnd, usuario.getDiasRetrocesoReporte(),
+                    usuario.getEstatus().trim(), usuario.getActualizadoPor().trim());
         } else {
-            this.jdbcTemplate.update(QRY_UPDATE, usuario.getNombres().trim(), usuario.getApePaterno().trim(), usuario.getApeMaterno().trim(),
-                    usuario.getTipoUsuario().trim(), usuario.getUsername().trim(), usuario.getEstatus().trim(), usuario.getActualizadoPor().trim(), usuario.getIdUsuario());
+            this.jdbcTemplate.update(QRY_UPDATE, usuario.getNombres().trim(), usuario.getApePaterno().trim(),
+                    usuario.getApeMaterno().trim(), usuario.getRol().getIdRol(), usuario.getUsername().trim(),
+                    usuario.getDiasRetrocesoReporte(), usuario.getEstatus().trim(), usuario.getActualizadoPor().trim(),
+                    usuario.getIdUsuario());
         }
 
         return usuario;
@@ -92,8 +110,12 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
         usuario.setNombres(rs.getString("NOMBRES"));
         usuario.setApePaterno(rs.getString("APE_PATERNO"));
         usuario.setApeMaterno(rs.getString("APE_MATERNO"));
-        usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
+        Rol rol = new Rol();
+        rol.setIdRol(rs.getInt("ID_ROL"));
+        rol.setNombre(rs.getString("TIPO_USUARIO"));
+        usuario.setRol(rol);
         usuario.setUsername(rs.getString("USERNAME"));
+        usuario.setDiasRetrocesoReporte(rs.getInt("DIAS_RETROCESO_REPORTE"));
         return usuario;
     }
 }

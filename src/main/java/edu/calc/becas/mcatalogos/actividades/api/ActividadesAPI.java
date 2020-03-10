@@ -91,7 +91,7 @@ public class ActividadesAPI {
 
     @PostMapping
     @ApiOperation(value = "Registra una nueva Actividad")
-    public ActividadVo add(@ApiParam(value = "Actividad a registrar", defaultValue = "0") @RequestBody ActividadVo actividad) {
+    public ActividadVo add(@ApiParam(value = "Actividad a registrar", defaultValue = "0") @RequestBody ActividadVo actividad) throws GenericException {
         actividad.setAgregadoPor("Admin");
         return actividadesService.add(actividad);
     }

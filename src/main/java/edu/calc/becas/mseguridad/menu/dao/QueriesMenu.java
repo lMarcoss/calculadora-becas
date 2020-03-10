@@ -1,4 +1,4 @@
-package edu.calc.becas.mconfiguracion.menu.dao;
+package edu.calc.becas.mseguridad.menu.dao;
 
 final class QueriesMenu {
     private QueriesMenu() {

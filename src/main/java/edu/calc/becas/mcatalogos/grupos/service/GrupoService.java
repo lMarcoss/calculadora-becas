@@ -1,7 +1,7 @@
 package edu.calc.becas.mcatalogos.grupos.service;
 
-import edu.calc.becas.common.service.CrudGenericService;
-import edu.calc.becas.mcatalogos.grupos.model.Grupo;
+import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.exceptions.GenericException;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -9,5 +9,6 @@ import edu.calc.becas.mcatalogos.grupos.model.Grupo;
  * Description:
  * Date: 3/26/19
  */
-public interface GrupoService extends CrudGenericService<Grupo> {
+public interface GrupoService {
+    WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String licenciatura) throws GenericException;
 }

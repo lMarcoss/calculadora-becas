@@ -1,6 +1,7 @@
 package edu.calc.becas.malumnos.api;
 
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.malumnos.service.AlumnosService;
 import io.swagger.annotations.Api;
@@ -45,7 +46,7 @@ public class AlumnosAPI {
 
     @PostMapping("/actividades")
     @ApiOperation(value = "Inserta un alumno con su actividad en la base de datos")
-    public Alumno add(@ApiParam(value = "Realiza el insert a la tabla de alumnos y actividades", defaultValue = "0") @RequestBody Alumno alumno){
+    public Alumno add(@ApiParam(value = "Realiza el insert a la tabla de alumnos y actividades", defaultValue = "0") @RequestBody Alumno alumno) throws GenericException {
         alumnosService.add(alumno);
         return alumno;
     }

@@ -1,8 +1,8 @@
-package edu.calc.becas.mconfiguracion.menu.dao;
+package edu.calc.becas.mseguridad.menu.dao;
 
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.exceptions.GenericException;
-import edu.calc.becas.mconfiguracion.menu.model.Menu;
+import edu.calc.becas.mseguridad.menu.model.Menu;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -10,8 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import static edu.calc.becas.mconfiguracion.menu.dao.QueriesMenu.QRY_GET_CHLIDS_BY_PARENT;
-import static edu.calc.becas.mconfiguracion.menu.dao.QueriesMenu.QRY_GET_PARENTS_BY_USER;
+import static edu.calc.becas.mseguridad.menu.dao.QueriesMenu.QRY_GET_CHLIDS_BY_PARENT;
+import static edu.calc.becas.mseguridad.menu.dao.QueriesMenu.QRY_GET_PARENTS_BY_USER;
 
 @Repository
 public class MenuDaoImpl extends BaseDao implements MenuDao {
