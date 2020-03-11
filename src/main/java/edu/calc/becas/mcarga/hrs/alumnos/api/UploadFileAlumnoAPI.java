@@ -33,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import static edu.calc.becas.common.utils.Constant.ALL_ITEMS;
 import static edu.calc.becas.common.utils.Message.MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER;
 import static edu.calc.becas.utils.ExtensionFile.XLSX_EXTENSION;
 import static edu.calc.becas.utils.ExtensionFile.XLS_EXTENSION;

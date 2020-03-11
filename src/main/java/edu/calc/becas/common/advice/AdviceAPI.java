@@ -1,5 +1,9 @@
 package edu.calc.becas.common.advice;
 
+import edu.calc.becas.mvc.config.security.InvalidJwtAuthenticationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
@@ -12,10 +16,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class AdviceAPI {
 
-    /*@ExceptionHandler(SQLException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ComunicationFailure comunicationFailureConnectionBD(Exception e) {
-
-        return new ComunicationFailure(null, 0, e.getMessage(), "La base de datos no est\u00e1 disponible", e.getMessage(), null);
-    }*/
+    @ExceptionHandler(InvalidJwtAuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String comunicationFailureConnectionBD(InvalidJwtAuthenticationException e) {
+        return e.getMessage();
+    }
 }

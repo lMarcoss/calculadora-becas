@@ -5,7 +5,6 @@ import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.mcarga.hrs.ProcessRow;
 import edu.calc.becas.mcarga.hrs.alumnos.dao.CargaAlumnosPeriodosDao;
-import edu.calc.becas.mcarga.hrs.blibioteca.model.Hora;
 import edu.calc.becas.mcarga.hrs.read.files.model.RowFile;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service("cargaAlumnosPeriodosService")

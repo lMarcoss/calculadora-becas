@@ -1,6 +1,5 @@
 package edu.calc.becas.mcatalogos.licenciaturas.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mcatalogos.CommonMethodToRestTemplate;

@@ -2,7 +2,6 @@ package edu.calc.becas.mcarga.hrs.alumnos.dao;
 
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.malumnos.model.Alumno;
-import edu.calc.becas.mcarga.hrs.CargaHrsDao;
 import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
@@ -11,7 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static edu.calc.becas.mcarga.hrs.alumnos.dao.QueriesCargaAlumnos.*;
+import static edu.calc.becas.mcarga.hrs.alumnos.dao.QueriesCargaAlumnos.QRY_ADD;
+import static edu.calc.becas.mcarga.hrs.alumnos.dao.QueriesCargaAlumnos.QRY_ADD_ALUMNO_PERIODO;
 
 
 @Repository("cargaAlumnosPeriodosRepository")

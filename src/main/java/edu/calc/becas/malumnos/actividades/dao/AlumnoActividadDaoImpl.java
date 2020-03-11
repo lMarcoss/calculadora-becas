@@ -12,7 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import static edu.calc.becas.common.utils.Constant.*;
+import static edu.calc.becas.common.utils.Constant.ESTATUS_ACTIVE;
+import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
 import static edu.calc.becas.malumnos.actividades.dao.QueriesActividadAlumno.QRY_GET_ACTIVIDAD_BY_ALUMNO;
 import static edu.calc.becas.malumnos.actividades.dao.QueriesActividadAlumno.QRY_GET_ALL_ACTIVIDADES_ALUMNOS;
 

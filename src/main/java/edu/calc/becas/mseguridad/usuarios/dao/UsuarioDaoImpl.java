@@ -7,6 +7,7 @@ import edu.calc.becas.mseguridad.rolesypermisos.model.Rol;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -29,8 +30,11 @@ import static edu.calc.becas.mseguridad.usuarios.dao.QueriesUsuario.*;
 @Slf4j
 public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
 
-    private final String secretKeyStart = "4^%m@=C*&c#L+%";
-    private final String secretKeyEnd = "U$|2AT>30!";
+    @Value("${prop.security.secret.key.start}")
+    private String secretKeyStart;
+
+    @Value("${prop.security.secret.key.end}")
+    private String secretKeyEnd;
 
     public UsuarioDaoImpl(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
