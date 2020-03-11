@@ -63,13 +63,17 @@ public class AlumnosAPI {
     @ApiParam(value = "Estatus de los registros a recuperar", defaultValue = DEFAULT_ESTATUS)
     @RequestParam(value = "status", defaultValue = DEFAULT_ESTATUS, required = false) String status,
     @ApiParam(value = "Id de la actividad a la que perteneco el alumno", defaultValue = DEFAULT_ESTATUS)
-    @RequestParam(value = "cicloEscolar", defaultValue = DEFAULT_ESTATUS, required = false) String cicloEscolar) {
+    @RequestParam(value = "cicloEscolar", defaultValue = DEFAULT_ESTATUS, required = false) String cicloEscolar,
+    @ApiParam(value = "Id de la actividad a la que perteneco el alumno", defaultValue = DEFAULT_ESTATUS)
+    @RequestParam(value = "licenciatura", defaultValue = DEFAULT_ESTATUS, required = false) String licenciatura,
+  @ApiParam(value = "Id de la actividad a la que perteneco el alumno", defaultValue = DEFAULT_ESTATUS)
+    @RequestParam(value = "grupo", defaultValue = DEFAULT_ESTATUS, required = false) String grupo) {
 
     if (pageSize.equalsIgnoreCase(ALL_ITEMS)) {
       pageSize = ITEMS_FOR_PAGE;
     }
 
-    return alumnosService.getAllByStatusLoad(Integer.parseInt(page), Integer.parseInt(pageSize), status, cicloEscolar);
+    return alumnosService.getAllByStatusLoad(Integer.parseInt(page), Integer.parseInt(pageSize), status, cicloEscolar, licenciatura, grupo);
   }
 
 

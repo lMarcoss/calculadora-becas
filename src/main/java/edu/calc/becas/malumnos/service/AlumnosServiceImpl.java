@@ -42,7 +42,7 @@ public class AlumnosServiceImpl implements AlumnosService {
     }
 
   @Override
-  public WrapperData getAllByStatusLoad(int page, int pageSize, String status, String param1) {
-    return alumnosDao.getAllByStatusLoad(page, pageSize, status, param1);
+  public WrapperData getAllByStatusLoad(int page, int pageSize, String status, String param1, String param2, String param3) {
+    return alumnosDao.getAllByStatusLoad(page, pageSize, status, param1, param2, param3);
   }
 }
