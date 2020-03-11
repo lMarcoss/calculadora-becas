@@ -26,9 +26,18 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
     @Override
     public WrapperData getAllByStatus(int page, int pageSize, String status) {
 
+        return getAllByAllParam(page, pageSize, status, ALL_ITEMS);
+    }
+
+    private WrapperData getAllByAllParam(int page, int pageSize, String status, String tipoActividad) {
         boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
+        boolean byTipoActividad = !tipoActividad.equalsIgnoreCase(ALL_ITEMS);
 
         String queryGetALl = addConditionFilterByStatus(status, QRY_ACTIVIDADES, QRY_CONDITION_ESTATUS_ACTIVIDADES);
+
+        if (byTipoActividad) {
+            queryGetALl = queryGetALl.concat(QRY_CONDITION_TIPO_ACTIVIDAD.replace("?", "'" + tipoActividad + "'"));
+        }
 
         queryGetALl = addQueryPageable(page, pageSize, queryGetALl);
 
@@ -45,7 +54,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
     @Override
     public WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String param1) {
-        return null;
+        return getAllByAllParam(page, pageSize, status, param1);
     }
 
 

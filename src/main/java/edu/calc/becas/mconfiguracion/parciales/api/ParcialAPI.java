@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import static edu.calc.becas.common.utils.Constant.ESTATUS_ACTIVE;
+
 /**
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
@@ -31,9 +33,9 @@ public class ParcialAPI {
         this.cicloEscolarService = cicloEscolarService;
     }
 
-    @GetMapping()
+    @GetMapping("/periodo-actual")
     @ApiOperation("Obtiene el listado de parciales del periodo actual")
-    public WrapperData<Parcial> getAll() throws GenericException {
+    public WrapperData<Parcial> getParcialesPeriodoActual() throws GenericException {
         CicloEscolarVo cicloEscolar = cicloEscolarService.getCicloEscolarActual();
         String cvePeriodo = cicloEscolar.getClave();
 
@@ -43,6 +45,12 @@ public class ParcialAPI {
         parcialWrapperData.setPageSize(parcialWrapperData.getData().size());
         parcialWrapperData.setLengthData(parcialWrapperData.getData().size());
         return parcialWrapperData;
+    }
+
+    @GetMapping()
+    @ApiOperation("Obtiene el cat\u00e1lgoo de parciales")
+    public WrapperData<Parcial> getAll() throws GenericException {
+        return this.parcialService.getAllByStatus(0, 0, ESTATUS_ACTIVE);
     }
 
     @PatchMapping

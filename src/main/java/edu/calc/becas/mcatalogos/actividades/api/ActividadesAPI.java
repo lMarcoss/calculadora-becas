@@ -39,12 +39,14 @@ public class ActividadesAPI {
             @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)
             @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,
             @ApiParam(value = "Estatus de los registros a recuperar", defaultValue = DEFAULT_ESTATUS)
-            @RequestParam(value = "status", defaultValue = DEFAULT_ESTATUS, required = false) String status) {
+            @RequestParam(value = "status", defaultValue = DEFAULT_ESTATUS, required = false) String status,
+            @ApiParam(value = "Tipo de actividad", defaultValue = DEFAULT_ESTATUS)
+            @RequestParam(value = "tipo-actividad", defaultValue = ALL_ITEMS, required = false) String tipoActividad) {
 
         if (pageSize.equalsIgnoreCase(ALL_ITEMS)) {
             pageSize = ITEMS_FOR_PAGE;
         }
-        return actividadesService.getAllByStatus(Integer.parseInt(page), Integer.parseInt(pageSize), status);
+        return actividadesService.getAllByStatusAndOneParam(Integer.parseInt(page), Integer.parseInt(pageSize), status, tipoActividad);
     }
 
 

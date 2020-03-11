@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import static edu.calc.becas.common.utils.Constant.ALL_ITEMS;
 import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
 import static edu.calc.becas.reporte.percent.beca.dao.QueriesReportPercentBeca.*;
 
@@ -75,20 +76,24 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
             conditions = conditions.concat(String.format(ADD_CONDITION_ACTIVIDAD, filter.getIdActividad()));
         }
 
-        if (filter.getIdCicloEscolar() != 0) {
-            conditions = conditions.concat(String.format(ADD_CONDITION_CICLO_ESCOLAR, filter.getIdCicloEscolar()));
+        if (!filter.getCvePeriodo().equalsIgnoreCase(ALL_ITEMS)) {
+            conditions = conditions.concat(String.format(ADD_CONDITION_CICLO_ESCOLAR, "'"+filter.getCvePeriodo()+"'"));
         }
 
-        if (filter.getIdGrupo() != 0) {
-            conditions = conditions.concat(String.format(ADD_CONDITION_GRUPO, filter.getIdGrupo()));
+        if (!filter.getCveGrupo().equalsIgnoreCase(ALL_ITEMS)) {
+            conditions = conditions.concat(String.format(ADD_CONDITION_GRUPO, "'"+filter.getCveGrupo()+"'"));
         }
 
-        if (filter.getIdLicenciatura() != 0) {
-            conditions = conditions.concat(String.format(ADD_CONDITION_LICENCIATURA, filter.getIdLicenciatura()));
+        if (!filter.getCveLicenciatura().equalsIgnoreCase(ALL_ITEMS)) {
+            conditions = conditions.concat(String.format(ADD_CONDITION_LICENCIATURA, "'"+filter.getCveLicenciatura()+"'"));
         }
 
         if (filter.getIdParcial() != 0) {
             conditions = conditions.concat(String.format(ADD_CONDITION_PARCIAL, filter.getIdParcial()));
+        }
+
+        if (!filter.getMatricula().equalsIgnoreCase(ALL_ITEMS)) {
+            conditions = conditions.concat(String.format(ADD_CONDITION_MATRICULA_ALUMNO, filter.getMatricula()));
         }
 
         if (filter.getPalabraClave() != null && !filter.getPalabraClave().trim().equalsIgnoreCase("")) {
@@ -100,13 +105,10 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
 
     private ReporteActividad mapperReporteActividad(ResultSet rs) throws SQLException {
         ReporteActividad reporte = new ReporteActividad();
-        reporte.setIdPorcentajeBeca(rs.getInt("ID_PORCENTAJE_BECA"));
-        reporte.setIdAlumno(rs.getInt("ID_ALUMNO"));
         reporte.setMatricula(rs.getString("MATRICULA"));
         reporte.setNombres(rs.getString("NOMBRES"));
         reporte.setApePaterno(rs.getString("APE_PATERNO"));
         reporte.setApeMaterno(rs.getString("APE_MATERNO"));
-        reporte.setIdActividadAlumno(rs.getInt("ID_ACTIVIDAD_ALUMNO"));
         reporte.setPorcentajeSala(rs.getInt("PORCENTAJE_SALA"));
         reporte.setPorcentajeBiblioteca(rs.getInt("PORCENTAJE_BIBLIOTECA"));
         reporte.setPorcentajeActividad(rs.getInt("PORCENTAJE_ACTIVIDAD"));
@@ -114,13 +116,12 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
         reporte.setNombreActividad(rs.getString("NOMBRE_ACTIVIDAD"));
         reporte.setIdParcial(rs.getInt("ID_PARCIAL"));
         reporte.setDescParcial(rs.getString("DESC_PARCIAL"));
-        reporte.setIdCicloEscolar(rs.getInt("ID_CICLO_ESCOLAR"));
-        reporte.setDescCicloEscolar(rs.getString("DESCRIPCION_CICLO"));
-        reporte.setIdGrupo(rs.getInt("ID_GRUPO"));
+        reporte.setCvePeriodo(rs.getString("CVE_PERIODO"));
+        reporte.setDescPeriodo(rs.getString("DESC_PERIDODO"));
         reporte.setCveGrupo(rs.getString("CVE_GRUPO"));
-        reporte.setIdLicenciatura(rs.getInt("ID_LICENCIATURA"));
+        reporte.setDescGrupo(rs.getString("DESC_GRUPO"));
         reporte.setCveLicenciatura(rs.getString("CVE_LICENCIATURA"));
-        reporte.setNombreLicenciatura(rs.getString("NOMBRE_LICENCIATURA"));
+        reporte.setDescLicenciatura(rs.getString("DESC_LICENCIATURA"));
         return reporte;
     }
 }
