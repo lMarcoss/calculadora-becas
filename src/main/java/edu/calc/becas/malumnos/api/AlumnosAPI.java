@@ -52,11 +52,25 @@ public class AlumnosAPI {
     }
 
 
-    /*
-  public DetalleActividadVo add(@ApiParam(value = "Detalle de hora para una actividad", defaultValue = "0") @RequestBody DetalleActividadVo detalle){
-        return  actividadesService.add(
-                detalle
-        );
+
+  @GetMapping("/cargas")
+  @ApiOperation(value = "Obtiene el listado de alumnos")
+  public WrapperData getAlumnoCargado(
+    @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
+    @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
+    @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)
+    @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,
+    @ApiParam(value = "Estatus de los registros a recuperar", defaultValue = DEFAULT_ESTATUS)
+    @RequestParam(value = "status", defaultValue = DEFAULT_ESTATUS, required = false) String status,
+    @ApiParam(value = "Id de la actividad a la que perteneco el alumno", defaultValue = DEFAULT_ESTATUS)
+    @RequestParam(value = "cicloEscolar", defaultValue = DEFAULT_ESTATUS, required = false) String cicloEscolar) {
+
+    if (pageSize.equalsIgnoreCase(ALL_ITEMS)) {
+      pageSize = ITEMS_FOR_PAGE;
     }
-*/
+
+    return alumnosService.getAllByStatusLoad(Integer.parseInt(page), Integer.parseInt(pageSize), status, cicloEscolar);
+  }
+
+
 }

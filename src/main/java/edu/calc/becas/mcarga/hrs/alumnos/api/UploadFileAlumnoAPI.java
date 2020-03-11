@@ -76,8 +76,8 @@ public class UploadFileAlumnoAPI extends UploadFileAPI {
     Parcial parcialActual = parcialService.getParcialActual();
     CicloEscolarVo cicloEscolarActual = cicloEscolarService.getCicloEscolarActual();
     Licenciatura lic = new Licenciatura();
-    lic.setCveLicenciatura(nombreLicenciatura);
-    lic.setNombreLicenciatura(cveLicenciatura);
+    lic.setCveLicenciatura(cveLicenciatura);
+    lic.setNombreLicenciatura(nombreLicenciatura);
 
     int resultProcessed = cargaAlumnosPeriodosService.processData(pages, commonData, parcialActual, cicloEscolarActual, lic);
     return ProcessedFile.builder()

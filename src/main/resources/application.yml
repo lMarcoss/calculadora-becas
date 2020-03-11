@@ -5,14 +5,13 @@ server:
 spring:
   datasource:
     url: jdbc:mysql://${HOST_NAME:127.0.0.1}:${BD_PORT:3311}/${BD_NAME:calcbecabd}?useSSL=false
-    #url: jdbc:mysql://${HOST_NAME:192.160.0.12}:${BD_PORT:3306}/${BD_NAME:calcbecabd}?useSSL=false
     username: ${BD_USER:dbuser}
     password: ${BD_PASS:dbpassword}
 key:
   encode:
     crypto: $#u1!N51*5M412&
 location:
-  file: /Users/lmarcoss/workspace-leo/servicio-social/file-dev/
+  file: /Users/vampiro/workspace-leo/servicio-social/file-dev/
 
 prop:
   sistema:
@@ -51,10 +50,11 @@ prop:
       alumnos:
         id: 1
         posicion:
-          matricula: 0
-          curp: 1
-          apePaterno: 2
-          apeMaterno: 3
-          nombres: 4
+          grupo: 0
+          matricula: 1
+          curp: 2
+          apePaterno: 3
+          apeMaterno: 4
+          nombres: 5
           celda:
-            final: 5
+            final: 6

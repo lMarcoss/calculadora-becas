@@ -21,6 +21,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ApiModel(description = "Entidad con los datos del usuario")
 public class Usuario extends CommonData implements Serializable {
+
     @ApiModelProperty("Indentificador único del usuario")
     private int idUsuario;
     @ApiModelProperty(value = "Nombre (s) del usuario", required = true)
@@ -41,6 +42,10 @@ public class Usuario extends CommonData implements Serializable {
 
     @ApiModelProperty("Días de tolerania para reporte de asistencias")
     private int diasRetrocesoReporte;
+
+    private String commonVal01;
+    private String commonVal02;
+    private String commonVal03;
 
     public Usuario(String estatus) {
         super(estatus);

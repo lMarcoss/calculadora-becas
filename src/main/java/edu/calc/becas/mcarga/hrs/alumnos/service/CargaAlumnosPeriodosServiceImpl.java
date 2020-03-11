@@ -47,6 +47,9 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
   @Value("${prop.carga.alumnos.alumnos.posicion.nombres}")
   private int posNombres;
 
+  @Value("${prop.carga.alumnos.alumnos.posicion.grupo}")
+  private int posGrupo;
+
 
   @Value("${prop.carga.alumnos.alumnos.posicion.celda.final}")
   private int posEndCell = 4;
@@ -69,6 +72,9 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
 
         for (int i = 0; (i < row.getCells().size() && i <= posEndCell); i++) {
 
+          if (i == posGrupo){
+            alumno.setGrupo(row.getCells().get(i).getValue());
+          }
           if (i == posMatricula){
             alumno.setMatricula(row.getCells().get(i).getValue());
           }

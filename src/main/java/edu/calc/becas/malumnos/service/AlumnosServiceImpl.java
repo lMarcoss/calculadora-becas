@@ -41,4 +41,8 @@ public class AlumnosServiceImpl implements AlumnosService {
         return null;
     }
 
+  @Override
+  public WrapperData getAllByStatusLoad(int page, int pageSize, String status, String param1) {
+    return alumnosDao.getAllByStatusLoad(page, pageSize, status, param1);
+  }
 }
