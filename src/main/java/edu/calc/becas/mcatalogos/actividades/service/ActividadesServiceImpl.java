@@ -27,7 +27,7 @@ public class ActividadesServiceImpl implements ActividadesService{
 
     @Override
     public WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String param1) {
-        return null;
+        return actividadesDao.getAllByStatusAndOneParam(page, pageSize, status, param1);
     }
 
     @Override

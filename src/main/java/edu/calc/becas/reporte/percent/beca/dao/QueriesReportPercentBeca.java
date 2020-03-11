@@ -14,50 +14,56 @@ final class QueriesReportPercentBeca {
             "SELECT COUNT(1) \n";
 
     static final String QRY_SELECT_DATA_REPORT =
-            "SELECT P.ID_PORCENTAJE_BECA,\n" +
-                    "       A.ID_ALUMNO,\n" +
-                    "       A.MATRICULA,\n" +
+            "SELECT A.MATRICULA,\n" +
                     "       A.NOMBRES,\n" +
                     "       A.APE_PATERNO,\n" +
                     "       A.APE_MATERNO,\n" +
-                    "       P.ID_ACTIVIDAD_ALUMNO,\n" +
-                    "       P.PORCENTAJE_SALA,\n" +
-                    "       P.PORCENTAJE_BIBLIOTECA,\n" +
-                    "       P.PORCENTAJE_ACTIVIDAD,\n" +
+                    "       PB.PORCENTAJE_SALA,\n" +
+                    "       PB.PORCENTAJE_BIBLIOTECA,\n" +
+                    "       PB.PORCENTAJE_ACTIVIDAD,\n" +
                     "       AC.ID_ACTIVIDAD,\n" +
                     "       AC.NOMBRE_ACTIVIDAD,\n" +
                     "       P.ID_PARCIAL,\n" +
-                    "       PA.DESC_PARCIAL,\n" +
-                    "       CE.ID_CICLO_ESCOLAR,\n" +
-                    "       CE.DESCRIPCION_CICLO,\n" +
-                    "       AL.ID_GRUPO,\n" +
-                    "       G.CVE_GRUPO,\n" +
-                    "       L.ID_LICENCIATURA,\n" +
-                    "       L.CVE_LICENCIATURA,\n" +
-                    "       L.NOMBRE_LICENCIATURA\n";
+                    "       P.DESC_PARCIAL,\n" +
+                    "       ADP.CVE_LICENCIATURA, \n" +
+                    "       ADP.DESC_LICENCIATURA,\n"+
+                    "       ADP.CVE_GRUPO,\n" +
+                    "       ADP.DESC_GRUPO,\n" +
+                    "       ADP.CVE_PERIODO,\n" +
+                    "       ADP.DESC_PERIDODO\n";
 
-    static final String QRY_ORDER_BY = "\nORDER BY A.NOMBRES ASC, A.APE_PATERNO ASC, A.APE_MATERNO ASC, G.CVE_GRUPO ASC, L.NOMBRE_LICENCIATURA ASC";
+    static final String QRY_ORDER_BY = "\nORDER BY A.NOMBRES ASC, A.APE_PATERNO ASC, A.APE_MATERNO ASC, ADP.CVE_GRUPO ASC, ADP.DESC_LICENCIATURA ASC";
 
     static final String QRY_FROM_DATA_REPORTE_ACTIVIDADES =
-            "FROM PORCENTAJE_BECA P,\n" +
-                    "     PARCIALES PA,\n" +
-                    "     ACTIVIDAD_ALUMNO AL,\n" +
-                    "     HORARIO_ACTIVIDAD H,\n" +
-                    "     ACTIVIDADES AC,\n" +
-                    "     ALUMNOS A\n" +
-                    "WHERE P.ID_PARCIAL = PA.ID_PARCIAL\n" +
-                    "  AND P.ID_ACTIVIDAD_ALUMNO = AL.ID_ACTIVIDAD_ALUMNO\n" +
-                    "  AND H.ESTATUS = 'S'\n" +
-                    "  AND AL.ID_ACTIVIDAD = H.ID_HORARIO_ACTIVIDAD\n" +
+            "FROM PORCENTAJE_BECA PB,\n" +
+                    "     PARCIAL_PERIODO PP,\n" +
+                    "     PARCIALES P,\n" +
+                    "     ACTIVIDAD_ALUMNO AA,\n" +
+                    "     ALUMNOS_DAT_PERIODO ADP,\n" +
+                    "     ALUMNOS A,\n" +
+                    "     HORARIO_ACTIVIDAD HA,\n" +
+                    "     ACTIVIDADES AC\n" +
+                    "WHERE PB.ID_PARCIAL = PP.ID_PARCIAL\n" +
+                    "  AND PP.PARCIAL = P.ID_PARCIAL\n" +
+                    "  AND PB.ID_ACTIVIDAD_ALUMNO = AA.ID_ACTIVIDAD_ALUMNO\n" +
+                    "  AND AA.ID_ALUMNO_P = ADP.ID_ALUMNOP\n" +
+                    "  AND ADP.MATRICULA = A.MATRICULA\n" +
+                    "  AND AA.ID_HORARIO_ACTIVIDAD = HA.ID_HORARIO_ACTIVIDAD\n" +
+                    "  AND HA.ID_ACTIVIDAD = AC.ID_ACTIVIDAD\n" +
                     "  AND AC.ESTATUS = 'S'\n" +
-                    "  AND H.ID_ACTIVIDAD = AC.ID_ACTIVIDAD\n" +
+                    "  AND HA.ESTATUS = 'S'\n" +
                     "  AND A.ESTATUS = 'S'\n" +
-                    "  AND AL.ID_ALUMNO = A.ID_ALUMNO\n";
+                    "  AND AC.TIPO_ACTIVIDAD = 'EX'\n";
+
+    static final String ADD_CONDITION_CICLO_ESCOLAR = "\nAND ADP.CVE_PERIODO = %s\n";
+    static final String ADD_CONDITION_LICENCIATURA = "\nAND ADP.CVE_LICENCIATURA = %s\n";
+    static final String ADD_CONDITION_GRUPO = "\nAND ADP.CVE_GRUPO = %s\n";
+    static final String ADD_CONDITION_PARCIAL = "\nAND PP.ID_PARCIAL = %s\n";
 
     static final String ADD_CONDITION_ACTIVIDAD = "\nAND AC.ID_ACTIVIDAD = %s\n";
-    static final String ADD_CONDITION_CICLO_ESCOLAR = "\nAND CE.ID_CICLO_ESCOLAR = %s\n";
-    static final String ADD_CONDITION_GRUPO = "\nAND G.ID_GRUPO = %s\n";
-    static final String ADD_CONDITION_LICENCIATURA = "\nAND L.ID_LICENCIATURA = %s\n";
-    static final String ADD_CONDITION_PARCIAL = "\nAND PA.ID_PARCIAL = %s\n";
+    static final String ADD_CONDITION_MATRICULA_ALUMNO = "\nAND A.MATRICULA = %s\n";
     static final String ADD_CONDITION_LIKE_WORD_KEY = "\nAND CONCAT(A.NOMBRES, ' ', A.APE_PATERNO, ' ', A.APE_MATERNO) LIKE %s\n";
 }
+
+
+

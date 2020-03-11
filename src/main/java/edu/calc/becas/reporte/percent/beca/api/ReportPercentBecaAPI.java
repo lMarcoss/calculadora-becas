@@ -48,31 +48,23 @@ public class ReportPercentBecaAPI {
         }
         Pageable pageable = new Pageable(Integer.parseInt(page), Integer.parseInt(pageSize));
 
-        ReporteActividad reporte = defineFilterParam(cicloEscolar, licenciatura, grupo, parcial, actividad, palabraClave);
+
+        String matricula = ALL_ITEMS;
+        //String matricula = "2017030402";
+        ReporteActividad reporte = defineFilterParam(cicloEscolar, licenciatura, grupo, parcial, actividad, palabraClave, matricula);
 
         return this.reportPercentBecaService.getAll(pageable, reporte);
     }
 
-    private ReporteActividad defineFilterParam(String cicloEscolar, String licenciatura, String grupo, String parcial, String actividad, String palabraClave) {
+    private ReporteActividad defineFilterParam(String cicloEscolar, String licenciatura, String grupo, String parcial,
+                                               String actividad, String palabraClave, String matricula) {
         ReporteActividad filter = new ReporteActividad();
 
-        if (cicloEscolar.equalsIgnoreCase(ALL_ITEMS)) {
-            filter.setIdCicloEscolar(0);
-        } else {
-            filter.setIdCicloEscolar(Integer.parseInt(cicloEscolar));
-        }
+            filter.setCvePeriodo(cicloEscolar);
+            filter.setCveLicenciatura(licenciatura);
+            filter.setCveGrupo(grupo);
+            filter.setMatricula(matricula);
 
-        if (licenciatura.equalsIgnoreCase(ALL_ITEMS)) {
-            filter.setIdLicenciatura(0);
-        } else {
-            filter.setIdLicenciatura(Integer.parseInt(licenciatura));
-        }
-
-        if (grupo.equalsIgnoreCase(ALL_ITEMS)) {
-            filter.setIdGrupo(0);
-        } else {
-            filter.setIdGrupo(Integer.parseInt(grupo));
-        }
 
         if (parcial.equalsIgnoreCase(ALL_ITEMS)) {
             filter.setIdParcial(0);

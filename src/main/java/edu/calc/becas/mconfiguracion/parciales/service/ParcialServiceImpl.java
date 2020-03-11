@@ -27,7 +27,7 @@ public class ParcialServiceImpl implements ParcialService {
 
     @Override
     public WrapperData getAllByStatus(int page, int pageSize, String status) {
-        return null;
+        return parcialDao.getAllByStatus(page, pageSize, status);
     }
 
     @Override

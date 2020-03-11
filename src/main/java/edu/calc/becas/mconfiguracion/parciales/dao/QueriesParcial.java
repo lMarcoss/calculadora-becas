@@ -10,6 +10,9 @@ final class QueriesParcial {
     private QueriesParcial() {
     }
 
+    static final String QRY_GET_ALL_CATALOGUE =
+            "SELECT ID_PARCIAL, DESC_PARCIAL FROM PARCIALES\n";
+
     static final String QRY_GET_ALL =
             "SELECT PP.ID_PARCIAL, PP.PARCIAL, P.DESC_PARCIAL, PARCIAL_ACTUAL,\n" +
                     "       DATE_FORMAT(PP.FECHA_INICIO, '%d/%m/%Y') AS FECHA_INICIO,\n" +
