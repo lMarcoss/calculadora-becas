@@ -1,5 +1,6 @@
 package edu.calc.becas.common.advice;
 
+import edu.calc.becas.exceptions.ConnectionJdbcException;
 import edu.calc.becas.mvc.config.security.InvalidJwtAuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,6 +20,12 @@ public class AdviceAPI {
     @ExceptionHandler(InvalidJwtAuthenticationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public String comunicationFailureConnectionBD(InvalidJwtAuthenticationException e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(ConnectionJdbcException.class)
+    @ResponseStatus(HttpStatus.FAILED_DEPENDENCY)
+    public String comunicationFailureConnectionBD(ConnectionJdbcException e) {
         return e.getMessage();
     }
 }

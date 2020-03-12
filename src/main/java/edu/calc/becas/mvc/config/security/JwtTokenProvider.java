@@ -1,6 +1,5 @@
 package edu.calc.becas.mvc.config.security;
 
-import edu.calc.becas.common.utils.UtilMethods;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -52,8 +51,7 @@ public class JwtTokenProvider {
     public String createToken(UserLogin userLogin) {
 
 
-        Claims claims = Jwts.claims().setSubject(
-                UtilMethods.isBlank(userLogin.getMatricula()) ? userLogin.getUsername() : userLogin.getMatricula());
+        Claims claims = Jwts.claims().setSubject(userLogin.getUsername());
         //Claims claims = Jwts.claims().set;
         claims.put("roles", Collections.singletonList(userLogin.getRol()));
 
@@ -65,7 +63,8 @@ public class JwtTokenProvider {
                 .setIssuedAt(now)//
                 .setExpiration(validity)//
                 .claim("user", userLogin.getUsername())
-                .claim("matricula", userLogin.getMatricula())
+                .claim("matricula", userLogin.getUsername())
+                .claim("esAlumno", userLogin.isEsAlumno())
                 .signWith(SignatureAlgorithm.HS256, secretKey)//
                 .compact();
     }
@@ -105,13 +104,14 @@ public class JwtTokenProvider {
     }
 
     public UserLogin getUserByToken(HttpServletRequest request) {
-
         UserLogin userRequest = new UserLogin();
         Jws<Claims> claims = getClaims(resolveToken(request));
         String username = claims.getBody().get("username") != null ? claims.getBody().get("username").toString() : null;
-        String matricula = claims.getBody().get("matricula") != null ? claims.getBody().get("matricula").toString() : null;
+        String isAlumno = claims.getBody().get("esAlumno") != null ? claims.getBody().get("esAlumno").toString() : null;
         userRequest.setUsername(username);
-        userRequest.setMatricula(matricula);
+        if (isAlumno != null) {
+            userRequest.setEsAlumno(Boolean.parseBoolean(isAlumno));
+        }
         return userRequest;
     }
 }

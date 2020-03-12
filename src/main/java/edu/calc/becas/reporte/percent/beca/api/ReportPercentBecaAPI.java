@@ -2,6 +2,9 @@ package edu.calc.becas.reporte.percent.beca.api;
 
 import edu.calc.becas.common.model.Pageable;
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.common.utils.UtilMethods;
+import edu.calc.becas.mseguridad.login.model.UserLogin;
+import edu.calc.becas.mvc.config.security.user.UserRequestService;
 import edu.calc.becas.reporte.percent.beca.model.ReporteActividad;
 import edu.calc.becas.reporte.percent.beca.service.ReportPercentBecaService;
 import io.swagger.annotations.Api;
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static edu.calc.becas.common.utils.Constant.*;
 
@@ -27,8 +32,11 @@ public class ReportPercentBecaAPI {
 
     private final ReportPercentBecaService reportPercentBecaService;
 
-    public ReportPercentBecaAPI(ReportPercentBecaService reportPercentBecaService) {
+    private final UserRequestService userRequestService;
+
+    public ReportPercentBecaAPI(ReportPercentBecaService reportPercentBecaService, UserRequestService userRequestService) {
         this.reportPercentBecaService = reportPercentBecaService;
+        this.userRequestService = userRequestService;
     }
 
     @GetMapping
@@ -41,16 +49,23 @@ public class ReportPercentBecaAPI {
             @ApiParam(value = "Grupo a recuperar", defaultValue = ALL_ITEMS) @RequestParam(value = "grupo", defaultValue = ALL_ITEMS, required = false) String grupo,
             @ApiParam(value = "Parcial a recuperar", defaultValue = ALL_ITEMS) @RequestParam(value = "parcial", defaultValue = ALL_ITEMS, required = false) String parcial,
             @ApiParam(value = "Actividad a recuperar", defaultValue = ALL_ITEMS) @RequestParam(value = "actividad", defaultValue = ALL_ITEMS, required = false) String actividad,
-            @ApiParam(value = "Palabra clave") @RequestParam(value = "palabra-clave", defaultValue = "", required = false) String palabraClave
+            @ApiParam(value = "Palabra clave") @RequestParam(value = "palabra-clave", defaultValue = "", required = false) String palabraClave,
+            HttpServletRequest httpServlet
     ) {
+
+        UserLogin userLogin = userRequestService.getUserLogin(httpServlet);
+
+        String matricula = ALL_ITEMS;
+        if (userLogin.isEsAlumno()) {
+            matricula = userLogin.getUsername().trim();
+        }
+
         if (pageSize.equalsIgnoreCase(ALL_ITEMS)) {
             pageSize = ITEMS_FOR_PAGE;
         }
         Pageable pageable = new Pageable(Integer.parseInt(page), Integer.parseInt(pageSize));
 
 
-        String matricula = ALL_ITEMS;
-        //String matricula = "2017030402";
         ReporteActividad reporte = defineFilterParam(cicloEscolar, licenciatura, grupo, parcial, actividad, palabraClave, matricula);
 
         return this.reportPercentBecaService.getAll(pageable, reporte);
@@ -60,10 +75,10 @@ public class ReportPercentBecaAPI {
                                                String actividad, String palabraClave, String matricula) {
         ReporteActividad filter = new ReporteActividad();
 
-            filter.setCvePeriodo(cicloEscolar);
-            filter.setCveLicenciatura(licenciatura);
-            filter.setCveGrupo(grupo);
-            filter.setMatricula(matricula);
+        filter.setCvePeriodo(cicloEscolar);
+        filter.setCveLicenciatura(licenciatura);
+        filter.setCveGrupo(grupo);
+        filter.setMatricula(matricula);
 
 
         if (parcial.equalsIgnoreCase(ALL_ITEMS)) {
