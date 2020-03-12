@@ -78,8 +78,8 @@ public class UploadFileAlumnoAPI extends UploadFileAPI {
     lic.setCveLicenciatura(cveLicenciatura);
     lic.setNombreLicenciatura(nombreLicenciatura);
 
-    //int resultProcessed = cargaAlumnosPeriodosService.processData(pages, commonData, parcialActual, cicloEscolarActual, lic);
-    int resultProcessed = cargaAlumnosPeriodosService.processDataPorcentajes(pages, commonData, parcialActual, cicloEscolarActual, lic);
+    int resultProcessed = cargaAlumnosPeriodosService.processData(pages, commonData, parcialActual, cicloEscolarActual, lic);
+    //int resultProcessed = cargaAlumnosPeriodosService.processDataPorcentajes(pages, commonData, parcialActual, cicloEscolarActual, lic);
     return ProcessedFile.builder()
       .error(false)
       .file(pathfile)
