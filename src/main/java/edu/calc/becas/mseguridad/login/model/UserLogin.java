@@ -33,7 +33,7 @@ public class UserLogin implements Serializable {
     @ApiModelProperty(value = "correo del usuario", required = true)
     private String username;
 
-    @ApiModelProperty("Contraseña del usuario")
+    @ApiModelProperty(value = "Contraseña del usuario", required = true)
     private String password;
 
     @ApiModelProperty("token de sesión")

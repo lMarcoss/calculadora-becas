@@ -18,5 +18,7 @@ public interface ActividadesDao extends CrudGenericDao<ActividadVo> {
     DetalleActividadVo add(DetalleActividadVo detalle);
 
     DetalleActividadVo udateDetail(DetalleActividadVo detalle);
+
+    WrapperData getAllByStatusAndTipoActividadHorario(int page, int pageSize, String status, String param1, String swHorario);
 }
 

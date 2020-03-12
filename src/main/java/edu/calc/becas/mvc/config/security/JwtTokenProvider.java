@@ -62,8 +62,7 @@ public class JwtTokenProvider {
                 .setClaims(claims)//
                 .setIssuedAt(now)//
                 .setExpiration(validity)//
-                .claim("user", userLogin.getUsername())
-                .claim("matricula", userLogin.getUsername())
+                .claim("username", userLogin.getUsername())
                 .claim("esAlumno", userLogin.isEsAlumno())
                 .signWith(SignatureAlgorithm.HS256, secretKey)//
                 .compact();

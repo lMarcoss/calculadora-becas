@@ -40,13 +40,15 @@ public class ActividadesAPI {
             @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,
             @ApiParam(value = "Estatus de los registros a recuperar", defaultValue = DEFAULT_ESTATUS)
             @RequestParam(value = "status", defaultValue = DEFAULT_ESTATUS, required = false) String status,
-            @ApiParam(value = "Tipo de actividad", defaultValue = DEFAULT_ESTATUS)
-            @RequestParam(value = "tipo-actividad", defaultValue = ALL_ITEMS, required = false) String tipoActividad) {
+            @ApiParam(value = "Tipo de actividad", defaultValue = ALL_ITEMS)
+            @RequestParam(value = "tipo-actividad", defaultValue = ALL_ITEMS, required = false) String tipoActividad,
+            @ApiParam(value = "Actividades con horario (S/N)", defaultValue = ALL_ITEMS)
+            @RequestParam(value = "sw-horario", defaultValue = ALL_ITEMS, required = false) String swHorario) {
 
         if (pageSize.equalsIgnoreCase(ALL_ITEMS)) {
             pageSize = ITEMS_FOR_PAGE;
         }
-        return actividadesService.getAllByStatusAndOneParam(Integer.parseInt(page), Integer.parseInt(pageSize), status, tipoActividad);
+        return actividadesService.getAllByStatusAndTipoActividadHorario(Integer.parseInt(page), Integer.parseInt(pageSize), status, tipoActividad, swHorario);
     }
 
 

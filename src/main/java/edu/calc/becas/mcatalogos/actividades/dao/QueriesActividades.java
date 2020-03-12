@@ -18,6 +18,7 @@ final class QueriesActividades {
 
     static final String QRY_CONDITION_ESTATUS_ACTIVIDADES = "\nAND AC.ESTATUS = ? ";
     static final String QRY_CONDITION_TIPO_ACTIVIDAD = "\nAND AC.TIPO_ACTIVIDAD = ? ";
+    static final String QRY_CONDITION_TIPO_SW_HORARIO = "\nAND AC.SW_HORARIO = ? ";
     static final String QRY_CONDITION_ESTATUS_HORARIO_ACTIVIDADES = "\nAND DA.ESTATUS = ? ";
 
     static final String QRY_DETALLE_ACTIVIDADES = "SELECT A.NOMBRE_ACTIVIDAD, US.ID_USUARIO, " +
