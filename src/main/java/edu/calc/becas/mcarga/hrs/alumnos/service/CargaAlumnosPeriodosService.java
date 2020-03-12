@@ -9,5 +9,5 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public interface CargaAlumnosPeriodosService {
   public int processData(Workbook pages, CommonData commonData, Parcial parcialActual, CicloEscolarVo cicloEscolarActual, Licenciatura licenciatura) throws GenericException;
-
+  public int processDataPorcentajes(Workbook pages, CommonData commonData, Parcial parcialActual, CicloEscolarVo cicloEscolarActual, Licenciatura licenciatura) throws GenericException;
 }

@@ -101,6 +101,50 @@ public class ProcessRow {
     return rows;
   }
 
+  protected List<RowFile> readRowsAlumnosReportes(Workbook pages) {
+
+    LOG.info("NUMBERS PAGES: " + String.valueOf(pages.getNumberOfSheets()));
+
+    List<RowFile> rows = new ArrayList<>();
+    for (Sheet sheet : pages) {
+      LOG.info("PAGE:  " + sheet.getSheetName());
+      int rowNum =0;
+      for (Row row : sheet) {
+        if(rowNum>=9){
+          RowFile rowFile = new RowFile();
+
+          List<CellFile> cells = new ArrayList<>();
+
+          CellFile cellFileTmp = new CellFile();
+          cellFileTmp.setValue(
+            sheet.getSheetName()
+          );
+          cells.add(cellFileTmp);
+
+          for (Cell cell : row) {
+            CellFile cellFile = new CellFile();
+
+            cell.setCellType(1);
+            String value = readCellByType(cell);
+            if (value != null && !value.trim().equalsIgnoreCase("") && value.length() > 0) {
+              cellFile.setValue(
+                value.trim()
+              );
+
+              cells.add(cellFile);
+            }
+          }
+          if (!cells.isEmpty()) {
+            rowFile.setCells(cells);
+            rows.add(rowFile);
+          }
+        }
+        rowNum++;
+      }
+    }
+    return rows;
+  }
+
 
     private String readCellByType(Cell cell) {
         String value = null;

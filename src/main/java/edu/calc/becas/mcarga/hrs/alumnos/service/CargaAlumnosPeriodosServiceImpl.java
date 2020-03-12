@@ -11,6 +11,7 @@ import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
+import edu.calc.becas.reporte.percent.beca.model.ReporteActividad;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +62,7 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
 
     List<RowFile> rows = readRowsAlumnos(pages);
 
+
     List<Alumno> alumnos = new ArrayList<>();
     int rowIni = 0;
     for (RowFile row : rows) {
@@ -102,8 +104,40 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
 
     }
     return cargaAlumnosPeriodosDao.persistenceAlumnos(alumnos,  parcialActual, cicloEscolarActual, licenciatura);
+    }
+
+    @Override
+    public int processDataPorcentajes(Workbook pages, CommonData commonData, Parcial parcialActual, CicloEscolarVo cicloEscolarActual, Licenciatura licenciatura) throws GenericException {
+
+    List<RowFile> rows = readRowsAlumnosReportes(pages);
 
 
+    List<ReporteActividad> alumnosReportes = new ArrayList<>();
+    int rowIni = 0;
+    for (RowFile row : rows) {
+
+        ReporteActividad alumno = new ReporteActividad();
+        ActividadVo actividadVo = new ActividadVo("S");
+        actividadVo.setIdActividad(idActividadBiblioteca);
+
+
+        for (int i = 0; (i < row.getCells().size() && i <= 32); i++) {
+
+          if (i == 2){
+            alumno.setMatricula(row.getCells().get(i).getValue());
+          }
+          if (i == 31){
+            alumno.setPorcentajeActividad(Integer.parseInt(row.getCells().get(i).getValue()));
+          }
+
+        }
+        alumnosReportes.add(alumno);
+
+      rowIni++;
+
+    }
+    LOG.debug(alumnosReportes.toString());
+    return 0; //cargaAlumnosPeriodosDao.persistenceAlumnos(alumnos,  parcialActual, cicloEscolarActual, licenciatura);
     }
 
   public static interface CargaAlumnosPeriodosService {
