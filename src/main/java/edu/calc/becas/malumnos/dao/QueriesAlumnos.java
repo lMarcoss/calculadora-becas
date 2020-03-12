@@ -42,4 +42,7 @@ public class QueriesAlumnos {
       "AND CVE_PERIODO  = ?";
 
 
+    static final String QRY_CONDITION_LIC =" AND CVE_LICENCIATURA = ? ";
+
+    static final String QRY_CONDITION_GRUPO =" AND CVE_GRUPO = ? ";
 }

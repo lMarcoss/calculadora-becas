@@ -142,12 +142,20 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
   }
 
   @Override
-  public WrapperData getAllByStatusLoad(int page, int pageSize, String status, String param1) {
+  public WrapperData getAllByStatusLoad(int page, int pageSize, String status, String param1, String param2, String param3) {
     boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
-
     String queryGetALl = "";
 
     queryGetALl = queryGetALl.concat(QRY_ALUMNOS_CARGAS);
+    //queryGetALl.concat(QRY_CONDITION_ACTIVIDAD.replace("?", "'" + idActividad + "'"));
+    if(!param2.equals("All")){
+      queryGetALl =   queryGetALl.concat(QRY_CONDITION_LIC.replace("?", "'" + param2 + "'"));
+    }
+
+    if(!param3.equals("All")){
+      queryGetALl = queryGetALl.concat(QRY_CONDITION_GRUPO.replace("?", "'" + param3 + "'"));
+    }
+
 
     int lengthDataTable = this.jdbcTemplate.queryForObject(createQueryCountItem(QRY_ALUMNOS_CARGAS), new Object[]{param1}, Integer.class);
 
