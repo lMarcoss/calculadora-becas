@@ -41,7 +41,6 @@ public class LoginDaoImpl extends BaseDao implements LoginDao {
             //alumno
             Integer count = null;
             try {
-
                 count = jdbcTemplate.queryForObject(QRY_VALIDA_ALUMNO,
                         new Object[]{usuario.getUsername()},
                         Integer.class);
@@ -52,6 +51,9 @@ public class LoginDaoImpl extends BaseDao implements LoginDao {
 
                 usuario.setRol("ALUMNO");
 
+                if(!usuario.getUsername().trim().equalsIgnoreCase(usuario.getPassword())){
+                    throw new EmptyResultDataAccessException(0);
+                }
                 Usuario usuarioAlumno = null;
                 try {
                     usuarioAlumno = jdbcTemplate.queryForObject(QRY_GET_INFO_ALUMNO,
