@@ -60,7 +60,10 @@ public class ActividadesServiceImpl implements ActividadesService{
         return actividadesDao.udateDetail(detalle);
     }
 
-
+    @Override
+    public WrapperData getAllByStatusAndTipoActividadHorario(int page, int pageSize, String status, String param1, String swHorario) {
+        return actividadesDao.getAllByStatusAndTipoActividadHorario(page, pageSize, status, param1, swHorario);
+    }
 
 
 }

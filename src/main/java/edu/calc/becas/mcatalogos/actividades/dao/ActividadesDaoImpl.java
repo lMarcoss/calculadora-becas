@@ -27,17 +27,22 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
     @Override
     public WrapperData getAllByStatus(int page, int pageSize, String status) {
 
-        return getAllByAllParam(page, pageSize, status, ALL_ITEMS);
+        return getAllByAllParam(page, pageSize, status, ALL_ITEMS, ALL_ITEMS);
     }
 
-    private WrapperData getAllByAllParam(int page, int pageSize, String status, String tipoActividad) {
+    private WrapperData getAllByAllParam(int page, int pageSize, String status, String tipoActividad, String swHorario) {
         boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
         boolean byTipoActividad = !tipoActividad.equalsIgnoreCase(ALL_ITEMS);
+        boolean bySwHorario = !swHorario.equalsIgnoreCase(ALL_ITEMS);
 
         String queryGetALl = addConditionFilterByStatus(status, QRY_ACTIVIDADES, QRY_CONDITION_ESTATUS_ACTIVIDADES);
 
         if (byTipoActividad) {
             queryGetALl = queryGetALl.concat(QRY_CONDITION_TIPO_ACTIVIDAD.replace("?", "'" + tipoActividad + "'"));
+        }
+
+        if (bySwHorario) {
+            queryGetALl = queryGetALl.concat(QRY_CONDITION_TIPO_SW_HORARIO.replace("?", "'" + swHorario + "'"));
         }
 
         queryGetALl = addQueryPageable(page, pageSize, queryGetALl);
@@ -55,7 +60,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
     @Override
     public WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String param1) {
-        return getAllByAllParam(page, pageSize, status, param1);
+        return getAllByAllParam(page, pageSize, status, param1, ALL_ITEMS);
     }
 
 
@@ -65,7 +70,6 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
         boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
         boolean byActividad = !idActividad.equalsIgnoreCase(ALL_ITEMS);
         boolean byUser = !username.equalsIgnoreCase(ALL_ITEMS);
-
 
 
         String queryGetALl = addConditionFilterByStatus(status, QRY_DETALLE_ACTIVIDADES, QRY_CONDITION_ESTATUS_HORARIO_ACTIVIDADES);
@@ -102,8 +106,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
     }
 
 
-
-  @Override
+    @Override
     public ActividadVo add(ActividadVo actividad) {
         this.jdbcTemplate.update(QRY_ADD, createObjectParamUpdate(actividad));
         return actividad;
@@ -111,15 +114,13 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
     @Override
     public ActividadVo update(ActividadVo object) {
-      this.jdbcTemplate.update(QRY_UPDATE_ACTIVIDAD,
-        new Object[]{
-          object.getNombreActividad(),
-          object.getEstatus(),
-          object.getIdActividad()});
-      return object;
+        this.jdbcTemplate.update(QRY_UPDATE_ACTIVIDAD,
+                new Object[]{
+                        object.getNombreActividad(),
+                        object.getEstatus(),
+                        object.getIdActividad()});
+        return object;
     }
-
-
 
 
     @Override
@@ -141,6 +142,11 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
         });
 
         return detalle;
+    }
+
+    @Override
+    public WrapperData getAllByStatusAndTipoActividadHorario(int page, int pageSize, String status, String param1, String swHorario) {
+        return getAllByAllParam(page, pageSize, status, param1, swHorario);
     }
 
     private ActividadVo mapperActividades(ResultSet rs) throws SQLException {
@@ -181,6 +187,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
     private Object[] createObjectParamUpdate(ActividadVo actividad) {
         return new Object[]{actividad.getNombreActividad(), actividad.getEstatus(), actividad.getAgregadoPor()};
     }
+
     //199E2A1EswF5CVrh
     private Object[] createObjectParamDetalle(DetalleActividadVo detalle) {
         return new Object[]{

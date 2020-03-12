@@ -19,4 +19,6 @@ public interface ActividadesService extends CrudGenericService<ActividadVo> {
     DetalleActividadVo add(DetalleActividadVo detalle);
 
     DetalleActividadVo udateDetail(DetalleActividadVo detalle);
+
+    WrapperData getAllByStatusAndTipoActividadHorario(int parseInt, int parseInt1, String status, String tipoActividad, String swHorario);
 }
