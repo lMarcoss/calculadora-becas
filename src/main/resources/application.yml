@@ -25,7 +25,11 @@ prop:
         periodo:
           actual: /periodo/actual
           lista: /periodo/lista
-
+  security:
+    secret:
+      key:
+        start: 4^%m@=C*&c#L+%
+        end: U$|2AT>30!
   carga:
     hrs:
       biblioteca:
