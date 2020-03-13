@@ -1,6 +1,7 @@
 package edu.calc.becas.mconfiguracion.parciales.service;
 
 import edu.calc.becas.common.service.CrudGenericService;
+import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface ParcialService extends CrudGenericService<Parcial> {
 
     List<Parcial> getAllByPeriodo(String cvePeriodo);
 
-    Parcial getParcialActual();
+    Parcial getParcialActual() throws GenericException;
 }

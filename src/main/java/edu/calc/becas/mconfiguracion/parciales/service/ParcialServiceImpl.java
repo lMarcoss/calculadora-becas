@@ -2,6 +2,8 @@ package edu.calc.becas.mconfiguracion.parciales.service;
 
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
+import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
+import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
 import edu.calc.becas.mconfiguracion.parciales.dao.ParcialDao;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,14 @@ import java.util.List;
 public class ParcialServiceImpl implements ParcialService {
 
     private final ParcialDao parcialDao;
+    private final CicloEscolarService cicloEscolarService;
+
+
 
     @Autowired
-    public ParcialServiceImpl(ParcialDao parcialDao) {
+    public ParcialServiceImpl(ParcialDao parcialDao, CicloEscolarService cicloEscolarService) {
         this.parcialDao = parcialDao;
+        this.cicloEscolarService = cicloEscolarService;
     }
 
     @Override
@@ -51,7 +57,8 @@ public class ParcialServiceImpl implements ParcialService {
     }
 
     @Override
-    public Parcial getParcialActual() {
-        return parcialDao.getParcialActual();
+    public Parcial getParcialActual() throws GenericException {
+        CicloEscolarVo cicloEscolarVo = cicloEscolarService.getCicloEscolarActual();
+        return parcialDao.getParcialActual(cicloEscolarVo);
     }
 }

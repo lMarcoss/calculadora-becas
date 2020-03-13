@@ -97,7 +97,7 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
             this.jdbcTemplate.update(QRY_UPDATE_WITH_PASSWORD, usuario.getNombres().trim(), usuario.getApePaterno().trim(),
                     usuario.getApeMaterno().trim(), usuario.getRol().getIdRol(), usuario.getUsername().trim(),
                     secretKeyStart, usuario.getPassword(), secretKeyEnd, usuario.getDiasRetrocesoReporte(),
-                    usuario.getEstatus().trim(), usuario.getActualizadoPor().trim());
+                    usuario.getEstatus().trim(), usuario.getActualizadoPor().trim(), usuario.getIdUsuario());
         } else {
             this.jdbcTemplate.update(QRY_UPDATE, usuario.getNombres().trim(), usuario.getApePaterno().trim(),
                     usuario.getApeMaterno().trim(), usuario.getRol().getIdRol(), usuario.getUsername().trim(),
