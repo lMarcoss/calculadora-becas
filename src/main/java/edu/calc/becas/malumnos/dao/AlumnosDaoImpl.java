@@ -4,6 +4,8 @@ import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
+import edu.calc.becas.mseguridad.rolesypermisos.model.Rol;
+import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -95,7 +97,30 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
     }
 
 
+    @Override
+    public Usuario getUserInfo(String matricula) {
+        String query = "SELECT ID_ALUMNO,NOMBRES, APE_PATERNO, APE_MATERNO, '3' ID_ROL, 'ALUMNO' ROL, AC.MATRICULA as USERNAME, CURP COMMONVAL01, AC.CVE_GRUPO COMMONVAL02,\n" +
+                "       AC.DESC_LICENCIATURA COMMONVAL03 FROM ALUMNOS AL, ALUMNOS_DAT_PERIODO AC\n" +
+                "    WHERE AL.MATRICULA = AC.MATRICULA AND AC.MATRICULA = ? and ESTATUS = 'S'";
+        return this.jdbcTemplate.queryForObject(query, new Object[]{matricula}, (((rs, i) -> mapperAlumnoLogin(rs))));
+    }
 
+    private Usuario mapperAlumnoLogin(ResultSet rs) throws SQLException {
+        Usuario usuario = new Usuario();
+        Rol rol = new Rol();
+        usuario.setIdUsuario(rs.getInt("ID_ALUMNO"));
+        usuario.setNombres(rs.getString("NOMBRES"));
+        usuario.setApePaterno(rs.getString("APE_PATERNO"));
+        usuario.setApeMaterno(rs.getString("APE_MATERNO"));
+        usuario.setUsername(rs.getString("USERNAME"));
+        usuario.setCommonVal01(rs.getString("COMMONVAL01"));
+        usuario.setCommonVal02(rs.getString("COMMONVAL02"));
+        usuario.setCommonVal03(rs.getString("COMMONVAL03"));
+        rol.setIdRol(rs.getInt("ID_ROL"));
+        rol.setNombre(rs.getString("ROL"));
+        usuario.setRol(rol);
+        return usuario;
+    }
 
     private Object[] createObject(int idAlumno, Alumno detalle) {
         return new Object[]{
@@ -167,4 +192,6 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
     }
     return new WrapperData(data, page, pageSize, lengthDataTable);
   }
+
+
 }
