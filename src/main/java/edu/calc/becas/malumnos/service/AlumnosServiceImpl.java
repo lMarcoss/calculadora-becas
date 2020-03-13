@@ -4,6 +4,7 @@ import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.dao.AlumnosDao;
 import edu.calc.becas.malumnos.model.Alumno;
+import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,10 @@ public class AlumnosServiceImpl implements AlumnosService {
   @Override
   public WrapperData getAllByStatusLoad(int page, int pageSize, String status, String param1, String param2, String param3) {
     return alumnosDao.getAllByStatusLoad(page, pageSize, status, param1, param2, param3);
+  }
+
+  @Override
+  public Usuario getUserInfo(String matricula) {
+    return alumnosDao.getUserInfo(matricula);
   }
 }

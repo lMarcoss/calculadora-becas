@@ -4,6 +4,7 @@ import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.malumnos.service.AlumnosService;
+import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -49,6 +50,11 @@ public class AlumnosAPI {
     public Alumno add(@ApiParam(value = "Realiza el insert a la tabla de alumnos y actividades", defaultValue = "0") @RequestBody Alumno alumno) throws GenericException {
         alumnosService.add(alumno);
         return alumno;
+    }
+    @GetMapping("/info")
+    @ApiOperation(value = "Obtiene datos del alumno")
+    public Usuario getAlumno(@RequestParam(value = "matricula", defaultValue = DEFAULT_ESTATUS, required = false) String matricula) throws GenericException {
+        return alumnosService.getUserInfo(matricula);
     }
 
 

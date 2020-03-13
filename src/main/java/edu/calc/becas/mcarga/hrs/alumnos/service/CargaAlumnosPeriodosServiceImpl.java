@@ -6,6 +6,7 @@ import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.mcarga.hrs.ProcessRow;
 import edu.calc.becas.mcarga.hrs.alumnos.dao.CargaAlumnosPeriodosDao;
 import edu.calc.becas.mcarga.hrs.read.files.model.RowFile;
+import edu.calc.becas.mcatalogos.actividades.dao.ActividadesDaoImpl;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
@@ -27,6 +28,9 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
 
   @Autowired
   CargaAlumnosPeriodosDao cargaAlumnosPeriodosDao;
+
+  @Autowired
+  ActividadesDaoImpl actividadesDaoImpl;
 
   @Value("${prop.carga.hrs.biblioteca.id}")
   private int idActividadBiblioteca;
@@ -125,7 +129,16 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
             alumno.setMatricula(row.getCells().get(i).getValue());
           }
           if (i == 31){
-            alumno.setPorcentajeActividad(Integer.parseInt(row.getCells().get(i).getValue()));
+            String valor = row.getCells().get(i).getValue();
+            float tmp = Float.parseFloat(valor)*100;
+            int b=(int)(Math.round(tmp));
+            System.out.println("porcentaje :::::::: " + b);
+
+            /*String[] arrOfStr = valor.split(".", 2);
+            for (String a : arrOfStr)
+              System.out.println(a);*/
+            alumno.setPorcentajeActividad(b);
+            //alumno.setPorcentajeActividad(Integer.parseInt(row.getCells().get(i).getValue()));
           }
 
         }
@@ -135,7 +148,7 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
 
     }
     LOG.debug(alumnosReportes.toString());
-    return 0; //cargaAlumnosPeriodosDao.persistenceAlumnos(alumnos,  parcialActual, cicloEscolarActual, licenciatura);
+     return actividadesDaoImpl.persistencePorcentaje(alumnosReportes,  parcialActual, cicloEscolarActual);
     }
 
   public static interface CargaAlumnosPeriodosService {
