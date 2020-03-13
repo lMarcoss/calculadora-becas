@@ -47,6 +47,12 @@ public class ParcialAPI {
         return parcialWrapperData;
     }
 
+    @GetMapping("/actual")
+    @ApiOperation("Obtiene el parcial actual")
+    public Parcial getParcialActual() throws GenericException {
+        return parcialService.getParcialActual();
+    }
+
     @GetMapping()
     @ApiOperation("Obtiene el cat\u00e1lgoo de parciales")
     public WrapperData<Parcial> getAll() throws GenericException {

@@ -2,6 +2,8 @@ package edu.calc.becas.mconfiguracion.parciales.dao;
 
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.exceptions.GenericException;
+import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -30,8 +32,13 @@ public class ParcialDaoImpl extends BaseDao implements ParcialDao {
     }
 
     @Override
-    public Parcial getParcialActual() {
-        return this.jdbcTemplate.queryForObject(QueriesParcial.QRY_GET_PARCIAL_ACTUAL, ((rs, i) -> mapperParcial(rs)));
+    public Parcial getParcialActual(CicloEscolarVo cicloEscolarVo) throws GenericException {
+        try {
+            return this.jdbcTemplate.queryForObject(QueriesParcial.QRY_GET_PARCIAL_ACTUAL,new Object[]{cicloEscolarVo.getClave()}, ((rs, i) -> mapperParcial(rs)));
+        }catch (Exception e){
+            throw new GenericException( e, "El Parcial actual del periodo en curso no est\u00e1 registrado");
+        }
+
     }
 
     private Parcial mapperParcial(ResultSet rs) throws SQLException {

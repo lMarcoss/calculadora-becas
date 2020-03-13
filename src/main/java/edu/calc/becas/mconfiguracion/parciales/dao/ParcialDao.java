@@ -1,6 +1,8 @@
 package edu.calc.becas.mconfiguracion.parciales.dao;
 
 import edu.calc.becas.common.base.dao.CrudGenericDao;
+import edu.calc.becas.exceptions.GenericException;
+import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 
 import java.util.List;
@@ -14,5 +16,5 @@ import java.util.List;
 public interface ParcialDao extends CrudGenericDao<Parcial> {
     List<Parcial> getAllByPeriodo(String cvePeriodo);
 
-    Parcial getParcialActual();
+    Parcial getParcialActual(CicloEscolarVo cicloEscolarVo) throws GenericException;
 }

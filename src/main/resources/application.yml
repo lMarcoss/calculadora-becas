@@ -11,7 +11,7 @@ key:
   encode:
     crypto: $#u1!N51*5M412&
 location:
-  file: /Users/vampiro/workspace-leo/servicio-social/file-dev/
+  file: ${PATH_FILE_DEV_CALC_UNSIS:/Users/vampiro/workspace-leo/servicio-social/file-dev/}
 
 prop:
   sistema:
