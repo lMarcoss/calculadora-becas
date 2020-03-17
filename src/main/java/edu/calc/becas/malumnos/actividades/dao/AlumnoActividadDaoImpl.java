@@ -5,6 +5,7 @@ import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.malumnos.actividades.model.ActividadesAlumnos;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -26,8 +27,8 @@ import static edu.calc.becas.malumnos.actividades.dao.QueriesActividadAlumno.QRY
 @Repository
 public class AlumnoActividadDaoImpl extends BaseDao implements AlumnoActividadDao {
 
-    public AlumnoActividadDaoImpl(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+    public AlumnoActividadDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
+        super(jdbcTemplate, messageApplicationProperty);
     }
 
     @Override
