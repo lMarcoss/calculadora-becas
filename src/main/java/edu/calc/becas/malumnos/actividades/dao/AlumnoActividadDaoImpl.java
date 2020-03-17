@@ -12,10 +12,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import static edu.calc.becas.common.utils.Constant.ESTATUS_ACTIVE;
-import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
+import static edu.calc.becas.common.utils.Constant.*;
 import static edu.calc.becas.malumnos.actividades.dao.QueriesActividadAlumno.QRY_GET_ACTIVIDAD_BY_ALUMNO;
 import static edu.calc.becas.malumnos.actividades.dao.QueriesActividadAlumno.QRY_GET_ALL_ACTIVIDADES_ALUMNOS;
+import static edu.calc.becas.malumnos.actividades.dao.QueriesActividadAlumno.QRY_CONDITION_ID_ACTIVIDAD;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -48,8 +48,16 @@ public class AlumnoActividadDaoImpl extends BaseDao implements AlumnoActividadDa
     public WrapperData getAllAlumnosByActividad(int page, int pageSize, String idActividad, String idCiclo){
       boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
       String queryGetAll = QRY_GET_ALL_ACTIVIDADES_ALUMNOS;
+      boolean byActividad = !idActividad.equalsIgnoreCase(ALL_ITEMS);
+      if (byActividad) {
+        queryGetAll = queryGetAll.concat(QRY_CONDITION_ID_ACTIVIDAD.replace("?", "'" + idActividad + "'"));
+        //queryCountItem = queryGetAll.concat(QRY_CONDITION_ID_ACTIVIDAD.replace("?", "'" + idActividad + "'"));
+      }
 
       queryGetAll = addQueryPageable(page, pageSize, queryGetAll);
+
+
+
 
       int lengthDatable = this.jdbcTemplate.queryForObject(createQueryCountItem(queryGetAll), Integer.class);
 

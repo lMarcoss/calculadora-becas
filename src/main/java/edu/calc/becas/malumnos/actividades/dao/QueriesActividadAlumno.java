@@ -32,4 +32,7 @@ final class QueriesActividadAlumno {
       "AND CAL.ID_ALUMNO_P = AL.ID_ALUMNOP\n" +
       "AND AC.ID_ACTIVIDAD = AT.ID_ACTIVIDAD\n" +
       "AND ALM.MATRICULA = AL.MATRICULA";
+
+
+  static final String QRY_CONDITION_ID_ACTIVIDAD =" and AT.ID_ACTIVIDAD = ?";
 }
