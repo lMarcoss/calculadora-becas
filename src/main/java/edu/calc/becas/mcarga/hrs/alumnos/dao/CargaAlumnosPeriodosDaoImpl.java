@@ -5,6 +5,7 @@ import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -17,8 +18,8 @@ import static edu.calc.becas.mcarga.hrs.alumnos.dao.QueriesCargaAlumnos.QRY_ADD_
 @Repository("cargaAlumnosPeriodosRepository")
 public class CargaAlumnosPeriodosDaoImpl extends BaseDao implements CargaAlumnosPeriodosDao {
 
-  public CargaAlumnosPeriodosDaoImpl(JdbcTemplate jdbcTemplate) {
-    super(jdbcTemplate);
+  public CargaAlumnosPeriodosDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
+    super(jdbcTemplate, messageApplicationProperty);
   }
 
   @Override

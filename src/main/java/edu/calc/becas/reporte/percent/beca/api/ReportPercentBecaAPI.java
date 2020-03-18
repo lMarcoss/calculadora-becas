@@ -50,6 +50,7 @@ public class ReportPercentBecaAPI {
             @ApiParam(value = "Parcial a recuperar", defaultValue = ALL_ITEMS) @RequestParam(value = "parcial", defaultValue = ALL_ITEMS, required = false) String parcial,
             @ApiParam(value = "Actividad a recuperar", defaultValue = ALL_ITEMS) @RequestParam(value = "actividad", defaultValue = ALL_ITEMS, required = false) String actividad,
             @ApiParam(value = "Palabra clave") @RequestParam(value = "palabra-clave", defaultValue = "", required = false) String palabraClave,
+            @ApiParam(value = "Estatus del alumno en el periodo") @RequestParam(value = "status", defaultValue = ALL_ITEMS, required = false) String estatus,
             HttpServletRequest httpServlet
     ) {
 
@@ -66,13 +67,13 @@ public class ReportPercentBecaAPI {
         Pageable pageable = new Pageable(Integer.parseInt(page), Integer.parseInt(pageSize));
 
 
-        ReporteActividad reporte = defineFilterParam(cicloEscolar, licenciatura, grupo, parcial, actividad, palabraClave, matricula);
+        ReporteActividad reporte = defineFilterParam(cicloEscolar, licenciatura, grupo, parcial, actividad, palabraClave, matricula, estatus);
 
         return this.reportPercentBecaService.getAll(pageable, reporte);
     }
 
     private ReporteActividad defineFilterParam(String cicloEscolar, String licenciatura, String grupo, String parcial,
-                                               String actividad, String palabraClave, String matricula) {
+                                               String actividad, String palabraClave, String matricula, String estatus) {
         ReporteActividad filter = new ReporteActividad();
 
         filter.setCvePeriodo(cicloEscolar);
@@ -96,6 +97,8 @@ public class ReportPercentBecaAPI {
         if (!palabraClave.equalsIgnoreCase("")) {
             filter.setPalabraClave(palabraClave);
         }
+
+        filter.setCveEstatus(estatus);
         return filter;
     }
 }

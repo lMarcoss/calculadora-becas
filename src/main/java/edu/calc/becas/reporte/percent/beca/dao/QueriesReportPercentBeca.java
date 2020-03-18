@@ -63,6 +63,7 @@ final class QueriesReportPercentBeca {
     static final String ADD_CONDITION_ACTIVIDAD = "\nAND AC.ID_ACTIVIDAD = %s\n";
     static final String ADD_CONDITION_MATRICULA_ALUMNO = "\nAND A.MATRICULA = %s\n";
     static final String ADD_CONDITION_LIKE_WORD_KEY = "\nAND CONCAT(A.NOMBRES, ' ', A.APE_PATERNO, ' ', A.APE_MATERNO) LIKE %s\n";
+    static final String ADD_CONDITION_BY_STATUS = "\nAND ADP.ESTATUS = %s\n";
 }
 
 

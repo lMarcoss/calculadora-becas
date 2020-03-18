@@ -51,13 +51,13 @@ public class ActividadesServiceImpl implements ActividadesService{
     }
 
     @Override
-    public DetalleActividadVo add(DetalleActividadVo detalle) {
+    public DetalleActividadVo add(DetalleActividadVo detalle) throws GenericException {
         return actividadesDao.add(detalle);
     }
 
     @Override
-    public DetalleActividadVo udateDetail(DetalleActividadVo detalle) {
-        return actividadesDao.udateDetail(detalle);
+    public DetalleActividadVo updateDetail(DetalleActividadVo detalle) throws GenericException {
+        return actividadesDao.updateDetail(detalle);
     }
 
     @Override

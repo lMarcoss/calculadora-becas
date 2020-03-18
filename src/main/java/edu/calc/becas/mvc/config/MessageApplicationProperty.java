@@ -23,4 +23,5 @@ public class MessageApplicationProperty {
     String errorObtenerDetalleLicencuaturaSistemaHorario;
     String errorObtenerPeriodoActual;
     String errorObtenerGrupos;
+    String errorAsignarUsuariosAHorarioActividad;
 }

@@ -3,6 +3,7 @@ package edu.calc.becas.reporte.asistencia.sala.dao;
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import edu.calc.becas.reporte.asistencia.sala.model.AlumnoAsistenciaSala;
 import edu.calc.becas.reporte.asistencia.sala.model.FechaAsistencia;
 import edu.calc.becas.reporte.asistencia.sala.model.PaseAsistencia;
@@ -28,8 +29,8 @@ public class AsistenciaSalaDaoImpl extends BaseDao implements AsistenciaSalaDao 
     @Value("${prop.carga.hrs.sala.asistencia.falta}")
     String pFalta;
 
-    public AsistenciaSalaDaoImpl(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+    public AsistenciaSalaDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
+        super(jdbcTemplate, messageApplicationProperty);
     }
 
     @Override

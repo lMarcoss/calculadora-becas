@@ -3,6 +3,7 @@ package edu.calc.becas.mcatalogos.actividades.service;
 import edu.calc.becas.common.model.LabelValueData;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.common.service.CrudGenericService;
+import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.actividades.model.DetalleActividadVo;
 
@@ -16,9 +17,9 @@ public interface ActividadesService extends CrudGenericService<ActividadVo> {
 
     ActividadVo update(ActividadVo detalle);
 
-    DetalleActividadVo add(DetalleActividadVo detalle);
+    DetalleActividadVo add(DetalleActividadVo detalle) throws GenericException;
 
-    DetalleActividadVo udateDetail(DetalleActividadVo detalle);
+    DetalleActividadVo updateDetail(DetalleActividadVo detalle) throws GenericException;
 
     WrapperData getAllByStatusAndTipoActividadHorario(int parseInt, int parseInt1, String status, String tipoActividad, String swHorario);
 }

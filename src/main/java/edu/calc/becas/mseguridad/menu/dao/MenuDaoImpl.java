@@ -3,6 +3,7 @@ package edu.calc.becas.mseguridad.menu.dao;
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mseguridad.menu.model.Menu;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -16,8 +17,8 @@ import static edu.calc.becas.mseguridad.menu.dao.QueriesMenu.QRY_GET_PARENTS_BY_
 @Repository
 public class MenuDaoImpl extends BaseDao implements MenuDao {
 
-    public MenuDaoImpl(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+    public MenuDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
+        super(jdbcTemplate, messageApplicationProperty);
     }
 
 

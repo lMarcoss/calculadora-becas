@@ -1,11 +1,11 @@
 package edu.calc.becas.mseguridad.login.dao;
 
 import edu.calc.becas.common.base.dao.BaseDao;
-import edu.calc.becas.common.utils.UtilMethods;
 import edu.calc.becas.exceptions.ConnectionJdbcException;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.rolesypermisos.model.Rol;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import edu.calc.becas.mvc.config.security.InvalidJwtAuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -30,8 +30,8 @@ public class LoginDaoImpl extends BaseDao implements LoginDao {
     @Value("${prop.security.secret.key.end}")
     private String secretKeyEnd;
 
-    public LoginDaoImpl(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+    public LoginDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
+        super(jdbcTemplate, messageApplicationProperty);
     }
 
     public UserLogin login(UserLogin usuario) throws InvalidJwtAuthenticationException, ConnectionJdbcException, EmptyResultDataAccessException {

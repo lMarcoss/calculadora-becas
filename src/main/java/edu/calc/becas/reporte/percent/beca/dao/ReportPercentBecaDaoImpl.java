@@ -4,6 +4,7 @@ import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.common.model.Pageable;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import edu.calc.becas.reporte.percent.beca.model.ReporteActividad;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,8 +26,8 @@ import static edu.calc.becas.reporte.percent.beca.dao.QueriesReportPercentBeca.*
 @Repository
 public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBecaDao {
 
-    public ReportPercentBecaDaoImpl(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+    public ReportPercentBecaDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
+        super(jdbcTemplate, messageApplicationProperty);
     }
 
     @Override
@@ -98,6 +99,10 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
 
         if (filter.getPalabraClave() != null && !filter.getPalabraClave().trim().equalsIgnoreCase("")) {
             conditions = conditions.concat(String.format(ADD_CONDITION_LIKE_WORD_KEY, "'%" + filter.getPalabraClave() + "%'"));
+        }
+
+        if(filter.getCveEstatus()!= null && !filter.getCveEstatus().equalsIgnoreCase(ALL_ITEMS)){
+            conditions = conditions.concat(String.format(ADD_CONDITION_BY_STATUS, "'" + filter.getCveEstatus() + "'"));
         }
 
         return conditions;

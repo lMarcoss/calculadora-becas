@@ -3,6 +3,7 @@ package edu.calc.becas.mconfiguracion.cicloescolar.dao;
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -21,8 +22,8 @@ import static edu.calc.becas.mconfiguracion.cicloescolar.dao.QueriesCicloEscolar
 @Repository
 public class CicloEscolarDaoImpl extends BaseDao implements CicloEscolarDao {
 
-    public CicloEscolarDaoImpl(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+    public CicloEscolarDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
+        super(jdbcTemplate, messageApplicationProperty);
     }
 
     @Override

@@ -6,6 +6,7 @@ import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mseguridad.rolesypermisos.model.Rol;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -22,8 +23,8 @@ import static edu.calc.becas.malumnos.dao.QueriesAlumnos.*;
 public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
 
 
-    public AlumnosDaoImpl(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+    public AlumnosDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
+        super(jdbcTemplate, messageApplicationProperty);
     }
 
     @Override
@@ -61,36 +62,36 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
 
     @Override
     public Alumno add(Alumno object) {
-        try{
+        try {
             int idAlumno = this.jdbcTemplate.queryForObject(QRY_ID_ALUMNO, Integer.class);
             int valueAlumno = this.jdbcTemplate.queryForObject(QRY_EXISTE_ALUMNO, new Object[]{object.getMatricula()}, Integer.class);
-            if (valueAlumno == 0){
-              this.jdbcTemplate.update(QRY_ADD, createObject(idAlumno, object));
+            if (valueAlumno == 0) {
+                this.jdbcTemplate.update(QRY_ADD, createObject(idAlumno, object));
             }
 
-          int valueAlumnoPeriodo = this.jdbcTemplate.queryForObject(QRY_EXISTE_ALUMNO_PERIODO,
-                                          new Object[]{
-                                            object.getCicloEscolar(),
-                                            object.getMatricula()}, Integer.class);
-          if (valueAlumnoPeriodo == 0){
-            this.jdbcTemplate.update(QRY_ADD_ALUMNO_PERIODO,
-              new Object[]{
-                object.getMatricula(),
-                object.getGrupo(),
-                object.getGrupo(),
-                object.getLicenciatura(),
-                object.getLicenciatura(),
-                object.getCicloEscolar(),
-                object.getCicloEscolar()
-              });
-          }
+            int valueAlumnoPeriodo = this.jdbcTemplate.queryForObject(QRY_EXISTE_ALUMNO_PERIODO,
+                    new Object[]{
+                            object.getCicloEscolar(),
+                            object.getMatricula()}, Integer.class);
+            if (valueAlumnoPeriodo == 0) {
+                this.jdbcTemplate.update(QRY_ADD_ALUMNO_PERIODO,
+                        new Object[]{
+                                object.getMatricula(),
+                                object.getGrupo(),
+                                object.getGrupo(),
+                                object.getLicenciatura(),
+                                object.getLicenciatura(),
+                                object.getCicloEscolar(),
+                                object.getCicloEscolar()
+                        });
+            }
 //INSERT INTO ALUMNOS_DAT_PERIODO (MATRICULA,CVE_GRUPO, DESC_GRUPO, CVE_LICENCIATURA, DESC_LICENCIATURA, CVE_PERIODO, DESC_PERIDODO) VALUES
 
             this.jdbcTemplate.update(QRY_ADD_ALUMNO_ACTIVIDAD, new Object[]{
                     object.getIdDetalleActividad(),
                     object.getMatricula()
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return object;
@@ -101,7 +102,7 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
     public Usuario getUserInfo(String matricula) {
         String query = "SELECT ID_ALUMNO,NOMBRES, APE_PATERNO, APE_MATERNO, '3' ID_ROL, 'ALUMNO' ROL, AC.MATRICULA as USERNAME, CURP COMMONVAL01, AC.CVE_GRUPO COMMONVAL02,\n" +
                 "       AC.DESC_LICENCIATURA COMMONVAL03 FROM ALUMNOS AL, ALUMNOS_DAT_PERIODO AC\n" +
-                "    WHERE AL.MATRICULA = AC.MATRICULA AND AC.MATRICULA = ? and ESTATUS = 'S'";
+                "    WHERE AL.MATRICULA = AC.MATRICULA AND AC.MATRICULA = ? and AL.ESTATUS = 'S'";
         return this.jdbcTemplate.queryForObject(query, new Object[]{matricula}, (((rs, i) -> mapperAlumnoLogin(rs))));
     }
 
@@ -134,6 +135,7 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
                 "ADMIN"
         };
     }
+
     @Override
     public Alumno update(Alumno object) {
         return null;
@@ -153,45 +155,45 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
         return alumno;
     }
 
-  private Alumno mapperAlumnoCargas(ResultSet rs) throws SQLException {
-    Alumno alumno = new Alumno(rs.getString("ESTATUS"));
-    ActividadVo actividadVo = new ActividadVo();
-    alumno.setIdAlumno(rs.getString("ID_ALUMNO"));
-    alumno.setMatricula(rs.getString("MATRICULA"));
-    alumno.setCurp(rs.getString("CURP"));
-    alumno.setNombres(rs.getString("NOMBRES"));
-    alumno.setApePaterno(rs.getString("APE_PATERNO"));
-    alumno.setApeMaterno(rs.getString("APE_MATERNO"));
-    alumno.setGrupo(rs.getString("CVE_GRUPO"));
-    return alumno;
-  }
-
-  @Override
-  public WrapperData getAllByStatusLoad(int page, int pageSize, String status, String param1, String param2, String param3) {
-    boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
-    String queryGetALl = "";
-
-    queryGetALl = queryGetALl.concat(QRY_ALUMNOS_CARGAS);
-    //queryGetALl.concat(QRY_CONDITION_ACTIVIDAD.replace("?", "'" + idActividad + "'"));
-    if(!param2.equals("All")){
-      queryGetALl =   queryGetALl.concat(QRY_CONDITION_LIC.replace("?", "'" + param2 + "'"));
+    private Alumno mapperAlumnoCargas(ResultSet rs) throws SQLException {
+        Alumno alumno = new Alumno(rs.getString("ESTATUS"));
+        ActividadVo actividadVo = new ActividadVo();
+        alumno.setIdAlumno(rs.getString("ID_ALUMNO"));
+        alumno.setMatricula(rs.getString("MATRICULA"));
+        alumno.setCurp(rs.getString("CURP"));
+        alumno.setNombres(rs.getString("NOMBRES"));
+        alumno.setApePaterno(rs.getString("APE_PATERNO"));
+        alumno.setApeMaterno(rs.getString("APE_MATERNO"));
+        alumno.setGrupo(rs.getString("CVE_GRUPO"));
+        return alumno;
     }
 
-    if(!param3.equals("All")){
-      queryGetALl = queryGetALl.concat(QRY_CONDITION_GRUPO.replace("?", "'" + param3 + "'"));
+    @Override
+    public WrapperData getAllByStatusLoad(int page, int pageSize, String status, String param1, String param2, String param3) {
+        boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
+        String queryGetALl = "";
+
+        queryGetALl = queryGetALl.concat(QRY_ALUMNOS_CARGAS);
+        //queryGetALl.concat(QRY_CONDITION_ACTIVIDAD.replace("?", "'" + idActividad + "'"));
+        if (!param2.equals("All")) {
+            queryGetALl = queryGetALl.concat(QRY_CONDITION_LIC.replace("?", "'" + param2 + "'"));
+        }
+
+        if (!param3.equals("All")) {
+            queryGetALl = queryGetALl.concat(QRY_CONDITION_GRUPO.replace("?", "'" + param3 + "'"));
+        }
+
+
+        int lengthDataTable = this.jdbcTemplate.queryForObject(createQueryCountItem(QRY_ALUMNOS_CARGAS), new Object[]{param1}, Integer.class);
+
+        List<Alumno> data = this.jdbcTemplate.query(queryGetALl, new Object[]{param1}, (rs, rowNum) -> mapperAlumnoCargas(rs));
+
+        if (!pageable) {
+            page = 0;
+            pageSize = lengthDataTable;
+        }
+        return new WrapperData(data, page, pageSize, lengthDataTable);
     }
-
-
-    int lengthDataTable = this.jdbcTemplate.queryForObject(createQueryCountItem(QRY_ALUMNOS_CARGAS), new Object[]{param1}, Integer.class);
-
-    List<Alumno> data = this.jdbcTemplate.query(queryGetALl, new Object[]{param1}, (rs, rowNum) -> mapperAlumnoCargas(rs));
-
-    if (!pageable) {
-      page = 0;
-      pageSize = lengthDataTable;
-    }
-    return new WrapperData(data, page, pageSize, lengthDataTable);
-  }
 
 
 }

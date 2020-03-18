@@ -3,6 +3,7 @@ package edu.calc.becas.mseguridad.rolesypermisos.dao;
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.mseguridad.rolesypermisos.model.Rol;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,8 +26,8 @@ public class RolDaoImpl extends BaseDao implements RolDao {
     private final String secretKeyStart = "4^%m@=C*&c#L+%";
     private final String secretKeyEnd = "U$|2AT>30!";
 
-    public RolDaoImpl(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+    public RolDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
+        super(jdbcTemplate, messageApplicationProperty);
     }
 
     @Override

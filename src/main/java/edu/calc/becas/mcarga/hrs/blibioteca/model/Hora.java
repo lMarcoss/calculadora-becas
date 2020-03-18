@@ -20,4 +20,5 @@ import java.io.Serializable;
 public class Hora implements Serializable {
     int numHora;
     int numMinutos;
+    String amPm;
 }

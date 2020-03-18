@@ -5,6 +5,7 @@ import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mseguridad.rolesypermisos.model.Rol;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,8 +37,8 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
     @Value("${prop.security.secret.key.end}")
     private String secretKeyEnd;
 
-    public UsuarioDaoImpl(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+    public UsuarioDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
+        super(jdbcTemplate, messageApplicationProperty);
     }
 
     @Override

@@ -7,6 +7,7 @@ import edu.calc.becas.mcarga.hrs.CargaHrsDao;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import edu.calc.becas.reporte.percent.beca.dao.ReportPercentBecaDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,10 +33,10 @@ public class CargaHrsSalaDaoImpl extends BaseDao implements CargaHrsDao {
     private final ReportPercentBecaDao reportPercentBecaDao;
     private final AlumnoActividadDao alumnoActividadDao;
 
-    public CargaHrsSalaDaoImpl(JdbcTemplate jdbcTemplate,
+    public CargaHrsSalaDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty,
                                ReportPercentBecaDao reportPercentBecaDao,
                                AlumnoActividadDao alumnoActividadDao) {
-        super(jdbcTemplate);
+        super(jdbcTemplate, messageApplicationProperty);
         this.reportPercentBecaDao = reportPercentBecaDao;
         this.alumnoActividadDao = alumnoActividadDao;
     }

@@ -5,6 +5,7 @@ import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -22,8 +23,8 @@ import static edu.calc.becas.mconfiguracion.parciales.dao.QueriesParcial.QRY_GET
  */
 @Repository
 public class ParcialDaoImpl extends BaseDao implements ParcialDao {
-    public ParcialDaoImpl(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate);
+    public ParcialDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
+        super(jdbcTemplate, messageApplicationProperty);
     }
 
     @Override

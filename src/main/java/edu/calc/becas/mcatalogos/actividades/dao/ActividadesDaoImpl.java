@@ -3,18 +3,20 @@ package edu.calc.becas.mcatalogos.actividades.dao;
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.common.model.LabelValueData;
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.actividades.dao.AlumnoActividadDao;
-import edu.calc.becas.malumnos.model.Alumno;
-import edu.calc.becas.mcarga.hrs.blibioteca.dao.CargaHrsBibliotecaDaoImpl;
+import edu.calc.becas.mcarga.hrs.blibioteca.model.Hora;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.actividades.model.DetalleActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import edu.calc.becas.reporte.percent.beca.dao.ReportPercentBecaDao;
 import edu.calc.becas.reporte.percent.beca.model.ReporteActividad;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -28,19 +30,18 @@ import static edu.calc.becas.mcatalogos.actividades.dao.QueriesActividades.*;
 
 @Repository
 public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
-  private static final Logger LOG = LoggerFactory.getLogger(ActividadesDaoImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActividadesDaoImpl.class);
 
-  private final ReportPercentBecaDao reportPercentBecaDao;
+    private final ReportPercentBecaDao reportPercentBecaDao;
     private final AlumnoActividadDao alumnoActividadDao;
 
-    public ActividadesDaoImpl(JdbcTemplate jdbcTemplate,
+    public ActividadesDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty,
                               ReportPercentBecaDao reportPercentBecaDao,
                               AlumnoActividadDao alumnoActividadDao) {
-        super(jdbcTemplate);
-      this.reportPercentBecaDao = reportPercentBecaDao;
-      this.alumnoActividadDao = alumnoActividadDao;
+        super(jdbcTemplate, messageApplicationProperty);
+        this.reportPercentBecaDao = reportPercentBecaDao;
+        this.alumnoActividadDao = alumnoActividadDao;
     }
-
 
 
     @Override
@@ -143,24 +144,36 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
 
     @Override
-    public DetalleActividadVo add(DetalleActividadVo detalle) {
-        this.jdbcTemplate.update(QRY_ADD_HORA_ACTIVIDAD, createObjectParamDetalle(detalle));
-        return detalle;
+    public DetalleActividadVo add(DetalleActividadVo detalle) throws GenericException {
+        try {
+            this.jdbcTemplate.update(QRY_ADD_HORA_ACTIVIDAD, createObjectParamDetalle(detalle));
+            return detalle;
+        } catch (DuplicateKeyException e) {
+            throw new GenericException(messageApplicationProperty.getErrorAsignarUsuariosAHorarioActividad());
+        } catch (Exception e) {
+            throw new GenericException(e);
+        }
+
     }
 
     @Override
-    public DetalleActividadVo udateDetail(DetalleActividadVo detalle) {
-        this.jdbcTemplate.update(QRY_UPDATE_HORA_ACTIVIDAD, new Object[]{
-                detalle.getHora(),
-                detalle.getFormat(),
-                detalle.getNumeroAlumnos(),
-                detalle.getUsuario().getIdUsuario(),
-                detalle.getEstatus(),
-                detalle.getComentario(),
-                detalle.getIdDetalleActividad()
-        });
+    public DetalleActividadVo updateDetail(DetalleActividadVo detalle) throws GenericException {
+        try {
+            this.jdbcTemplate.update(QRY_UPDATE_HORA_ACTIVIDAD, detalle.getHorario().getNumHora(),
+                    detalle.getHorario().getAmPm(),
+                    detalle.getNumeroAlumnos(),
+                    detalle.getUsuario().getIdUsuario(),
+                    detalle.getEstatus(),
+                    detalle.getComentario(),
+                    detalle.getIdDetalleActividad());
 
-        return detalle;
+            return detalle;
+        } catch (DuplicateKeyException e) {
+            throw new GenericException(messageApplicationProperty.getErrorAsignarUsuariosAHorarioActividad());
+        } catch (Exception e) {
+            throw new GenericException(e);
+        }
+
     }
 
     @Override
@@ -178,15 +191,17 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
     private DetalleActividadVo mapperDetalleActividades(ResultSet rs) throws SQLException {
         Usuario usuario = new Usuario();
-
+        Hora hora = new Hora();
         DetalleActividadVo detalle = new DetalleActividadVo(rs.getString("ESTATUS"));
 
         detalle.setIdActividad(rs.getInt("ID_ACTIVIDAD"));
         detalle.setNombreActividad(rs.getString("NOMBRE_ACTIVIDAD"));
 
         detalle.setIdDetalleActividad(rs.getInt("ID_HORARIO_ACTIVIDAD"));
-        detalle.setHora(rs.getString("HORA") + ":00");
-        detalle.setFormat(rs.getString("AM_PM"));
+
+        hora.setNumHora(rs.getInt("HORA"));
+        hora.setAmPm(rs.getString("AM_PM"));
+
         detalle.setNumeroAlumnos(rs.getInt("NUMERO_ALUMNOS"));
         detalle.setNombreActividad(rs.getString("NOMBRE_ACTIVIDAD"));
         //detalle.setComentario(rs.getString("COMENTARIO"));
@@ -200,6 +215,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
         usuario.setApeMaterno(rs.getString("APE_MATERNO"));
 
         detalle.setUsuario(usuario);
+        detalle.setHorario(hora);
         return detalle;
     }
 
@@ -211,8 +227,8 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
     private Object[] createObjectParamDetalle(DetalleActividadVo detalle) {
         return new Object[]{
                 detalle.getIdActividad(),
-                detalle.getHora(),
-                detalle.getFormat(),
+                detalle.getHorario().getNumHora(),
+                detalle.getHorario().getAmPm(),
                 detalle.getNumeroAlumnos(),
                 detalle.getUsuario().getIdUsuario(),
                 detalle.getIdCicloEscolar(),
@@ -224,41 +240,41 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
     }
 
 
-  @Override
-  public int persistencePorcentaje(List<ReporteActividad> alumnos, Parcial parcialActual, CicloEscolarVo cicloEscolarActual) {
-    int count = 0;
-    for (ReporteActividad alumno : alumnos) {
-      try {
+    @Override
+    public int persistencePorcentaje(List<ReporteActividad> alumnos, Parcial parcialActual, CicloEscolarVo cicloEscolarActual) {
+        int count = 0;
+        for (ReporteActividad alumno : alumnos) {
+            try {
 
-        // obtiene la actividad del alumno
-        ActividadVo actividadVo = alumnoActividadDao.getActividadByAlumno(alumno.getMatricula(), cicloEscolarActual);
+                // obtiene la actividad del alumno
+                ActividadVo actividadVo = alumnoActividadDao.getActividadByAlumno(alumno.getMatricula(), cicloEscolarActual);
 
-        if (reportPercentBecaDao.actividadAlumnoExists(actividadVo)) {
-          jdbcTemplate.update(QRY_UPDATE_PERCENT_ACTIVIDAD,
-            new Object[]{
-              //percentLibraryTime,
-              alumno.getPorcentajeActividad(),
-              actividadVo.getIdActividad(),
-              parcialActual.getIdParcial()
-            });
-        } else {
-          jdbcTemplate.update(QRY_INSERT_PERCENT_ACTIVIDAD,
-            actividadVo.getIdActividad(),
-            alumno.getPorcentajeActividad(),
-            parcialActual.getIdParcial(),
-            cicloEscolarActual.getClave(),
-            cicloEscolarActual.getNombre(),
-            "ADMIN"
-          );
+                if (reportPercentBecaDao.actividadAlumnoExists(actividadVo)) {
+                    jdbcTemplate.update(QRY_UPDATE_PERCENT_ACTIVIDAD,
+                            new Object[]{
+                                    //percentLibraryTime,
+                                    alumno.getPorcentajeActividad(),
+                                    actividadVo.getIdActividad(),
+                                    parcialActual.getIdParcial()
+                            });
+                } else {
+                    jdbcTemplate.update(QRY_INSERT_PERCENT_ACTIVIDAD,
+                            actividadVo.getIdActividad(),
+                            alumno.getPorcentajeActividad(),
+                            parcialActual.getIdParcial(),
+                            cicloEscolarActual.getClave(),
+                            cicloEscolarActual.getNombre(),
+                            "ADMIN"
+                    );
+                }
+
+                count++;
+            } catch (Exception e) {
+                LOG.error(e.getMessage());
+            }
+
         }
-
-        count++;
-      } catch (Exception e) {
-        LOG.error(e.getMessage());
-      }
-
+        return count;
     }
-    return count;
-  }
 
 }

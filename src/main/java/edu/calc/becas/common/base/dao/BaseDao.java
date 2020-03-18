@@ -1,6 +1,7 @@
 package edu.calc.becas.common.base.dao;
 
 
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +19,11 @@ import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
 @Component
 public class BaseDao {
     protected final JdbcTemplate jdbcTemplate;
+    protected final MessageApplicationProperty messageApplicationProperty;
 
-    public BaseDao(JdbcTemplate jdbcTemplate) {
+    public BaseDao(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
         this.jdbcTemplate = jdbcTemplate;
+        this.messageApplicationProperty = messageApplicationProperty;
     }
 
     protected String addQueryPageable(int page, int pageSize, String queryGetALl) {

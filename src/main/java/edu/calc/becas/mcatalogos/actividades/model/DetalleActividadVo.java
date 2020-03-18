@@ -1,6 +1,7 @@
 package edu.calc.becas.mcatalogos.actividades.model;
 
 import edu.calc.becas.common.model.CommonData;
+import edu.calc.becas.mcarga.hrs.blibioteca.model.Hora;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,10 +18,7 @@ public class DetalleActividadVo extends CommonData {
     private int idDetalleActividad;
 
     @ApiModelProperty("Horario de la actidad")
-    private String hora;
-
-    @ApiModelProperty("Indica la hora en AM/PM")
-    private String format;
+    private Hora horario;
 
     @ApiModelProperty("Número de alumnos inscriptos a la actividad")
     private int numeroAlumnos;
