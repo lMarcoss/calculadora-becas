@@ -1,11 +1,11 @@
-package edu.calc.becas.reporte.asistencia.sala.api;
+package edu.calc.becas.mreporte.asistencia.sala.api;
 
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
-import edu.calc.becas.reporte.asistencia.sala.model.AlumnoAsistenciaSala;
-import edu.calc.becas.reporte.asistencia.sala.model.FechaAsistencia;
-import edu.calc.becas.reporte.asistencia.sala.model.PaseAsistencia;
-import edu.calc.becas.reporte.asistencia.sala.model.WrapperAsistenciaAlumno;
-import edu.calc.becas.reporte.asistencia.sala.service.AsistenciaSalaService;
+import edu.calc.becas.mreporte.asistencia.sala.model.AlumnoAsistenciaSala;
+import edu.calc.becas.mreporte.asistencia.sala.model.FechaAsistencia;
+import edu.calc.becas.mreporte.asistencia.sala.model.PaseAsistencia;
+import edu.calc.becas.mreporte.asistencia.sala.model.WrapperAsistenciaAlumno;
+import edu.calc.becas.mreporte.asistencia.sala.service.AsistenciaSalaService;
 import edu.calc.becas.utils.UtilDate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

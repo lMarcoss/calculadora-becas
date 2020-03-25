@@ -1,10 +1,10 @@
-package edu.calc.becas.reporte.asistencia.sala.service;
+package edu.calc.becas.mreporte.asistencia.sala.service;
 
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
-import edu.calc.becas.reporte.asistencia.sala.dao.AsistenciaSalaDao;
-import edu.calc.becas.reporte.asistencia.sala.model.AlumnoAsistenciaSala;
-import edu.calc.becas.reporte.asistencia.sala.model.FechaAsistencia;
-import edu.calc.becas.reporte.asistencia.sala.model.PaseAsistencia;
+import edu.calc.becas.mreporte.asistencia.sala.dao.AsistenciaSalaDao;
+import edu.calc.becas.mreporte.asistencia.sala.model.AlumnoAsistenciaSala;
+import edu.calc.becas.mreporte.asistencia.sala.model.FechaAsistencia;
+import edu.calc.becas.mreporte.asistencia.sala.model.PaseAsistencia;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

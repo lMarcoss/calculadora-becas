@@ -1,12 +1,11 @@
-package edu.calc.becas.reporte.percent.beca.api;
+package edu.calc.becas.mreporte.percent.beca.api;
 
 import edu.calc.becas.common.model.Pageable;
 import edu.calc.becas.common.model.WrapperData;
-import edu.calc.becas.common.utils.UtilMethods;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mvc.config.security.user.UserRequestService;
-import edu.calc.becas.reporte.percent.beca.model.ReporteActividad;
-import edu.calc.becas.reporte.percent.beca.service.ReportPercentBecaService;
+import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
+import edu.calc.becas.mreporte.percent.beca.service.ReportPercentBecaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

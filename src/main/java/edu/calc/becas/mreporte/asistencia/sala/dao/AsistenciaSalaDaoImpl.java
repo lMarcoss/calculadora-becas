@@ -1,12 +1,12 @@
-package edu.calc.becas.reporte.asistencia.sala.dao;
+package edu.calc.becas.mreporte.asistencia.sala.dao;
 
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
-import edu.calc.becas.reporte.asistencia.sala.model.AlumnoAsistenciaSala;
-import edu.calc.becas.reporte.asistencia.sala.model.FechaAsistencia;
-import edu.calc.becas.reporte.asistencia.sala.model.PaseAsistencia;
+import edu.calc.becas.mreporte.asistencia.sala.model.AlumnoAsistenciaSala;
+import edu.calc.becas.mreporte.asistencia.sala.model.FechaAsistencia;
+import edu.calc.becas.mreporte.asistencia.sala.model.PaseAsistencia;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.calc.becas.reporte.asistencia.sala.dao.QueriesAsistenciaSala.*;
+import static edu.calc.becas.mreporte.asistencia.sala.dao.QueriesAsistenciaSala.*;
 
 @Slf4j
 @Repository

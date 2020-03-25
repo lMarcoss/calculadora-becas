@@ -1,8 +1,8 @@
-package edu.calc.becas.reporte.percent.beca.service;
+package edu.calc.becas.mreporte.percent.beca.service;
 
 import edu.calc.becas.common.model.Pageable;
 import edu.calc.becas.common.model.WrapperData;
-import edu.calc.becas.reporte.percent.beca.model.ReporteActividad;
+import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
 
 /**
  * @author Marcos Santiago Leonardo

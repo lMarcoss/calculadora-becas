@@ -1,4 +1,4 @@
-package edu.calc.becas.reporte.asistencia.sala.dao;
+package edu.calc.becas.mreporte.asistencia.sala.dao;
 
 final class QueriesAsistenciaSala {
     private QueriesAsistenciaSala() {

@@ -8,7 +8,7 @@ import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.actividades.model.DetalleActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
-import edu.calc.becas.reporte.percent.beca.model.ReporteActividad;
+import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
 
 import java.util.List;
 

@@ -1,11 +1,11 @@
-package edu.calc.becas.reporte.percent.beca.dao;
+package edu.calc.becas.mreporte.percent.beca.dao;
 
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.common.model.Pageable;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
-import edu.calc.becas.reporte.percent.beca.model.ReporteActividad;
+import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 import static edu.calc.becas.common.utils.Constant.ALL_ITEMS;
 import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
-import static edu.calc.becas.reporte.percent.beca.dao.QueriesReportPercentBeca.*;
+import static edu.calc.becas.mreporte.percent.beca.dao.QueriesReportPercentBeca.*;
 
 /**
  * @author Marcos Santiago Leonardo

@@ -1,4 +1,4 @@
-package edu.calc.becas.reporte.percent.beca.model;
+package edu.calc.becas.mreporte.percent.beca.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

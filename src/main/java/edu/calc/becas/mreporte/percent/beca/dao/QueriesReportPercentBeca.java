@@ -1,4 +1,4 @@
-package edu.calc.becas.reporte.percent.beca.dao;
+package edu.calc.becas.mreporte.percent.beca.dao;
 
 /**
  * @author Marcos Santiago Leonardo

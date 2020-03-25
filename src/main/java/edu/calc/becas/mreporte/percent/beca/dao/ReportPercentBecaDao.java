@@ -1,9 +1,9 @@
-package edu.calc.becas.reporte.percent.beca.dao;
+package edu.calc.becas.mreporte.percent.beca.dao;
 
 import edu.calc.becas.common.model.Pageable;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
-import edu.calc.becas.reporte.percent.beca.model.ReporteActividad;
+import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
 
 
 /**

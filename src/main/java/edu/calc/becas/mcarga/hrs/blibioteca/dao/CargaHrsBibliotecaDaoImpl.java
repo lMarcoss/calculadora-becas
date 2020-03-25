@@ -8,7 +8,7 @@ import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
-import edu.calc.becas.reporte.percent.beca.dao.ReportPercentBecaDao;
+import edu.calc.becas.mreporte.percent.beca.dao.ReportPercentBecaDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
