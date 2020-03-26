@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static edu.calc.becas.common.utils.Message.MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER;
+import static edu.calc.becas.common.utils.Message.MESSAGE_ROW_PROCESSED_ROOM_COMPUTER;
 import static edu.calc.becas.utils.ExtensionFile.XLSX_EXTENSION;
 import static edu.calc.becas.utils.ExtensionFile.XLS_EXTENSION;
 
@@ -59,10 +60,16 @@ public class UploadFileAPI {
         CicloEscolarVo cicloEscolarActual = cicloEscolarService.getCicloEscolarActual();
 
         int resultProcessed = processHoursService.processData(pages, commonData, parcialActual, cicloEscolarActual);
+        String message;
+        if(resultProcessed == 1){
+            message = String.format(MESSAGE_ROW_PROCESSED_ROOM_COMPUTER, 1);
+        }else {
+            message = String.format(MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER, resultProcessed);
+        }
         return ProcessedFile.builder()
                 .error(false)
                 .file(pathfile)
-                .message(String.format(MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER, resultProcessed))
+                .message(message)
                 .idFile(1)
                 .build();
 

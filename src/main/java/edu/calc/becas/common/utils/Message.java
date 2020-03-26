@@ -11,4 +11,5 @@ public final class Message {
     }
 
     public static final String MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER = "%s Registros procesados con éxito";
+    public static final String MESSAGE_ROW_PROCESSED_ROOM_COMPUTER = "%s Registro procesado con éxito";
 }
