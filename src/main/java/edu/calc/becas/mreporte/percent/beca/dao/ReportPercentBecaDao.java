@@ -3,6 +3,7 @@ package edu.calc.becas.mreporte.percent.beca.dao;
 import edu.calc.becas.common.model.Pageable;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
+import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
 
 
@@ -13,7 +14,7 @@ import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
  * Date: 2019-06-16
  */
 public interface ReportPercentBecaDao {
-    boolean actividadAlumnoExists(ActividadVo actividadVo);
+    boolean actividadAlumnoExists(ActividadVo actividadVo, Parcial parcialActual);
 
     WrapperData getAll(Pageable pageable, ReporteActividad reporteActividad);
 }

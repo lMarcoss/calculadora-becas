@@ -8,7 +8,7 @@ package edu.calc.becas.mreporte.percent.beca.dao;
  */
 final class QueriesReportPercentBeca {
     static final String QRY_COUNT_ID_ACTIVIDAD_ALUMNO =
-            "SELECT COUNT(1) FROM PORCENTAJE_BECA WHERE ID_ACTIVIDAD_ALUMNO = ?";
+            "SELECT COUNT(1) FROM PORCENTAJE_BECA WHERE ID_ACTIVIDAD_ALUMNO = ? and ID_PARCIAL = ? and CVE_PERIODO = ?";
 
     static final String QRY_COUNT_DATA_REPORT =
             "SELECT COUNT(1) \n";
@@ -30,7 +30,8 @@ final class QueriesReportPercentBeca {
                     "       ADP.CVE_GRUPO,\n" +
                     "       ADP.DESC_GRUPO,\n" +
                     "       ADP.CVE_PERIODO,\n" +
-                    "       ADP.DESC_PERIDODO\n";
+                    "       ADP.DESC_PERIDODO,\n"+
+                    "       ADP.ESTATUS\n";
 
     static final String QRY_ORDER_BY = "\nORDER BY A.NOMBRES ASC, A.APE_PATERNO ASC, A.APE_MATERNO ASC, ADP.CVE_GRUPO ASC, ADP.DESC_LICENCIATURA ASC";
 
@@ -58,7 +59,7 @@ final class QueriesReportPercentBeca {
     static final String ADD_CONDITION_CICLO_ESCOLAR = "\nAND ADP.CVE_PERIODO = %s\n";
     static final String ADD_CONDITION_LICENCIATURA = "\nAND ADP.CVE_LICENCIATURA = %s\n";
     static final String ADD_CONDITION_GRUPO = "\nAND ADP.CVE_GRUPO = %s\n";
-    static final String ADD_CONDITION_PARCIAL = "\nAND PP.ID_PARCIAL = %s\n";
+    static final String ADD_CONDITION_PARCIAL = "\nAND P.ID_PARCIAL = %s\n";
 
     static final String ADD_CONDITION_ACTIVIDAD = "\nAND AC.ID_ACTIVIDAD = %s\n";
     static final String ADD_CONDITION_MATRICULA_ALUMNO = "\nAND A.MATRICULA = %s\n";

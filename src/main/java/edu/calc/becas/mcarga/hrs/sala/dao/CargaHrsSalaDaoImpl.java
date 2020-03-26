@@ -49,7 +49,7 @@ public class CargaHrsSalaDaoImpl extends BaseDao implements CargaHrsDao {
                 // obtiene la actividad del alumno
                 ActividadVo actividadVo = alumnoActividadDao.getActividadByAlumno(alumno.getMatricula(), cicloEscolarActual);
 
-                if (reportPercentBecaDao.actividadAlumnoExists(actividadVo)) {
+                if (reportPercentBecaDao.actividadAlumnoExists(actividadVo, parcialActual)) {
                     jdbcTemplate.update(QRY_UPDATE_PERCENT_SALA,
                             new Object[]{
                                     alumno.getAsistenciaSala().getPorcentaje(),
@@ -60,7 +60,7 @@ public class CargaHrsSalaDaoImpl extends BaseDao implements CargaHrsDao {
                     jdbcTemplate.update(QRY_INSERT_PERCENT_SALA,
                             actividadVo.getIdActividad(),
                             alumno.getAsistenciaSala().getPorcentaje(),
-                            parcialActual.getIdParcial(),
+                            parcialActual.getParcial(),
                             alumno.getAgregadoPor()
                     );
                 }

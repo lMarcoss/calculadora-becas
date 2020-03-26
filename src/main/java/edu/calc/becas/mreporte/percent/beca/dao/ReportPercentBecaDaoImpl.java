@@ -4,6 +4,7 @@ import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.common.model.Pageable;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
+import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,8 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import static edu.calc.becas.common.utils.Constant.ALL_ITEMS;
-import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
+import static edu.calc.becas.common.utils.Constant.*;
 import static edu.calc.becas.mreporte.percent.beca.dao.QueriesReportPercentBeca.*;
 
 /**
@@ -31,11 +31,11 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
     }
 
     @Override
-    public boolean actividadAlumnoExists(ActividadVo actividadVo) {
+    public boolean actividadAlumnoExists(ActividadVo actividadVo, Parcial parcialActual) {
         try {
             int countAlumno = jdbcTemplate.queryForObject(
                     QRY_COUNT_ID_ACTIVIDAD_ALUMNO,
-                    new Object[]{actividadVo.getIdActividad()},
+                    new Object[]{actividadVo.getIdActividad(), parcialActual.getIdParcial(), parcialActual.getCvePeriodo()},
                     Integer.class);
             return countAlumno > 0;
         } catch (Exception e) {
@@ -127,6 +127,7 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
         reporte.setDescGrupo(rs.getString("DESC_GRUPO"));
         reporte.setCveLicenciatura(rs.getString("CVE_LICENCIATURA"));
         reporte.setDescLicenciatura(rs.getString("DESC_LICENCIATURA"));
+        reporte.setCveEstatus(rs.getString("ESTATUS"));
         return reporte;
     }
 }

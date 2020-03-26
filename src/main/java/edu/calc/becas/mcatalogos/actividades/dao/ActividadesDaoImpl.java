@@ -249,7 +249,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
                 // obtiene la actividad del alumno
                 ActividadVo actividadVo = alumnoActividadDao.getActividadByAlumno(alumno.getMatricula(), cicloEscolarActual);
 
-                if (reportPercentBecaDao.actividadAlumnoExists(actividadVo)) {
+                if (reportPercentBecaDao.actividadAlumnoExists(actividadVo, parcialActual)) {
                     jdbcTemplate.update(QRY_UPDATE_PERCENT_ACTIVIDAD,
                             new Object[]{
                                     //percentLibraryTime,
