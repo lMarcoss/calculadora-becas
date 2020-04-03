@@ -10,4 +10,5 @@ import edu.calc.becas.mseguridad.usuarios.model.Usuario;
  * Date: 4/14/19
  */
 public interface UsuarioService extends CrudGenericService<Usuario> {
+    Usuario getByUsername(String username);
 }

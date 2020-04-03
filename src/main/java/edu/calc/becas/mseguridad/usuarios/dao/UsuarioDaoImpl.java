@@ -123,4 +123,9 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
         usuario.setDiasRetrocesoReporte(rs.getInt("DIAS_RETROCESO_REPORTE"));
         return usuario;
     }
+
+    @Override
+    public Usuario getByUsername(String username) {
+        return this.jdbcTemplate.queryForObject(QRY_GET_ALL.concat(QRY_CONDITION_BY_USERNAME), new Object[]{username}, ((rs, i) -> mapperUsuario(rs)));
+    }
 }

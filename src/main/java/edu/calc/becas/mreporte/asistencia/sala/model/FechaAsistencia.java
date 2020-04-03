@@ -16,4 +16,6 @@ public class FechaAsistencia implements Serializable {
     private int idActividadAlumno;
     private String asistencia;
     private String fechaAsistencia;
+    private int index;
+    private boolean edit;
 }

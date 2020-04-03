@@ -17,4 +17,7 @@ public interface ParcialService extends CrudGenericService<Parcial> {
     List<Parcial> getAllByPeriodo(String cvePeriodo);
 
     Parcial getParcialActual() throws GenericException;
+
+    Parcial getParcialAnterior(Parcial parcialActual);
+
 }

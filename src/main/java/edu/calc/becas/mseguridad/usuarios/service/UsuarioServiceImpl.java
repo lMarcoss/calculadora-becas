@@ -42,4 +42,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario update(Usuario usuario) {
         return this.usuarioDao.update(usuario);
     }
+
+    @Override
+    public Usuario getByUsername(String username) {
+        return this.usuarioDao.getByUsername(username);
+    }
 }

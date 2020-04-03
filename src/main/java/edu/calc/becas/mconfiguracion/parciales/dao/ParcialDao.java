@@ -17,4 +17,6 @@ public interface ParcialDao extends CrudGenericDao<Parcial> {
     List<Parcial> getAllByPeriodo(String cvePeriodo);
 
     Parcial getParcialActual(CicloEscolarVo cicloEscolarVo) throws GenericException;
+
+    Parcial getParcialAnterior(Parcial parcialActual);
 }

@@ -25,11 +25,17 @@ public final class UtilDate {
 
     /**
      * @param fecha
-     * @return convierte una fecha dd/MM/yyyy a fecha Date
+     * @return convierte una fecha con formato @format a fecha Date
      * @throws Exception
      */
-    public static Date convertToDate(String fecha) throws Exception {
-        SimpleDateFormat sdfrmt = new SimpleDateFormat("dd-MM-yyyy");
+    public static Date convertToDate(String fecha, String format) throws Exception {
+        SimpleDateFormat sdfrmt;
+        if(format == null){
+            sdfrmt = new SimpleDateFormat("dd-MM-yyyy");
+        }else {
+            sdfrmt = new SimpleDateFormat(format);
+        }
+
         sdfrmt.setLenient(false);
         try {
             return sdfrmt.parse(fecha);
@@ -37,6 +43,7 @@ public final class UtilDate {
             throw new Exception(e);
         }
     }
+
 
     /**
      * @param fecha
@@ -65,5 +72,9 @@ public final class UtilDate {
             break;
         }
         return monthDesc;
+    }
+
+    public static Date getDateToday() {
+        return new Date();
     }
 }

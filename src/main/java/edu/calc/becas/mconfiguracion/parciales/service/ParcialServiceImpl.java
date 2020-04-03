@@ -61,4 +61,9 @@ public class ParcialServiceImpl implements ParcialService {
         CicloEscolarVo cicloEscolarVo = cicloEscolarService.getCicloEscolarActual();
         return parcialDao.getParcialActual(cicloEscolarVo);
     }
+
+    @Override
+    public Parcial getParcialAnterior(Parcial parcialActual) {
+        return parcialDao.getParcialAnterior(parcialActual);
+    }
 }

@@ -1,17 +1,21 @@
 package edu.calc.becas.mreporte.asistencia.sala.api;
 
+import edu.calc.becas.exceptions.GenericException;
+import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mreporte.asistencia.sala.model.AlumnoAsistenciaSala;
 import edu.calc.becas.mreporte.asistencia.sala.model.FechaAsistencia;
 import edu.calc.becas.mreporte.asistencia.sala.model.PaseAsistencia;
 import edu.calc.becas.mreporte.asistencia.sala.model.WrapperAsistenciaAlumno;
 import edu.calc.becas.mreporte.asistencia.sala.service.AsistenciaSalaService;
+import edu.calc.becas.mvc.config.security.user.UserRequestService;
 import edu.calc.becas.utils.UtilDate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,27 +28,32 @@ import static edu.calc.becas.common.utils.Constant.TODAY;
 public class AsistenciaSalaAPI {
 
     private final AsistenciaSalaService asistenciaSalaService;
+    private final UserRequestService userRequestService;
 
-    public AsistenciaSalaAPI(AsistenciaSalaService asistenciaSalaService) {
+    public AsistenciaSalaAPI(AsistenciaSalaService asistenciaSalaService, UserRequestService userRequestService) {
         this.asistenciaSalaService = asistenciaSalaService;
+        this.userRequestService = userRequestService;
     }
 
     @PostMapping
     @ApiOperation(value = "Registra una lista de asistencia de alumnos por fecha")
-    public List<PaseAsistencia> addPresenceByDate(@RequestBody List<PaseAsistencia> asistencias){
+    public List<PaseAsistencia> addPresenceByDate(@RequestBody List<PaseAsistencia> asistencias) throws GenericException {
         Usuario usuario  = new Usuario();
         usuario.setUsername("ADMIN");
         return this.asistenciaSalaService.addPresenceByDate(asistencias, usuario);
     }
 
 
-    @GetMapping("/{username}/{id-horario}")
-    @ApiOperation(value = "Obtiene la lista de alumnos por horario")
+    @GetMapping("/alumnos-fechas-horario/{id-horario}")
+    @ApiOperation(value = "Obtiene la lista de alumnos por horario para alta y edición de asistencia")
     public WrapperAsistenciaAlumno getAlumnosByScheduleAndUser(
-            @ApiParam(value = "Username", required = true) @PathVariable String username,
             @ApiParam(value = "Identificador-horario", required = true) @PathVariable("id-horario") String idHorario,
             @ApiParam(value = "Fecha inicio", defaultValue = TODAY) @RequestParam(value = "fecha-inicio", defaultValue = TODAY, required = false) String fechaInicio,
-            @ApiParam(value = "Fecha Fin", defaultValue = TODAY) @RequestParam(value = "fecha-fin", defaultValue = TODAY, required = false) String fechaFin) throws Exception {
+            @ApiParam(value = "Fecha Fin", defaultValue = TODAY) @RequestParam(value = "fecha-fin", defaultValue = TODAY, required = false) String fechaFin,
+            HttpServletRequest httpServlet) throws Exception {
+
+        UserLogin userLogin = userRequestService.getUserLogin(httpServlet);
+
         WrapperAsistenciaAlumno asistenciaAlumno = new WrapperAsistenciaAlumno();
 
 
@@ -59,8 +68,10 @@ public class AsistenciaSalaAPI {
             fechaFin = UtilDate.convertDateToString(today, UtilDate.PATTERN_GUION);
         }
 
+
+
         List<FechaAsistencia> fechas = this.getFechas(fechaInicio, fechaFin);
-        List<AlumnoAsistenciaSala> alumnos = asistenciaSalaService.getAlumnosByScheduleAndUser(username, idHorario, fechas);
+        List<AlumnoAsistenciaSala> alumnos = asistenciaSalaService.getAlumnosByScheduleAndUser(userLogin.getUsername(), idHorario, fechas);
         asistenciaAlumno.setAlumnos(alumnos);
         asistenciaAlumno.setFechas(fechas);
 
@@ -73,8 +84,12 @@ public class AsistenciaSalaAPI {
     public List<FechaAsistencia> getFechas(@ApiParam(value = "Fecha inicio", required = true) @PathVariable("fecha-inicio") String fechaInicio,
                                            @ApiParam(value = "Fecha fin", required = true) @PathVariable("fecha-fin") String fechaFin) throws Exception {
 
-        Date fechaInicial = UtilDate.convertToDate(fechaInicio);
-        Date fechaFinal = UtilDate.convertToDate(fechaFin);
+        Date fechaInicial = UtilDate.convertToDate(fechaInicio, null);
+        Date fechaFinal = UtilDate.convertToDate(fechaFin, null);
+
+        if(fechaFinal.before(fechaInicial)){
+            throw new Exception("La fecha fin debe ser mayor o igual a la fecha de inicio");
+        }
 
         List<FechaAsistencia> fechas = new ArrayList<>();
 

@@ -6,6 +6,9 @@ import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +25,7 @@ import static edu.calc.becas.mconfiguracion.parciales.dao.QueriesParcial.QRY_GET
  * Date: 4/9/19
  */
 @Repository
+@Slf4j
 public class ParcialDaoImpl extends BaseDao implements ParcialDao {
     public ParcialDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
         super(jdbcTemplate, messageApplicationProperty);
@@ -40,6 +44,22 @@ public class ParcialDaoImpl extends BaseDao implements ParcialDao {
             throw new GenericException( e, "El Parcial actual del periodo en curso no est\u00e1 registrado");
         }
 
+    }
+
+    @Override
+    public Parcial getParcialAnterior(Parcial parcialActual) {
+        try {
+            if(parcialActual.getParcial() > 1){
+                return this.jdbcTemplate.queryForObject(QueriesParcial.QRY_GET_PARCIAL_ANTERIOR,
+                        new Object[]{parcialActual.getCvePeriodo(), parcialActual.getIdParcial()-1},
+                        ((rs, i) -> mapperParcial(rs)));
+            }else {
+                return null;
+            }
+        }catch (Exception e){
+            log.error(ExceptionUtils.getStackTrace(e));
+            return null;
+        }
     }
 
     private Parcial mapperParcial(ResultSet rs) throws SQLException {
@@ -84,12 +104,18 @@ public class ParcialDaoImpl extends BaseDao implements ParcialDao {
     }
 
     @Override
-    public Parcial add(Parcial p) {
+    public Parcial add(Parcial p) throws GenericException {
         validateStatus(p);
-        jdbcTemplate.update(QueriesParcial.QRY_ADD,
-                p.getParcial(), p.getParcialActual(), p.getFechaInicio(), p.getFechaFin(),
-                p.getCvePeriodo(), p.getDescPeriodo(), p.getAgregadoPor(), p.getTotalHorasBiblioteca(), p.getTotalAsistenciaSala());
-        return p;
+        try {
+            jdbcTemplate.update(QueriesParcial.QRY_ADD,
+                    p.getParcial(), p.getParcialActual(), p.getFechaInicio(), p.getFechaFin(),
+                    p.getCvePeriodo(), p.getDescPeriodo(), p.getAgregadoPor(), p.getTotalHorasBiblioteca(), p.getTotalAsistenciaSala());
+            return p;
+        }catch (DataIntegrityViolationException e){
+            throw new GenericException("No se puede agregar dos veces el mismo parcial en un periodo");
+        }
+
+
     }
 
     private void validateStatus(Parcial p) {

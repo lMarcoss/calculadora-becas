@@ -14,6 +14,7 @@ final class QueriesUsuario {
             "FROM USUARIOS U, ROLES R WHERE U.ID_ROL = R.ID_ROL ";
     static final String QRY_CONDITION_ESTATUS = "\nAND U.ESTATUS = ? ";
     static final String QRY_CONDITION_TIPO_USUARIO = "\nAND U.ID_ROL = ?";
+    static final String QRY_CONDITION_BY_USERNAME = "\nAND U.USERNAME = ?";
     static final String QRY_ADD =
             "INSERT INTO USUARIOS\n" +
                     "(NOMBRES, APE_PATERNO, APE_MATERNO, ID_ROL, USERNAME, PASSWORD, DIAS_RETROCESO_REPORTE, ESTATUS, AGREGADO_POR, FECHA_CREACION)\n" +
