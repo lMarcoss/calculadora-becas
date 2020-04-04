@@ -5,6 +5,8 @@ import edu.calc.becas.common.model.LabelValueData;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.actividades.dao.AlumnoActividadDao;
+import edu.calc.becas.malumnos.actividades.model.ActividadesAlumnos;
+import edu.calc.becas.malumnos.model.AlumnoActividad;
 import edu.calc.becas.mcarga.hrs.blibioteca.model.Hora;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.actividades.model.DetalleActividadVo;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static edu.calc.becas.common.utils.Constant.ALL_ITEMS;
@@ -198,7 +201,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
         detalle.setNombreActividad(rs.getString("NOMBRE_ACTIVIDAD"));
 
         detalle.setIdDetalleActividad(rs.getInt("ID_HORARIO_ACTIVIDAD"));
-
+        hora.setIdHora("");
         hora.setNumHora(rs.getInt("HORA"));
         hora.setAmPm(rs.getString("AM_PM"));
 
@@ -208,7 +211,10 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
         detalle.setIdCicloEscolar(rs.getString("CVE_PERIODO"));
         detalle.setCicloEscolar(rs.getString("DESC_PERIDODO"));
-
+        detalle.setPeriodo(new CicloEscolarVo());
+        List<AlumnoActividad> alumnos = new ArrayList<AlumnoActividad>();
+      alumnos.add(new AlumnoActividad());
+        detalle.setAlumnos(alumnos);
         usuario.setIdUsuario(rs.getInt("ID_USUARIO"));
         usuario.setNombres(rs.getString("NOMBRES"));
         usuario.setApePaterno(rs.getString("APE_PATERNO"));

@@ -1,13 +1,17 @@
 package edu.calc.becas.mcatalogos.actividades.model;
 
 import edu.calc.becas.common.model.CommonData;
+import edu.calc.becas.malumnos.model.AlumnoActividad;
 import edu.calc.becas.mcarga.hrs.blibioteca.model.Hora;
+import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -40,6 +44,12 @@ public class DetalleActividadVo extends CommonData {
 
     @ApiModelProperty("Encargado o responsable de la actividad")
     private Usuario usuario;
+
+    @ApiModelProperty("Periodo al que se encuentra configurada la actividad")
+    private CicloEscolarVo periodo;
+
+    @ApiModelProperty("Alumnos relacionados a la actividad")
+    private List<AlumnoActividad> alumnos;
 
     public DetalleActividadVo() {
     }
