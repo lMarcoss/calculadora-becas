@@ -18,6 +18,7 @@ import java.io.Serializable;
 @Getter
 @ToString
 public class Hora implements Serializable {
+    String idHora;
     int numHora;
     int numMinutos;
     String amPm;
