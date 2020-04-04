@@ -72,6 +72,11 @@ public class AlumnoActividadDaoImpl extends BaseDao implements AlumnoActividadDa
       return new WrapperData(data, page, pageSize, lengthDatable);
     }
 
+    @Override
+    public String calculatePercentActivityBySchedule(int idHorario, int parcial, CicloEscolarVo cicloEscolarVo) {
+        return null;
+    }
+
     private ActividadVo mapperActividadAlumno(ResultSet rs) throws SQLException {
         ActividadVo actividadVo = new ActividadVo(rs.getString("ESTATUS"));
         actividadVo.setIdActividad(rs.getInt("ID_ACTIVIDAD_ALUMNO"));

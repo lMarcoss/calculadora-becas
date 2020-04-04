@@ -31,5 +31,10 @@ public class AlumnoActividadServiceImpl implements AlumnoActividadService {
     return alumnoActividadDao.getAllAlumnosByActividad(page, pageSize, idActividad, idCiclo);
   }
 
+    @Override
+    public String calculatePercentActivityBySchedule(int idHorario, int parcial, CicloEscolarVo cicloEscolarVo) {
+        return alumnoActividadDao.calculatePercentActivityBySchedule(idHorario, parcial, cicloEscolarVo);
+    }
+
 
 }

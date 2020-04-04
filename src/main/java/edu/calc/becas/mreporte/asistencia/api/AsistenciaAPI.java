@@ -1,13 +1,13 @@
-package edu.calc.becas.mreporte.asistencia.sala.api;
+package edu.calc.becas.mreporte.asistencia.api;
 
 import edu.calc.becas.exceptions.GenericException;
+import edu.calc.becas.mreporte.asistencia.model.AlumnoAsistenciaSala;
+import edu.calc.becas.mreporte.asistencia.model.FechaAsistencia;
+import edu.calc.becas.mreporte.asistencia.model.PaseAsistencia;
+import edu.calc.becas.mreporte.asistencia.model.WrapperAsistenciaAlumno;
+import edu.calc.becas.mreporte.asistencia.service.AsistenciaService;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
-import edu.calc.becas.mreporte.asistencia.sala.model.AlumnoAsistenciaSala;
-import edu.calc.becas.mreporte.asistencia.sala.model.FechaAsistencia;
-import edu.calc.becas.mreporte.asistencia.sala.model.PaseAsistencia;
-import edu.calc.becas.mreporte.asistencia.sala.model.WrapperAsistenciaAlumno;
-import edu.calc.becas.mreporte.asistencia.sala.service.AsistenciaSalaService;
 import edu.calc.becas.mvc.config.security.user.UserRequestService;
 import edu.calc.becas.utils.UtilDate;
 import io.swagger.annotations.Api;
@@ -23,28 +23,29 @@ import java.util.List;
 import static edu.calc.becas.common.utils.Constant.TODAY;
 
 @RestController
-@RequestMapping("/asistencia-sala")
-@Api(description = "Servicios para consultar asistencia de alumnos en sala de cómputo por usuario")
-public class AsistenciaSalaAPI {
+@RequestMapping("/asistencias")
+@Api(description = "Servicios para consultar asistencia de alumnos en en diferentes actividades extraescolares")
+public class AsistenciaAPI {
 
-    private final AsistenciaSalaService asistenciaSalaService;
+    private final AsistenciaService asistenciaService;
     private final UserRequestService userRequestService;
 
-    public AsistenciaSalaAPI(AsistenciaSalaService asistenciaSalaService, UserRequestService userRequestService) {
-        this.asistenciaSalaService = asistenciaSalaService;
+    public AsistenciaAPI(AsistenciaService asistenciaService, UserRequestService userRequestService) {
+        this.asistenciaService = asistenciaService;
         this.userRequestService = userRequestService;
     }
 
     @PostMapping
     @ApiOperation(value = "Registra una lista de asistencia de alumnos por fecha")
-    public List<PaseAsistencia> addPresenceByDate(@RequestBody List<PaseAsistencia> asistencias) throws GenericException {
-        Usuario usuario  = new Usuario();
-        usuario.setUsername("ADMIN");
-        return this.asistenciaSalaService.addPresenceByDate(asistencias, usuario);
+    public List<PaseAsistencia> addPresenceByDate(@RequestBody List<PaseAsistencia> asistencias, HttpServletRequest httpServlet) throws GenericException {
+        UserLogin userLogin = userRequestService.getUserLogin(httpServlet);
+        Usuario usuario = new Usuario();
+        usuario.setUsername(userLogin.getUsername());
+        return this.asistenciaService.addPresenceByDate(asistencias, usuario);
     }
 
 
-    @GetMapping("/alumnos-fechas-horario/{id-horario}")
+    @GetMapping("/alumnos-por-fechas-y-horarios/{id-horario}")
     @ApiOperation(value = "Obtiene la lista de alumnos por horario para alta y edición de asistencia")
     public WrapperAsistenciaAlumno getAlumnosByScheduleAndUser(
             @ApiParam(value = "Identificador-horario", required = true) @PathVariable("id-horario") String idHorario,
@@ -55,7 +56,6 @@ public class AsistenciaSalaAPI {
         UserLogin userLogin = userRequestService.getUserLogin(httpServlet);
 
         WrapperAsistenciaAlumno asistenciaAlumno = new WrapperAsistenciaAlumno();
-
 
 
         if (fechaInicio.equalsIgnoreCase(TODAY)) {
@@ -69,9 +69,8 @@ public class AsistenciaSalaAPI {
         }
 
 
-
         List<FechaAsistencia> fechas = this.getFechas(fechaInicio, fechaFin);
-        List<AlumnoAsistenciaSala> alumnos = asistenciaSalaService.getAlumnosByScheduleAndUser(userLogin.getUsername(), idHorario, fechas);
+        List<AlumnoAsistenciaSala> alumnos = asistenciaService.getAlumnosByScheduleAndUser(userLogin.getUsername(), idHorario, fechas);
         asistenciaAlumno.setAlumnos(alumnos);
         asistenciaAlumno.setFechas(fechas);
 
@@ -79,15 +78,13 @@ public class AsistenciaSalaAPI {
         return asistenciaAlumno;
     }
 
-    @GetMapping("/fechas/{fecha-inicio}/{fecha-fin}")
-    @ApiOperation(value = "Obtiene el periodo de asistencias entre una fecha de inicio y fin (dd-mm-yyyy)")
-    public List<FechaAsistencia> getFechas(@ApiParam(value = "Fecha inicio", required = true) @PathVariable("fecha-inicio") String fechaInicio,
-                                           @ApiParam(value = "Fecha fin", required = true) @PathVariable("fecha-fin") String fechaFin) throws Exception {
+    private List<FechaAsistencia> getFechas(String fechaInicio,
+                                            String fechaFin) throws Exception {
 
         Date fechaInicial = UtilDate.convertToDate(fechaInicio, null);
         Date fechaFinal = UtilDate.convertToDate(fechaFin, null);
 
-        if(fechaFinal.before(fechaInicial)){
+        if (fechaFinal.before(fechaInicial)) {
             throw new Exception("La fecha fin debe ser mayor o igual a la fecha de inicio");
         }
 
@@ -107,7 +104,7 @@ public class AsistenciaSalaAPI {
         if (isDayWeek(day)) {
             FechaAsistencia fechaAsistencia = new FechaAsistencia();
             fechaAsistencia.setDia(String.valueOf(fechaInicial.getDate()));
-            fechaAsistencia.setMes(UtilDate.convertMonthToMonthDesc(fechaInicial.getMonth() +1));
+            fechaAsistencia.setMes(UtilDate.convertMonthToMonthDesc(fechaInicial.getMonth() + 1));
             fechaAsistencia.setAnio(String.valueOf(fechaInicial.getYear() + 1900));
             fechaAsistencia.setFechaAsistencia(UtilDate.convertDateToString(fechaInicial, UtilDate.PATTERN_DIAG));
             fechas.add(fechaAsistencia);

@@ -14,4 +14,5 @@ public interface AlumnoActividadService {
     ActividadVo getActividadByAlumno(String matricula, CicloEscolarVo cicloEscolarActual);
     WrapperData getAllAlumnosByActividad(int page, int pageSize, String idActividad, String idCiclo);
 
+    String calculatePercentActivityBySchedule(int idHorario, int idParcial, CicloEscolarVo cicloEscolarVo);
 }

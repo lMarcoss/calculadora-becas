@@ -17,14 +17,14 @@ final class QueriesParcial {
             "SELECT PP.ID_PARCIAL, PP.PARCIAL, P.DESC_PARCIAL, PARCIAL_ACTUAL,\n" +
                     "       DATE_FORMAT(PP.FECHA_INICIO, '%d/%m/%Y') AS FECHA_INICIO,\n" +
                     "       DATE_FORMAT(PP.FECHA_FIN, '%d/%m/%Y') AS FECHA_FIN,\n" +
-                    "       PP.CVE_PERIODO, PP.DESC_PERIODO, PP.TOTAL_HORAS_BIBLIOTECA, PP.TOTAL_ASISTENCIA_SALA\n" +
+                    "       PP.CVE_PERIODO, PP.DESC_PERIODO, PP.TOTAL_HORAS_BIBLIOTECA, PP.TOTAL_ASISTENCIA_SALA, PP.TOTAL_ASISTENCIA_ACTIVIDADES\n" +
                     "FROM PARCIAL_PERIODO PP,\n" +
                     "     PARCIALES P\n" +
                     "WHERE PP.PARCIAL = P.ID_PARCIAL AND CVE_PERIODO = ?\n";
     static final String QRY_GET_PARCIAL_ACTUAL = "SELECT PP.ID_PARCIAL, PARCIAL, DESC_PARCIAL, PARCIAL_ACTUAL,\n" +
             "       DATE_FORMAT(FECHA_INICIO, '%d/%m/%Y') AS FECHA_INICIO,\n" +
             "       DATE_FORMAT(FECHA_FIN, '%d/%m/%Y') AS FECHA_FIN,\n" +
-            "       CVE_PERIODO, DESC_PERIODO, PP.TOTAL_HORAS_BIBLIOTECA, PP.TOTAL_ASISTENCIA_SALA\n" +
+            "       CVE_PERIODO, DESC_PERIODO, PP.TOTAL_HORAS_BIBLIOTECA, PP.TOTAL_ASISTENCIA_SALA, PP.TOTAL_ASISTENCIA_ACTIVIDADES\n" +
             "FROM PARCIAL_PERIODO PP,\n" +
             "     PARCIALES P\n" +
             "WHERE PP.PARCIAL = P.ID_PARCIAL AND PARCIAL_ACTUAL = 'S' AND PP.CVE_PERIODO = ?\n";
@@ -32,7 +32,7 @@ final class QueriesParcial {
     static final String QRY_GET_PARCIAL_ANTERIOR = "SELECT PP.ID_PARCIAL, PARCIAL, DESC_PARCIAL, PARCIAL_ACTUAL,\n" +
             "                   DATE_FORMAT(FECHA_INICIO, '%d/%m/%Y') AS FECHA_INICIO,\n" +
             "                   DATE_FORMAT(FECHA_FIN, '%d/%m/%Y') AS FECHA_FIN,\n" +
-            "                   CVE_PERIODO, DESC_PERIODO, PP.TOTAL_HORAS_BIBLIOTECA, PP.TOTAL_ASISTENCIA_SALA\n" +
+            "                   CVE_PERIODO, DESC_PERIODO, PP.TOTAL_HORAS_BIBLIOTECA, PP.TOTAL_ASISTENCIA_SALA, PP.TOTAL_ASISTENCIA_ACTIVIDADES\n" +
             "            FROM PARCIAL_PERIODO PP,\n" +
             "                 PARCIALES P\n" +
             "            WHERE PP.PARCIAL = P.ID_PARCIAL AND PP.CVE_PERIODO = ? and PP.ID_PARCIAL = ?\n";
@@ -41,8 +41,8 @@ final class QueriesParcial {
     static final String QRY_ADD =
             "INSERT INTO PARCIAL_PERIODO\n" +
                     "(PARCIAL, PARCIAL_ACTUAL, FECHA_INICIO, FECHA_FIN, CVE_PERIODO, DESC_PERIODO, AGREGADO_POR,\n" +
-                    " FECHA_CREACION, TOTAL_HORAS_BIBLIOTECA,TOTAL_ASISTENCIA_SALA )\n" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, NOW(),?,?)";
+                    " FECHA_CREACION, TOTAL_HORAS_BIBLIOTECA,TOTAL_ASISTENCIA_SALA, TOTAL_ASISTENCIA_ACTIVIDADES )\n" +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, NOW(),?,?,?)";
 
     static final String QRY_UPDATE =
             "UPDATE PARCIAL_PERIODO\n" +
@@ -55,7 +55,8 @@ final class QueriesParcial {
                     "    ACTUALIZADO_POR= ?,\n" +
                     "    FECHA_ACTUALIZACION =NOW(),\n" +
                     "    TOTAL_HORAS_BIBLIOTECA        = ?,\n" +
-                    "    TOTAL_ASISTENCIA_SALA        = ?\n" +
+                    "    TOTAL_ASISTENCIA_SALA        = ?,\n" +
+                    "    TOTAL_ASISTENCIA_ACTIVIDADES        = ?\n" +
                     "WHERE ID_PARCIAL = ?";
 
 }

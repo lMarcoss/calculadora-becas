@@ -1,13 +1,14 @@
-package edu.calc.becas.mreporte.asistencia.sala.dao;
+package edu.calc.becas.mreporte.asistencia.dao;
 
 import edu.calc.becas.common.base.dao.BaseDao;
+import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
+import edu.calc.becas.mreporte.asistencia.model.AlumnoAsistenciaSala;
+import edu.calc.becas.mreporte.asistencia.model.FechaAsistencia;
+import edu.calc.becas.mreporte.asistencia.model.PaseAsistencia;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
-import edu.calc.becas.mreporte.asistencia.sala.model.AlumnoAsistenciaSala;
-import edu.calc.becas.mreporte.asistencia.sala.model.FechaAsistencia;
-import edu.calc.becas.mreporte.asistencia.sala.model.PaseAsistencia;
 import edu.calc.becas.utils.UtilDate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -22,69 +23,77 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static edu.calc.becas.mreporte.asistencia.sala.dao.QueriesAsistenciaSala.*;
+import static edu.calc.becas.mreporte.asistencia.dao.QueriesAsistenciaSala.*;
 import static edu.calc.becas.utils.UtilDate.PATTERN_DIAG;
 
 @Slf4j
 @Repository
-public class AsistenciaSalaDaoImpl extends BaseDao implements AsistenciaSalaDao {
+public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
 
     @Value("${prop.carga.hrs.sala.asistencia.asistencia}")
     String pAsistencia;
     @Value("${prop.carga.hrs.sala.asistencia.falta}")
     String pFalta;
 
-    public AsistenciaSalaDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
+    public AsistenciaDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
         super(jdbcTemplate, messageApplicationProperty);
     }
 
     @Override
     public List<AlumnoAsistenciaSala> getAlumnosByScheduleAndUser(Usuario usuario, String idHorario,
                                                                   List<FechaAsistencia> fechasAsistencia,
-                                                                  Parcial parcialActual, Parcial parcialAnterior) {
+                                                                  Parcial parcialActual, Parcial parcialAnterior) throws GenericException {
 
         List<AlumnoAsistenciaSala> alumnoAsistenciaSalas = jdbcTemplate.query(GET_ALUMNOS_BY_USER_AND_SCHEDULE,
                 new Object[]{usuario.getUsername(), idHorario}, ((rs, i) -> mapperAlumnos(rs)));
+
+        Date today;
+        try {
+            today = UtilDate.getDateToday();
+        } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+            throw new GenericException("Error al convertir fecha " + e.getMessage());
+        }
 
         alumnoAsistenciaSalas.forEach(alumnoAsistenciaSala -> {
             List<FechaAsistencia> asistencias = new ArrayList<>();
 
             fechasAsistencia.forEach(fecha -> {
-                    FechaAsistencia fechaAsistencia = new FechaAsistencia();
+                FechaAsistencia fechaAsistencia = new FechaAsistencia();
 
 
-                    fechaAsistencia.setAnio(fecha.getAnio());
-                    fechaAsistencia.setMes(fecha.getMes());
-                    fechaAsistencia.setDia(fecha.getDia());
-                    fechaAsistencia.setFechaAsistencia(fecha.getFechaAsistencia());
+                fechaAsistencia.setAnio(fecha.getAnio());
+                fechaAsistencia.setMes(fecha.getMes());
+                fechaAsistencia.setDia(fecha.getDia());
+                fechaAsistencia.setFechaAsistencia(fecha.getFechaAsistencia());
 
-                    boolean editFecha = validateDatePresenceByParcial(parcialActual, fecha, parcialAnterior, usuario);
+                boolean editFecha = validateDatePresenceByParcial(parcialActual, fecha, parcialAnterior, usuario, today);
 
-                    fecha.setEdit(editFecha);
+                fecha.setEdit(editFecha);
 
 
-                    fechaAsistencia.setIdActividadAlumno(alumnoAsistenciaSala.getIdActividadAlumno());
-                    try {
-                        String asistencia =
-                                jdbcTemplate.
-                                        queryForObject(QRY_GET_ASISTENCIA_BY_ACTIVIDAD_ALUMNO,
-                                                new Object[]{alumnoAsistenciaSala.getIdActividadAlumno(),
-                                                        fecha.getFechaAsistencia()},
-                                                String.class);
-                        if (asistencia != null) {
-                            if (asistencia.equalsIgnoreCase(pAsistencia)) {
-                                fechaAsistencia.setAsistencia("true");
-                            } else if (asistencia.equalsIgnoreCase(pFalta)) {
-                                fechaAsistencia.setAsistencia("false");
-                            } else {
-                                fechaAsistencia.setAsistencia(null);
-                            }
+                fechaAsistencia.setIdActividadAlumno(alumnoAsistenciaSala.getIdActividadAlumno());
+                try {
+                    String asistencia =
+                            jdbcTemplate.
+                                    queryForObject(QRY_GET_ASISTENCIA_BY_ACTIVIDAD_ALUMNO,
+                                            new Object[]{alumnoAsistenciaSala.getIdActividadAlumno(),
+                                                    fecha.getFechaAsistencia()},
+                                            String.class);
+                    if (asistencia != null) {
+                        if (asistencia.equalsIgnoreCase(pAsistencia)) {
+                            fechaAsistencia.setAsistencia("true");
+                        } else if (asistencia.equalsIgnoreCase(pFalta)) {
+                            fechaAsistencia.setAsistencia("false");
+                        } else {
+                            fechaAsistencia.setAsistencia(null);
                         }
-
-                    } catch (IncorrectResultSizeDataAccessException e) {
-                        fechaAsistencia.setAsistencia(null);
                     }
-                    asistencias.add(fechaAsistencia);
+
+                } catch (IncorrectResultSizeDataAccessException e) {
+                    fechaAsistencia.setAsistencia(null);
+                }
+                asistencias.add(fechaAsistencia);
 
             });
 
@@ -95,28 +104,27 @@ public class AsistenciaSalaDaoImpl extends BaseDao implements AsistenciaSalaDao 
     }
 
     private boolean validateDatePresenceByParcial(Parcial parcialActual, FechaAsistencia fecha,
-                                                  Parcial parcialAnterior, Usuario usuario) {
+                                                  Parcial parcialAnterior, Usuario usuario, Date today) {
         try {
             Date fechaAsistencia = UtilDate.convertToDate(fecha.getFechaAsistencia(), PATTERN_DIAG);
             Date fechaInicio = UtilDate.convertToDate(parcialActual.getFechaInicio(), PATTERN_DIAG);
             Date fechaFin = UtilDate.convertToDate(parcialActual.getFechaFin(), PATTERN_DIAG);
 
-            Date today = UtilDate.getDateToday();
             // fecha de asistencia es del rango de parcial actual sumado la fecha de tolerancia
-            if(isDateBetween(fechaInicio, fechaFin, fechaAsistencia) && isDateBetween(fechaInicio, fechaFin, today)){
+            if (isDateBetween(fechaInicio, fechaFin, fechaAsistencia) && isDateBetween(fechaInicio, fechaFin, today)) {
                 return true;
             }
 
             // fecha de asistencia es del rango de parcial anterior
-            if(usuario.getDiasRetrocesoReporte()>0 && parcialActual.getParcial()>1){
+            if (usuario.getDiasRetrocesoReporte() > 0 && parcialActual.getParcial() > 1) {
                 Date fechaInicioParcialAnterior = UtilDate.convertToDate(parcialAnterior.getFechaInicio(), PATTERN_DIAG);
                 Date fechaFinParcialAnterior = UtilDate.convertToDate(parcialAnterior.getFechaFin(), PATTERN_DIAG);
                 Date fechaTolerancia = UtilDate.getNextDayBySum(fechaFinParcialAnterior, usuario.getDiasRetrocesoReporte());
 
                 // editable si la fecha de asistencia es del parcial anterior
-                if(isDateBetween(fechaInicioParcialAnterior, fechaFinParcialAnterior, fechaAsistencia)){
+                if (isDateBetween(fechaInicioParcialAnterior, fechaFinParcialAnterior, fechaAsistencia)) {
                     // la fecha actual es del rango de tolerancia del parcial anterior
-                    if(isDateBetween(fechaInicioParcialAnterior, fechaTolerancia, today)){
+                    if (isDateBetween(fechaInicioParcialAnterior, fechaTolerancia, today)) {
                         return true;
                     }
                 }

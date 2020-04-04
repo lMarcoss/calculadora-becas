@@ -12,5 +12,8 @@ import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
  */
 public interface AlumnoActividadDao {
     ActividadVo getActividadByAlumno(String matricula, CicloEscolarVo cicloEscolarActual);
-  WrapperData getAllAlumnosByActividad(int page, int pageSize, String idActividad, String idCiclo);
+
+    WrapperData getAllAlumnosByActividad(int page, int pageSize, String idActividad, String idCiclo);
+
+    String calculatePercentActivityBySchedule(int idHorario, int parcial, CicloEscolarVo cicloEscolarVo);
 }

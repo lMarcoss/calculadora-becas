@@ -50,8 +50,19 @@ public class Parcial extends CommonData implements Serializable {
     @ApiModelProperty("Total de asistencias de sala de cómputo a cumplir durante el parcial")
     private int totalAsistenciaSala;
 
+    @ApiModelProperty("Total de asistencias a cumplir en actividades extraescolares")
+    private int totalAsistenciaActividadExtraEscolar;
+
 
     public Parcial(String estatus) {
         super(estatus);
+    }
+
+    public void setTotalAsistenciaActividadExtraEscolar(int totalAsistenciaActividadExtraEscolar) {
+        this.totalAsistenciaActividadExtraEscolar = totalAsistenciaActividadExtraEscolar;
+    }
+
+    public int getTotalAsistenciaActividadExtraEscolar() {
+        return totalAsistenciaActividadExtraEscolar;
     }
 }

@@ -74,7 +74,10 @@ public final class UtilDate {
         return monthDesc;
     }
 
-    public static Date getDateToday() {
-        return new Date();
+    public static Date getDateToday() throws Exception {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        String dateToday = formatter.format(date);
+        return convertToDate(dateToday, PATTERN_DIAG);
     }
 }

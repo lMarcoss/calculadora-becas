@@ -74,6 +74,7 @@ public class ParcialDaoImpl extends BaseDao implements ParcialDao {
         parcial.setDescPeriodo(rs.getString("DESC_PERIODO"));
         parcial.setTotalHorasBiblioteca(rs.getInt("TOTAL_HORAS_BIBLIOTECA"));
         parcial.setTotalAsistenciaSala(rs.getInt("TOTAL_ASISTENCIA_SALA"));
+        parcial.setTotalAsistenciaActividadExtraEscolar(rs.getInt("TOTAL_ASISTENCIA_ACTIVIDADES"));
 
         return parcial;
     }
@@ -109,7 +110,8 @@ public class ParcialDaoImpl extends BaseDao implements ParcialDao {
         try {
             jdbcTemplate.update(QueriesParcial.QRY_ADD,
                     p.getParcial(), p.getParcialActual(), p.getFechaInicio(), p.getFechaFin(),
-                    p.getCvePeriodo(), p.getDescPeriodo(), p.getAgregadoPor(), p.getTotalHorasBiblioteca(), p.getTotalAsistenciaSala());
+                    p.getCvePeriodo(), p.getDescPeriodo(), p.getAgregadoPor(), p.getTotalHorasBiblioteca(),
+                    p.getTotalAsistenciaSala(), p.getTotalAsistenciaActividadExtraEscolar());
             return p;
         }catch (DataIntegrityViolationException e){
             throw new GenericException("No se puede agregar dos veces el mismo parcial en un periodo");
@@ -129,7 +131,8 @@ public class ParcialDaoImpl extends BaseDao implements ParcialDao {
         validateStatus(p);
         jdbcTemplate.update(QueriesParcial.QRY_UPDATE,
                 p.getParcial(), p.getParcialActual(), p.getFechaInicio(), p.getFechaFin(),
-                p.getCvePeriodo(), p.getDescPeriodo(), p.getActualizadoPor(), p.getTotalHorasBiblioteca(), p.getTotalAsistenciaSala(), p.getIdParcial());
+                p.getCvePeriodo(), p.getDescPeriodo(), p.getActualizadoPor(), p.getTotalHorasBiblioteca(),
+                p.getTotalAsistenciaSala(), p.getTotalAsistenciaActividadExtraEscolar(),p.getIdParcial());
         return p;
     }
 }

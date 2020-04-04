@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
@@ -107,6 +108,8 @@ public class JwtTokenProvider {
         Jws<Claims> claims = getClaims(resolveToken(request));
         String username = claims.getBody().get("username") != null ? claims.getBody().get("username").toString() : null;
         String isAlumno = claims.getBody().get("esAlumno") != null ? claims.getBody().get("esAlumno").toString() : null;
+        ArrayList<String> roles = claims.getBody().get("roles") != null ? (ArrayList<String>) claims.getBody().get("roles") : null;
+        userRequest.setRol(roles.get(0));
         userRequest.setUsername(username);
         if (isAlumno != null) {
             userRequest.setEsAlumno(Boolean.parseBoolean(isAlumno));

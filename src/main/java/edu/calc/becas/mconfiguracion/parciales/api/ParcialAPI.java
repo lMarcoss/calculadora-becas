@@ -6,10 +6,14 @@ import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mconfiguracion.parciales.service.ParcialService;
+import edu.calc.becas.mseguridad.login.model.UserLogin;
+import edu.calc.becas.mvc.config.security.user.UserRequestService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static edu.calc.becas.common.utils.Constant.ESTATUS_ACTIVE;
 
@@ -26,11 +30,14 @@ public class ParcialAPI {
 
     private final ParcialService parcialService;
     private final CicloEscolarService cicloEscolarService;
+    private final UserRequestService userRequestService;
 
     @Autowired
-    public ParcialAPI(ParcialService parcialService, CicloEscolarService cicloEscolarService) {
+    public ParcialAPI(ParcialService parcialService, CicloEscolarService cicloEscolarService,
+                      UserRequestService userRequestService) {
         this.parcialService = parcialService;
         this.cicloEscolarService = cicloEscolarService;
+        this.userRequestService = userRequestService;
     }
 
     @GetMapping("/periodo-actual")
@@ -61,15 +68,20 @@ public class ParcialAPI {
 
     @PatchMapping
     @ApiOperation("Actualiza datos del parcial")
-    public Parcial update(@RequestBody Parcial parcial) {
+    public Parcial update(@RequestBody Parcial parcial, HttpServletRequest httpServlet) {
+        UserLogin userLogin = userRequestService.getUserLogin(httpServlet);
+        parcial.setActualizadoPor(userLogin.getUsername());
+        parcial.setAgregadoPor(userLogin.getUsername());
         return this.parcialService.update(parcial);
     }
 
     @PostMapping
     @ApiOperation("Registra un nuevo parcial")
-    public Parcial add(@RequestBody Parcial parcial) throws Exception {
+    public Parcial add(@RequestBody Parcial parcial, HttpServletRequest httpServlet) throws Exception {
 
-        parcial.setAgregadoPor("admin");
+        UserLogin userLogin = userRequestService.getUserLogin(httpServlet);
+
+        parcial.setAgregadoPor(userLogin.getUsername());
         CicloEscolarVo cicloEscolarVo = cicloEscolarService.getCicloEscolarActual();
         parcial.setCvePeriodo(cicloEscolarVo.getClave());
         parcial.setDescPeriodo(cicloEscolarVo.getNombre());

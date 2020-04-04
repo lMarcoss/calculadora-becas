@@ -4,7 +4,9 @@ import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.actividades.service.AlumnoActividadService;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
+import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,7 @@ import static edu.calc.becas.common.utils.Constant.*;
  */
 @RestController
 @RequestMapping()
+@Api(description = "Servicios para consultar y administrar actividades de alumnos")
 public class AlumnoActividadAPI {
 
     private final AlumnoActividadService alumnoActividadService;
@@ -60,5 +63,15 @@ public class AlumnoActividadAPI {
       }
       return alumnoActividadService.getAllAlumnosByActividad(Integer.parseInt(page), Integer.parseInt(pageSize), idActividad, idCiclo);
     }
+
+   @PostMapping("/alumnos/calcula-porcentaje-actividad/horario/{id-horario}/parcial/{parcial}")
+    public String calculatePercentActivityBySchedule(
+            @ApiParam(value = "Identificador de horario de la actividad extra-escolar", required = true) @PathVariable("id-horario") int idHorario,
+            @ApiParam(value = "Parcial del periodo actual a calcular el porcentaje de actividad (1,2 o3)", required = true) @PathVariable("parcial") int idParcial
+   ) throws GenericException {
+       CicloEscolarVo cicloEscolarVo = cicloEscolarService.getCicloEscolarActual();
+       return alumnoActividadService.calculatePercentActivityBySchedule(idHorario, idParcial, cicloEscolarVo);
+   }
+
 
 }

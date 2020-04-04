@@ -25,7 +25,7 @@ final class QueriesActividades {
             "US.NOMBRES, US.APE_PATERNO , US.APE_MATERNO, DA.* " +
             "FROM HORARIO_ACTIVIDAD DA , ACTIVIDADES A, USUARIOS US " +
             "WHERE DA.ID_ACTIVIDAD = A.ID_ACTIVIDAD " +
-            "AND DA.ID_USUARIO = US.ID_USUARIO " ;
+            "AND DA.ID_USUARIO = US.ID_USUARIO AND A.ESTATUS = 'S' " ;
 
     static final String QRY_COUNT_DETALLE_ACTIVIDADES = "SELECT COUNT(1)\n" +
             "FROM HORARIO_ACTIVIDAD DA,\n" +
