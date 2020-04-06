@@ -93,6 +93,7 @@ public class LoginDaoImpl extends BaseDao implements LoginDao {
                         usuario.setNombreUsuario(usuarioLogin.getNombres());
                         usuario.setApellidoPaterno(usuarioLogin.getApePaterno());
                         usuario.setApellidoMaterno(usuarioLogin.getApeMaterno());
+                        usuario.setDiasTolerancia(usuarioLogin.getDiasRetrocesoReporte());
                     }
 
                     return usuario;
@@ -117,9 +118,12 @@ public class LoginDaoImpl extends BaseDao implements LoginDao {
         Usuario usuario = new Usuario();
         Rol rol = new Rol();
 
+        usuario.setIdUsuario(rs.getInt("ID_USUARIO"));
+
         usuario.setNombres(rs.getString("NOMBRES"));
         usuario.setApePaterno(rs.getString("APE_PATERNO"));
         usuario.setApeMaterno(rs.getString("APE_MATERNO"));
+        usuario.setDiasRetrocesoReporte(rs.getInt("DIAS_RETROCESO_REPORTE"));
 
         rol.setNombre(rs.getString("NOMBRE_ROL"));
         usuario.setRol(rol);

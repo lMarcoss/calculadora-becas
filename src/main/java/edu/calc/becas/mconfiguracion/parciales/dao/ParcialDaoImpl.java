@@ -16,7 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import static edu.calc.becas.mconfiguracion.parciales.dao.QueriesParcial.QRY_GET_ALL_CATALOGUE;
+import static edu.calc.becas.mconfiguracion.parciales.dao.QueriesParcial.*;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -60,6 +60,14 @@ public class ParcialDaoImpl extends BaseDao implements ParcialDao {
             log.error(ExceptionUtils.getStackTrace(e));
             return null;
         }
+    }
+
+    @Override
+    public Parcial getParcialByPeriodoAndParcialOrd(int parcial, CicloEscolarVo cicloEscolarVo) {
+        String qry = QRY_GET_ALL.concat(QRY_ADD_CONDITION_PARCIAL);
+        return this.jdbcTemplate.queryForObject(qry,
+                new Object[]{cicloEscolarVo.getClave(), parcial },
+                ((rs, i) -> mapperParcial(rs)));
     }
 
     private Parcial mapperParcial(ResultSet rs) throws SQLException {

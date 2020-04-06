@@ -15,8 +15,6 @@ import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mconfiguracion.parciales.service.ParcialService;
-import edu.calc.becas.mseguridad.login.model.UserLogin;
-import edu.calc.becas.mvc.config.security.user.UserRequestService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,7 +26,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,7 +41,6 @@ import static edu.calc.becas.common.utils.Message.MESSAGE_ROWS_PROCESSED_ROOM_CO
 import static edu.calc.becas.common.utils.Message.MESSAGE_ROW_PROCESSED_ROOM_COMPUTER;
 import static edu.calc.becas.utils.ExtensionFile.XLSX_EXTENSION;
 import static edu.calc.becas.utils.ExtensionFile.XLS_EXTENSION;
-import static edu.calc.becas.utils.Rol.ROL_ADMINISTRADOR;
 
 @RestController
 @RequestMapping("/actividades")
@@ -194,10 +190,10 @@ public class ActividadesAPI {
 
         //int resultProcessed = 0;//cargaAlumnosPeriodosService.processData(pages, commonData, parcialActual, cicloEscolarActual, lic);
         int resultProcessed = cargaAlumnosPeriodosService.processDataPorcentajes(pages, commonData, parcialActual, cicloEscolarActual, lic);
-        String message ;
-        if(resultProcessed == 1){
+        String message;
+        if (resultProcessed == 1) {
             message = String.format(MESSAGE_ROW_PROCESSED_ROOM_COMPUTER, resultProcessed);
-        }else {
+        } else {
             message = String.format(MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER, resultProcessed);
         }
 

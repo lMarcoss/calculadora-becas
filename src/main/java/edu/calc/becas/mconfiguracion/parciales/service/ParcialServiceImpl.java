@@ -66,4 +66,9 @@ public class ParcialServiceImpl implements ParcialService {
     public Parcial getParcialAnterior(Parcial parcialActual) {
         return parcialDao.getParcialAnterior(parcialActual);
     }
+
+    @Override
+    public Parcial getParcialByPeriodoAndParcialOrd(int parcial, CicloEscolarVo cicloEscolarVo) {
+        return parcialDao.getParcialByPeriodoAndParcialOrd(parcial, cicloEscolarVo);
+    }
 }

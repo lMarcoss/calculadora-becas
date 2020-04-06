@@ -45,7 +45,7 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
                                                                   Parcial parcialActual, Parcial parcialAnterior) throws GenericException {
 
         List<AlumnoAsistenciaSala> alumnoAsistenciaSalas = jdbcTemplate.query(GET_ALUMNOS_BY_USER_AND_SCHEDULE,
-                new Object[]{usuario.getUsername(), idHorario}, ((rs, i) -> mapperAlumnos(rs)));
+                new Object[]{usuario.getIdUsuario(), idHorario}, ((rs, i) -> mapperAlumnos(rs)));
 
         Date today;
         try {
@@ -171,6 +171,11 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
         });
 
         return asistencias;
+    }
+
+    @Override
+    public int countPresenceByActivityAlumno(Integer actividad, String fechaInicio, String fechaFin) {
+        return jdbcTemplate.queryForObject(QRY_COUNT_ASISTENCIAS, new Object[]{actividad, fechaInicio, fechaFin}, Integer.class);
     }
 
     private FechaAsistencia mapperAsistenciaAlumno(ResultSet rs) {

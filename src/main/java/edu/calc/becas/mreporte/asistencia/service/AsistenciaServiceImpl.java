@@ -57,4 +57,9 @@ public class AsistenciaServiceImpl implements AsistenciaService {
         return asistenciaDao.addPresenceByDate(asistencias, usuario);
     }
 
+    @Override
+    public int countPresenceByActivityAlumno(Integer actividad, String fechaInicio, String fechaFin) {
+        return asistenciaDao.countPresenceByActivityAlumno(actividad, fechaInicio, fechaFin);
+    }
+
 }

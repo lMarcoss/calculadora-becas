@@ -6,18 +6,25 @@ import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mcatalogos.actividades.dao.ActividadesDao;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.actividades.model.DetalleActividadVo;
+import edu.calc.becas.mseguridad.usuarios.model.Usuario;
+import edu.calc.becas.mseguridad.usuarios.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static edu.calc.becas.common.utils.Constant.ALL_ITEMS;
+
 @Service
 public class ActividadesServiceImpl implements ActividadesService{
 
     private final ActividadesDao actividadesDao;
+    private final UsuarioService usuarioService;
 
     @Autowired
-    public ActividadesServiceImpl(ActividadesDao actividadesDao){this.actividadesDao = actividadesDao;}
+    public ActividadesServiceImpl(ActividadesDao actividadesDao, UsuarioService usuarioService){this.actividadesDao = actividadesDao;
+        this.usuarioService = usuarioService;
+    }
 
     @Override
     public WrapperData getAllByStatus(int page, int pageSize, String status)
@@ -37,7 +44,14 @@ public class ActividadesServiceImpl implements ActividadesService{
 
     @Override
     public WrapperData getAllDetalle(int page, int pageSize, String idActividad, String ciclo, String status, String username) {
-        return actividadesDao.getAllDetalle(page, pageSize, idActividad, ciclo, status, username);
+        Usuario usuario;
+        if(username.equalsIgnoreCase(ALL_ITEMS)){
+            usuario = new Usuario();
+            usuario.setUsername(ALL_ITEMS);
+        }else {
+            usuario = usuarioService.getByUsername(username);
+        }
+        return actividadesDao.getAllDetalle(page, pageSize, idActividad, ciclo, status, usuario);
     }
 
     @Override

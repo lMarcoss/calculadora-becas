@@ -7,17 +7,14 @@ import edu.calc.becas.mcarga.hrs.CargaHrsDao;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
-import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import edu.calc.becas.mreporte.percent.beca.dao.ReportPercentBecaDao;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
-import static edu.calc.becas.mcarga.hrs.sala.dao.QueriesCargaHrsSala.QRY_INSERT_PERCENT_SALA;
-import static edu.calc.becas.mcarga.hrs.sala.dao.QueriesCargaHrsSala.QRY_UPDATE_PERCENT_SALA;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -49,7 +46,7 @@ public class CargaHrsSalaDaoImpl extends BaseDao implements CargaHrsDao {
                 // obtiene la actividad del alumno
                 ActividadVo actividadVo = alumnoActividadDao.getActividadByAlumno(alumno.getMatricula(), cicloEscolarActual);
 
-                if (reportPercentBecaDao.actividadAlumnoExists(actividadVo, parcialActual)) {
+                /*if (reportPercentBecaDao.actividadAlumnoExists(actividadVo, parcialActual)) {
                     jdbcTemplate.update(QRY_UPDATE_PERCENT_SALA,
                             new Object[]{
                                     alumno.getAsistenciaSala().getPorcentaje(),
@@ -63,7 +60,7 @@ public class CargaHrsSalaDaoImpl extends BaseDao implements CargaHrsDao {
                             parcialActual.getParcial(),
                             alumno.getAgregadoPor()
                     );
-                }
+                }*/
 
                 count++;
             } catch (Exception e) {

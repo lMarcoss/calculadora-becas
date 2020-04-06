@@ -5,13 +5,13 @@ import edu.calc.becas.common.model.LabelValueData;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.actividades.dao.AlumnoActividadDao;
-import edu.calc.becas.malumnos.actividades.model.ActividadesAlumnos;
 import edu.calc.becas.malumnos.model.AlumnoActividad;
 import edu.calc.becas.mcarga.hrs.blibioteca.model.Hora;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.actividades.model.DetalleActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
+import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import edu.calc.becas.mreporte.percent.beca.dao.ReportPercentBecaDao;
@@ -22,6 +22,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -88,11 +89,11 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
 
     @Override
-    public WrapperData getAllDetalle(int page, int pageSize, String idActividad, String ciclo, String status, String username) {
+    public WrapperData getAllDetalle(int page, int pageSize, String idActividad, String ciclo, String status, Usuario usuario) {
 
         boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
         boolean byActividad = !idActividad.equalsIgnoreCase(ALL_ITEMS);
-        boolean byUser = !username.equalsIgnoreCase(ALL_ITEMS);
+        boolean byUser = !usuario.getUsername().equalsIgnoreCase(ALL_ITEMS);
 
 
         String queryGetALl = addConditionFilterByStatus(status, QRY_DETALLE_ACTIVIDADES, QRY_CONDITION_ESTATUS_HORARIO_ACTIVIDADES);
@@ -104,8 +105,8 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
         }
 
         if (byUser) {
-            queryGetALl = queryGetALl.concat(QRY_CONDITION_USERNAME.replace("?", "'" + username + "'"));
-            queryCountItem = queryCountItem.concat(QRY_CONDITION_USERNAME.replace("?", "'" + username + "'"));
+            queryGetALl = queryGetALl.concat(QRY_CONDITION_ID_USUARIO.replace("?", "'" + usuario.getIdUsuario() + "'"));
+            queryCountItem = queryCountItem.concat(QRY_CONDITION_ID_USUARIO.replace("?", "'" + usuario.getIdUsuario() + "'"));
         }
 
         queryGetALl = queryGetALl.concat(QRY_ORDER_BY);
@@ -254,8 +255,11 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
                 // obtiene la actividad del alumno
                 ActividadVo actividadVo = alumnoActividadDao.getActividadByAlumno(alumno.getMatricula(), cicloEscolarActual);
+                UserLogin userLogin = new UserLogin();
+                userLogin.setUsername("ADMIN");
+                reportPercentBecaDao.addPercentActivity(BigDecimal.valueOf(alumno.getPorcentajeActividad()), actividadVo.getIdActividad(), userLogin,parcialActual);
 
-                if (reportPercentBecaDao.actividadAlumnoExists(actividadVo, parcialActual)) {
+                /*if (reportPercentBecaDao.actividadAlumnoExists(actividadVo, parcialActual)) {
                     jdbcTemplate.update(QRY_UPDATE_PERCENT_ACTIVIDAD,
                             new Object[]{
                                     //percentLibraryTime,
@@ -272,7 +276,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
                             cicloEscolarActual.getNombre(),
                             "ADMIN"
                     );
-                }
+                }*/
 
                 count++;
             } catch (Exception e) {

@@ -12,4 +12,6 @@ public interface AsistenciaService {
     List<AlumnoAsistenciaSala> getAlumnosByScheduleAndUser(String username, String idHorario, List<FechaAsistencia> fechasAsistencia) throws GenericException;
 
     List<PaseAsistencia> addPresenceByDate(List<PaseAsistencia> asistencias, Usuario usuario) throws GenericException;
+
+    int countPresenceByActivityAlumno(Integer actividad, String fechaInicio, String fechaFin);
 }

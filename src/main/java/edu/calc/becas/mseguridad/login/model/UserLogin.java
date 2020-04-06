@@ -20,11 +20,15 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-@ApiModel(description = "Entidad con los datos del usuario para inicio de sesión")
+@ApiModel(description = "Entidad con los datos del usuario en sesión")
 public class UserLogin implements Serializable {
+
+    @ApiModelProperty(value = "Días de tolerancia para carga de reporte")
+    private int diasTolerancia;
 
     @ApiModelProperty(value = "Nombre del usuario")
     private String nombreUsuario;
+
     @ApiModelProperty(value = "Apellido paterno del usuario")
     private String apellidoPaterno;
     @ApiModelProperty(value = "Apellido materno del usuario")

@@ -7,6 +7,7 @@ import java.util.Date;
 
 public final class UtilDate {
     public static String PATTERN_GUION = "dd-MM-yyyy";
+    public static String PATTERN_GUION_INVERSE = "yyyy-MM-yy";
     public static String PATTERN_DIAG = "dd/MM/yyyy";
     private UtilDate() {
     }

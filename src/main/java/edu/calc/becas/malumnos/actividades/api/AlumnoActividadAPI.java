@@ -4,12 +4,15 @@ import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.actividades.service.AlumnoActividadService;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
-import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
+import edu.calc.becas.mseguridad.login.model.UserLogin;
+import edu.calc.becas.mvc.config.security.user.UserRequestService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static edu.calc.becas.common.utils.Constant.*;
 
@@ -26,10 +29,13 @@ public class AlumnoActividadAPI {
 
     private final AlumnoActividadService alumnoActividadService;
     private CicloEscolarService cicloEscolarService;
+    private UserRequestService userRequestService;
 
-    public AlumnoActividadAPI(AlumnoActividadService alumnoActividadService, CicloEscolarService cicloEscolarService) {
+    public AlumnoActividadAPI(AlumnoActividadService alumnoActividadService, CicloEscolarService cicloEscolarService,
+                              UserRequestService userRequestService) {
         this.alumnoActividadService = alumnoActividadService;
         this.cicloEscolarService = cicloEscolarService;
+        this.userRequestService = userRequestService;
     }
 
     @GetMapping("/alumnos/{matricula}/actividades")
@@ -53,10 +59,10 @@ public class AlumnoActividadAPI {
       @RequestParam(value = "actividad", defaultValue = ALL_ITEMS, required = false) String idActividad,
 
       @ApiParam(value = "Identificador del ciclo escolar asociado a la actividad", defaultValue = DEFAULT_ESTATUS)
-      @RequestParam(value = "ciclo", defaultValue = DEFAULT_ESTATUS, required = false) String idCiclo,
-
-      @ApiParam(value = "Encargado de la actividad", defaultValue = ALL_ITEMS)
-      @RequestParam(value = "username", defaultValue = ALL_ITEMS, required = false) String username){
+      @RequestParam(value = "ciclo", defaultValue = DEFAULT_ESTATUS, required = false) String idCiclo
+            /*, @ApiParam(value = "Encargado de la actividad", defaultValue = ALL_ITEMS)
+      @RequestParam(value = "username", defaultValue = ALL_ITEMS, required = false) String username*/
+    ){
 
       if (pageSize.equalsIgnoreCase(ALL_ITEMS)) {
         pageSize = ITEMS_FOR_PAGE;
@@ -65,12 +71,14 @@ public class AlumnoActividadAPI {
     }
 
    @PostMapping("/alumnos/calcula-porcentaje-actividad/horario/{id-horario}/parcial/{parcial}")
-    public String calculatePercentActivityBySchedule(
+   @ApiOperation(value = "Calcula porcentaje de actividad extra-escoalar de alumnos por horario de actividad")
+   public String calculatePercentActivityBySchedule(
             @ApiParam(value = "Identificador de horario de la actividad extra-escolar", required = true) @PathVariable("id-horario") int idHorario,
-            @ApiParam(value = "Parcial del periodo actual a calcular el porcentaje de actividad (1,2 o3)", required = true) @PathVariable("parcial") int idParcial
-   ) throws GenericException {
-       CicloEscolarVo cicloEscolarVo = cicloEscolarService.getCicloEscolarActual();
-       return alumnoActividadService.calculatePercentActivityBySchedule(idHorario, idParcial, cicloEscolarVo);
+            @ApiParam(value = "Parcial del periodo actual a calcular el porcentaje de actividad (1,2 o3)", required = true) @PathVariable("parcial") int idParcial,
+            HttpServletRequest httpServletRequest
+   ) throws Exception {
+       UserLogin userLogin = userRequestService.getUserLogin(httpServletRequest);
+       return alumnoActividadService.calculatePercentActivityBySchedule(idHorario, idParcial, userLogin);
    }
 
 

@@ -2,6 +2,7 @@ package edu.calc.becas.mconfiguracion.parciales.service;
 
 import edu.calc.becas.common.service.CrudGenericService;
 import edu.calc.becas.exceptions.GenericException;
+import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 
 import java.util.List;
@@ -20,4 +21,5 @@ public interface ParcialService extends CrudGenericService<Parcial> {
 
     Parcial getParcialAnterior(Parcial parcialActual);
 
+    Parcial getParcialByPeriodoAndParcialOrd(int parcial, CicloEscolarVo cicloEscolarVo);
 }

@@ -6,6 +6,8 @@ import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +18,7 @@ import static edu.calc.becas.mcarga.hrs.alumnos.dao.QueriesCargaAlumnos.QRY_ADD_
 
 
 @Repository("cargaAlumnosPeriodosRepository")
+@Slf4j
 public class CargaAlumnosPeriodosDaoImpl extends BaseDao implements CargaAlumnosPeriodosDao {
 
   public CargaAlumnosPeriodosDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
@@ -27,15 +30,20 @@ public class CargaAlumnosPeriodosDaoImpl extends BaseDao implements CargaAlumnos
     int count = 0;
     for (Alumno alumno : alumnos) {
       //int idAlumno = this.jdbcTemplate.queryForObject(QRY_ID_ALUMNO, Integer.class);
-      this.jdbcTemplate.update(QRY_ADD, createObject(alumno));
+      try{
+        this.jdbcTemplate.update(QRY_ADD, createObject(alumno));
 
-      count++;
+      }catch (Exception e){
+        log.error(ExceptionUtils.getStackTrace(e));
+      }
+
     }
     for (Alumno alumno : alumnos) {
       //int idAlumno = this.jdbcTemplate.queryForObject(QRY_ID_ALUMNO, Integer.class);
       this.jdbcTemplate.update(QRY_ADD_ALUMNO_PERIODO, createObjectPeriodo(alumno,
         cicloEscolarActual,
         licenciatura));
+      count++;
     }
     return count;
   }

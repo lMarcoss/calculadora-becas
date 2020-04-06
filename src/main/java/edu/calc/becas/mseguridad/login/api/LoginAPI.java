@@ -2,6 +2,7 @@ package edu.calc.becas.mseguridad.login.api;
 
 import edu.calc.becas.exceptions.ConnectionJdbcException;
 import edu.calc.becas.exceptions.GenericException;
+import edu.calc.becas.mseguridad.login.model.DataLogin;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.login.service.LoginService;
 import edu.calc.becas.mseguridad.menu.service.MenuService;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
-@Api(description = "Servicios para realizar el login de la aplicación")
+@Api(description = "Servicios para realizar el login de la aplicación", position = 0)
 public class LoginAPI {
 
     private final LoginService loginService;
@@ -33,8 +34,13 @@ public class LoginAPI {
 
     @PostMapping
     @ApiOperation(value = "Realiza el login del usuario validando el usuario y contraseña")
-    public UserLogin login(@ApiParam(value = "usuario") @RequestBody UserLogin user) throws InvalidJwtAuthenticationException, ConnectionJdbcException, GenericException {
-        UserLogin userLogin = loginService.login(user);
+    public UserLogin login(@ApiParam(value = "usuario") @RequestBody DataLogin user) throws InvalidJwtAuthenticationException, ConnectionJdbcException, GenericException {
+
+        UserLogin dataUserLogin = new UserLogin();
+        dataUserLogin.setUsername(user.getUsername());
+        dataUserLogin.setPassword(user.getPassword());
+
+        UserLogin userLogin = loginService.login(dataUserLogin);
         userLogin.setPassword(null);
         userLogin.setToken(this.jwtTokenProvider.createToken(userLogin));
         userLogin.setMenu(menuService.getMenu(userLogin.getUsername()));

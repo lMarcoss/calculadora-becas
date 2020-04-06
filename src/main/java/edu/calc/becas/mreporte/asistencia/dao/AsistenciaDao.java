@@ -16,4 +16,6 @@ public interface AsistenciaDao {
                                                            Parcial parcialAnterior) throws GenericException;
 
     List<PaseAsistencia> addPresenceByDate(List<PaseAsistencia> asistencias, Usuario usuario);
+
+    int countPresenceByActivityAlumno(Integer actividad, String fechaInicio, String fechaFin);
 }

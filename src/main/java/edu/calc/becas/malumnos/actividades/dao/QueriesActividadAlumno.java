@@ -41,4 +41,11 @@ final class QueriesActividadAlumno {
 
 
   static final String QRY_CONDITION_ID_ACTIVIDAD =" and AT.ID_ACTIVIDAD = ?";
+  static final String QRY_CONDITION_ID_USER =" and AC.ID_USUARIO = ?";
+
+  static final String QRY_ID_ACTIVIDAD_ALUMNO_BY_HORARIO =
+          "SELECT AA.ID_ACTIVIDAD_ALUMNO, HA.ID_ACTIVIDAD\n" +
+          "FROM HORARIO_ACTIVIDAD HA, ACTIVIDAD_ALUMNO AA\n" +
+          "WHERE HA.ID_HORARIO_ACTIVIDAD = ? AND HA.ESTATUS = 'S'\n" +
+          "  AND AA.ID_HORARIO_ACTIVIDAD = HA.ID_HORARIO_ACTIVIDAD";
 }

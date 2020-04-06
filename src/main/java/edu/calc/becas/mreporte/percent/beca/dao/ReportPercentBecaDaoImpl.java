@@ -5,16 +5,19 @@ import edu.calc.becas.common.model.Pageable;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
-import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
+import edu.calc.becas.mseguridad.login.model.UserLogin;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import static edu.calc.becas.common.utils.Constant.*;
+import static edu.calc.becas.common.utils.Constant.ALL_ITEMS;
+import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
 import static edu.calc.becas.mreporte.percent.beca.dao.QueriesReportPercentBeca.*;
 
 /**
@@ -71,6 +74,59 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
         return new WrapperData(data, page, pageSize, lengthDataTable);
     }
 
+    @Override
+    public void addPercentActivity(BigDecimal porcentaje, Integer actividad, UserLogin userLogin, Parcial parcial) {
+        ActividadVo actividadVo = new ActividadVo();
+        actividadVo.setIdActividad(actividad);
+
+
+        if (actividadAlumnoExists(actividadVo, parcial)) {
+
+            jdbcTemplate.update(QRY_UPDATE_PERCENT_ACTIVIDAD,
+                    new Object[]{
+                            //percentLibraryTime,
+                            porcentaje,
+                            userLogin.getUsername(),
+                            actividadVo.getIdActividad(),
+                            parcial.getIdParcial()
+
+                    });
+        } else {
+            jdbcTemplate.update(QRY_INSERT_PERCENT_ACTIVIDAD,
+                    actividadVo.getIdActividad(),
+                    porcentaje,
+                    parcial.getIdParcial(),
+                    parcial.getCvePeriodo(),
+                    parcial.getDescPeriodo(),
+                    userLogin.getUsername()
+            );
+        }
+    }
+
+    @Override
+    public void addPercentActivitySala(BigDecimal percent, int idActividad, UserLogin userLogin, Parcial parcial) {
+        ActividadVo actividadVo = new ActividadVo();
+        actividadVo.setIdActividad(idActividad);
+        if (actividadAlumnoExists(actividadVo, parcial)) {
+            jdbcTemplate.update(QRY_UPDATE_PERCENT_SALA,
+                    new Object[]{
+                            percent,
+                            userLogin.getUsername(),
+                            actividadVo.getIdActividad(),
+                            parcial.getIdParcial()
+                    });
+        } else {
+            jdbcTemplate.update(QRY_INSERT_PERCENT_SALA,
+                    actividadVo.getIdActividad(),
+                    percent,
+                    parcial.getIdParcial(),
+                    parcial.getCvePeriodo(),
+                    parcial.getDescPeriodo(),
+                    userLogin.getUsername()
+            );
+        }
+    }
+
     private String createCondition(ReporteActividad filter) {
         String conditions = "";
         if (filter.getIdActividad() != 0) {
@@ -78,15 +134,15 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
         }
 
         if (!filter.getCvePeriodo().equalsIgnoreCase(ALL_ITEMS)) {
-            conditions = conditions.concat(String.format(ADD_CONDITION_CICLO_ESCOLAR, "'"+filter.getCvePeriodo()+"'"));
+            conditions = conditions.concat(String.format(ADD_CONDITION_CICLO_ESCOLAR, "'" + filter.getCvePeriodo() + "'"));
         }
 
         if (!filter.getCveGrupo().equalsIgnoreCase(ALL_ITEMS)) {
-            conditions = conditions.concat(String.format(ADD_CONDITION_GRUPO, "'"+filter.getCveGrupo()+"'"));
+            conditions = conditions.concat(String.format(ADD_CONDITION_GRUPO, "'" + filter.getCveGrupo() + "'"));
         }
 
         if (!filter.getCveLicenciatura().equalsIgnoreCase(ALL_ITEMS)) {
-            conditions = conditions.concat(String.format(ADD_CONDITION_LICENCIATURA, "'"+filter.getCveLicenciatura()+"'"));
+            conditions = conditions.concat(String.format(ADD_CONDITION_LICENCIATURA, "'" + filter.getCveLicenciatura() + "'"));
         }
 
         if (filter.getIdParcial() != 0) {
@@ -101,7 +157,7 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
             conditions = conditions.concat(String.format(ADD_CONDITION_LIKE_WORD_KEY, "'%" + filter.getPalabraClave() + "%'"));
         }
 
-        if(filter.getCveEstatus()!= null && !filter.getCveEstatus().equalsIgnoreCase(ALL_ITEMS)){
+        if (filter.getCveEstatus() != null && !filter.getCveEstatus().equalsIgnoreCase(ALL_ITEMS)) {
             conditions = conditions.concat(String.format(ADD_CONDITION_BY_STATUS, "'" + filter.getCveEstatus() + "'"));
         }
 

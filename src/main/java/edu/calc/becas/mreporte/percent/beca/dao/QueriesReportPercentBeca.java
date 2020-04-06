@@ -26,11 +26,11 @@ final class QueriesReportPercentBeca {
                     "       P.ID_PARCIAL,\n" +
                     "       P.DESC_PARCIAL,\n" +
                     "       ADP.CVE_LICENCIATURA, \n" +
-                    "       ADP.DESC_LICENCIATURA,\n"+
+                    "       ADP.DESC_LICENCIATURA,\n" +
                     "       ADP.CVE_GRUPO,\n" +
                     "       ADP.DESC_GRUPO,\n" +
                     "       ADP.CVE_PERIODO,\n" +
-                    "       ADP.DESC_PERIDODO,\n"+
+                    "       ADP.DESC_PERIDODO,\n" +
                     "       ADP.ESTATUS\n";
 
     static final String QRY_ORDER_BY = "\nORDER BY A.NOMBRES ASC, A.APE_PATERNO ASC, A.APE_MATERNO ASC, ADP.CVE_GRUPO ASC, ADP.DESC_LICENCIATURA ASC";
@@ -65,6 +65,19 @@ final class QueriesReportPercentBeca {
     static final String ADD_CONDITION_MATRICULA_ALUMNO = "\nAND A.MATRICULA = %s\n";
     static final String ADD_CONDITION_LIKE_WORD_KEY = "\nAND CONCAT(A.NOMBRES, ' ', A.APE_PATERNO, ' ', A.APE_MATERNO) LIKE %s\n";
     static final String ADD_CONDITION_BY_STATUS = "\nAND ADP.ESTATUS = %s\n";
+
+    static final String QRY_INSERT_PERCENT_ACTIVIDAD =
+            "INSERT INTO PORCENTAJE_BECA (ID_ACTIVIDAD_ALUMNO, PORCENTAJE_ACTIVIDAD, ID_PARCIAL, CVE_PERIODO,DESC_PERIDODO, AGREGADO_POR, FECHA_CREACION) " +
+                    "VALUE (?, ?, ?, ?, ?, ?, NOW())";
+    static final String QRY_UPDATE_PERCENT_ACTIVIDAD =
+            "UPDATE PORCENTAJE_BECA SET PORCENTAJE_ACTIVIDAD = ?, ACTUALIZADO_POR = ? WHERE ID_ACTIVIDAD_ALUMNO = ? AND ID_PARCIAL = ?";
+
+    static final String QRY_INSERT_PERCENT_SALA =
+            "INSERT INTO PORCENTAJE_BECA (ID_ACTIVIDAD_ALUMNO, PORCENTAJE_SALA, ID_PARCIAL, CVE_PERIODO,DESC_PERIDODO,AGREGADO_POR, FECHA_CREACION) " +
+                    "VALUE (?, ?, ?, ?,?,?, NOW())";
+
+    static final String QRY_UPDATE_PERCENT_SALA =
+            "UPDATE PORCENTAJE_BECA SET PORCENTAJE_SALA = ?, ACTUALIZADO_POR = ? WHERE ID_ACTIVIDAD_ALUMNO = ? AND ID_PARCIAL = ?";
 }
 
 
