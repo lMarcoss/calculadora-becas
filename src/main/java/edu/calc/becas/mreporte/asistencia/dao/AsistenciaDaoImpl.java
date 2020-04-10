@@ -119,7 +119,7 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
             if (usuario.getDiasRetrocesoReporte() > 0 && parcialActual.getParcial() > 1) {
                 Date fechaInicioParcialAnterior = UtilDate.convertToDate(parcialAnterior.getFechaInicio(), PATTERN_DIAG);
                 Date fechaFinParcialAnterior = UtilDate.convertToDate(parcialAnterior.getFechaFin(), PATTERN_DIAG);
-                Date fechaTolerancia = UtilDate.getNextDayBySum(fechaFinParcialAnterior, usuario.getDiasRetrocesoReporte());
+                Date fechaTolerancia = UtilDate.getDateSumDay(fechaFinParcialAnterior, usuario.getDiasRetrocesoReporte());
 
                 // editable si la fecha de asistencia es del parcial anterior
                 if (isDateBetween(fechaInicioParcialAnterior, fechaFinParcialAnterior, fechaAsistencia)) {

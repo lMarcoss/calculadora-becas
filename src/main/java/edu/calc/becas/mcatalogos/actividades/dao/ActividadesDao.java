@@ -24,7 +24,7 @@ public interface ActividadesDao extends CrudGenericDao<ActividadVo> {
 
     DetalleActividadVo updateDetail(DetalleActividadVo detalle) throws GenericException;
 
-    WrapperData getAllByStatusAndTipoActividadHorario(int page, int pageSize, String status, String param1, String swHorario);
+    WrapperData<ActividadVo> getAllByStatusAndTipoActividadHorario(int page, int pageSize, String status, String param1, String swHorario);
 
     int persistencePorcentaje(List<ReporteActividad> alumnos, Parcial parcialActual, CicloEscolarVo cicloEscolarActual);
 }

@@ -14,5 +14,6 @@ import org.apache.poi.ss.usermodel.Workbook;
  * Date: 5/13/19
  */
 public interface ProcessHoursService {
-    int processData(Workbook pages, CommonData commonData, Parcial parcialActual, CicloEscolarVo cicloEscolarActual) throws GenericException;
+    int processData(Workbook pages, CommonData commonData, Parcial parcialActual,
+                    CicloEscolarVo cicloEscolarActual) throws GenericException;
 }

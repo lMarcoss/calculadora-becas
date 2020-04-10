@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.List;
+
 import static edu.calc.becas.common.utils.Constant.ESTATUS_ACTIVE;
 
 /**
@@ -52,6 +54,14 @@ public class ParcialAPI {
         parcialWrapperData.setPageSize(parcialWrapperData.getData().size());
         parcialWrapperData.setLengthData(parcialWrapperData.getData().size());
         return parcialWrapperData;
+    }
+
+    @GetMapping("/carga-horas-biblioteca")
+    @ApiOperation("Obtiene el listado de parciales disponibles para carga de horas de biblioteca")
+    public List<Parcial> getParcialesPeriodoActualCargaHorasBiblioteca(HttpServletRequest httpServletRequest) throws GenericException {
+        UserLogin userLogin = userRequestService.getUserLogin(httpServletRequest);
+
+        return parcialService.getParcialesPeriodoActualCargaHorasBiblioteca(userLogin);
     }
 
     @GetMapping("/actual")

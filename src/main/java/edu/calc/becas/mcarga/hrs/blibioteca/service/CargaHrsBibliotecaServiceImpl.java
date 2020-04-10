@@ -59,7 +59,8 @@ public class CargaHrsBibliotecaServiceImpl extends ProcessRow implements Process
 
 
     @Override
-    public int processData(Workbook pages, CommonData commonData, Parcial parcialActual, CicloEscolarVo cicloEscolarActual) throws GenericException {
+    public int processData(Workbook pages, CommonData commonData, Parcial parcialCarga,
+                           CicloEscolarVo cicloEscolarActual) throws GenericException {
 
         List<RowFile> rows = readRows(pages);
 
@@ -107,6 +108,6 @@ public class CargaHrsBibliotecaServiceImpl extends ProcessRow implements Process
             alumnos.add(alumno);
         }
 
-        return this.cargaHrsBibliotecaDao.persistenceHours(alumnos, parcialActual, cicloEscolarActual);
+        return this.cargaHrsBibliotecaDao.persistenceHours(alumnos, parcialCarga, cicloEscolarActual);
     }
 }

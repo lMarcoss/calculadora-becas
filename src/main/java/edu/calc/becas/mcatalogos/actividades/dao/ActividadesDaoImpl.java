@@ -49,12 +49,12 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
 
     @Override
-    public WrapperData getAllByStatus(int page, int pageSize, String status) {
+    public WrapperData<ActividadVo> getAllByStatus(int page, int pageSize, String status) {
 
         return getAllByAllParam(page, pageSize, status, ALL_ITEMS, ALL_ITEMS);
     }
 
-    private WrapperData getAllByAllParam(int page, int pageSize, String status, String tipoActividad, String swHorario) {
+    private WrapperData<ActividadVo> getAllByAllParam(int page, int pageSize, String status, String tipoActividad, String swHorario) {
         boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
         boolean byTipoActividad = !tipoActividad.equalsIgnoreCase(ALL_ITEMS);
         boolean bySwHorario = !swHorario.equalsIgnoreCase(ALL_ITEMS);
@@ -181,7 +181,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
     }
 
     @Override
-    public WrapperData getAllByStatusAndTipoActividadHorario(int page, int pageSize, String status, String param1, String swHorario) {
+    public WrapperData<ActividadVo> getAllByStatusAndTipoActividadHorario(int page, int pageSize, String status, String param1, String swHorario) {
         return getAllByAllParam(page, pageSize, status, param1, swHorario);
     }
 

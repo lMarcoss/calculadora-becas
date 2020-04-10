@@ -44,7 +44,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 
         try {
             Date date = UtilDate.convertToDate(parcialActual.getFechaFin(), UtilDate.PATTERN_DIAG);
-            Date dateEnd = UtilDate.getNextDayBySum(date, usuario.getDiasRetrocesoReporte());
+            Date dateEnd = UtilDate.getDateSumDay(date, usuario.getDiasRetrocesoReporte());
             String dateEndString = UtilDate.convertDateToString(dateEnd, UtilDate.PATTERN_DIAG);
             parcialActual.setFechaFin(dateEndString);
         } catch (Exception e) {

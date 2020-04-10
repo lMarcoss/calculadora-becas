@@ -42,28 +42,28 @@ public class CargaHrsBibliotecaDaoImpl extends BaseDao implements CargaHrsDao {
     }
 
     @Override
-    public int persistenceHours(List<Alumno> alumnos, Parcial parcialActual, CicloEscolarVo cicloEscolarActual) {
+    public int persistenceHours(List<Alumno> alumnos, Parcial parcial, CicloEscolarVo cicloEscolarActual) {
         int count = 0;
         for (Alumno alumno : alumnos) {
             try {
                 // obtiene datos del alumno
                 /*Alumno alumnoBD = alumnosService.getByMatricula(alumno.getMatricula());*/
-                int percentLibraryTime = calculatePercentHoursLibrary(alumno, parcialActual);
+                int percentLibraryTime = calculatePercentHoursLibrary(alumno, parcial);
                 // obtiene la actividad del alumno
                 ActividadVo actividadVo = alumnoActividadDao.getActividadByAlumno(alumno.getMatricula(), cicloEscolarActual);
 
-                if (reportPercentBecaDao.actividadAlumnoExists(actividadVo, parcialActual)) {
+                if (reportPercentBecaDao.actividadAlumnoExists(actividadVo, parcial)) {
                     jdbcTemplate.update(QRY_UPDATE_PERCENT_BIBLIOTECA,
                             new Object[]{
                                     percentLibraryTime,
                                     actividadVo.getIdActividad(),
-                                    parcialActual.getIdParcial()
+                                    parcial.getIdParcial()
                             });
                 } else {
                     jdbcTemplate.update(QRY_INSERT_PERCENT_BIBLIOTECA,
                             actividadVo.getIdActividad(),
                             percentLibraryTime,
-                            parcialActual.getIdParcial(),
+                            parcial.getIdParcial(),
                             cicloEscolarActual.getClave(),
                             cicloEscolarActual.getNombre(),
                             alumno.getAgregadoPor()

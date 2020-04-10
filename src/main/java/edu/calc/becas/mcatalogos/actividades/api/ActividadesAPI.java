@@ -70,7 +70,7 @@ public class ActividadesAPI {
 
     @GetMapping
     @ApiOperation(value = "Obtiene el listado de Actividades")
-    public WrapperData getAll(
+    public WrapperData<ActividadVo> getAll(
             @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
             @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
             @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)

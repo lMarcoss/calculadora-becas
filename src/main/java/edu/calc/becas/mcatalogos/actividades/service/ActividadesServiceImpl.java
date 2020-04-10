@@ -75,7 +75,7 @@ public class ActividadesServiceImpl implements ActividadesService{
     }
 
     @Override
-    public WrapperData getAllByStatusAndTipoActividadHorario(int page, int pageSize, String status, String param1, String swHorario) {
+    public WrapperData<ActividadVo> getAllByStatusAndTipoActividadHorario(int page, int pageSize, String status, String param1, String swHorario) {
         return actividadesDao.getAllByStatusAndTipoActividadHorario(page, pageSize, status, param1, swHorario);
     }
 

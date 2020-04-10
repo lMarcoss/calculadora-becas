@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,27 +44,29 @@ public class UploadFileAPI {
     @Autowired
     private CicloEscolarService cicloEscolarService;
     @Autowired
-    private  ParcialService parcialService;
+    private ParcialService parcialService;
 
     @Value("${location.file}")
     String locationFile;
 
-    @PostMapping("/upload")
+    @PostMapping("/upload/parcial/{parcial}")
     @ApiOperation(value = "Carga de archivo")
-    public ProcessedFile uploadFactura(@RequestParam("file") MultipartFile file) throws GenericException {
+    public ProcessedFile uploadFactura(@RequestParam("file") MultipartFile file, @PathVariable int parcial) throws GenericException {
         String pathfile = saveFile(file);
         Workbook pages = ReadFile.pages(pathfile);
         CommonData commonData = new CommonData();
         commonData.setAgregadoPor("ADMIN");
         commonData.setActualizadoPor("ADMIN");
-        Parcial parcialActual = parcialService.getParcialActual();
+
         CicloEscolarVo cicloEscolarActual = cicloEscolarService.getCicloEscolarActual();
 
-        int resultProcessed = processHoursService.processData(pages, commonData, parcialActual, cicloEscolarActual);
+        Parcial parcialCarga = parcialService.getParcialByPeriodoAndParcialOrd(parcial, cicloEscolarActual);
+
+        int resultProcessed = processHoursService.processData(pages, commonData, parcialCarga, cicloEscolarActual);
         String message;
-        if(resultProcessed == 1){
+        if (resultProcessed == 1) {
             message = String.format(MESSAGE_ROW_PROCESSED_ROOM_COMPUTER, 1);
-        }else {
+        } else {
             message = String.format(MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER, resultProcessed);
         }
         return ProcessedFile.builder()

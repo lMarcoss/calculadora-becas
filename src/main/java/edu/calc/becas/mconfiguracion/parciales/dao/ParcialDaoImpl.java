@@ -39,9 +39,9 @@ public class ParcialDaoImpl extends BaseDao implements ParcialDao {
     @Override
     public Parcial getParcialActual(CicloEscolarVo cicloEscolarVo) throws GenericException {
         try {
-            return this.jdbcTemplate.queryForObject(QueriesParcial.QRY_GET_PARCIAL_ACTUAL,new Object[]{cicloEscolarVo.getClave()}, ((rs, i) -> mapperParcial(rs)));
-        }catch (Exception e){
-            throw new GenericException( e, "El Parcial actual del periodo en curso no est\u00e1 registrado");
+            return this.jdbcTemplate.queryForObject(QueriesParcial.QRY_GET_PARCIAL_ACTUAL, new Object[]{cicloEscolarVo.getClave()}, ((rs, i) -> mapperParcial(rs)));
+        } catch (Exception e) {
+            throw new GenericException(e, "El Parcial actual del periodo en curso no est\u00e1 registrado");
         }
 
     }
@@ -49,14 +49,14 @@ public class ParcialDaoImpl extends BaseDao implements ParcialDao {
     @Override
     public Parcial getParcialAnterior(Parcial parcialActual) {
         try {
-            if(parcialActual.getParcial() > 1){
+            if (parcialActual.getParcial() > 1) {
                 return this.jdbcTemplate.queryForObject(QueriesParcial.QRY_GET_PARCIAL_ANTERIOR,
-                        new Object[]{parcialActual.getCvePeriodo(), parcialActual.getIdParcial()-1},
+                        new Object[]{parcialActual.getCvePeriodo(), parcialActual.getIdParcial() - 1},
                         ((rs, i) -> mapperParcial(rs)));
-            }else {
+            } else {
                 return null;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
             return null;
         }
@@ -66,7 +66,7 @@ public class ParcialDaoImpl extends BaseDao implements ParcialDao {
     public Parcial getParcialByPeriodoAndParcialOrd(int parcial, CicloEscolarVo cicloEscolarVo) {
         String qry = QRY_GET_ALL.concat(QRY_ADD_CONDITION_PARCIAL);
         return this.jdbcTemplate.queryForObject(qry,
-                new Object[]{cicloEscolarVo.getClave(), parcial },
+                new Object[]{cicloEscolarVo.getClave(), parcial},
                 ((rs, i) -> mapperParcial(rs)));
     }
 
@@ -121,7 +121,7 @@ public class ParcialDaoImpl extends BaseDao implements ParcialDao {
                     p.getCvePeriodo(), p.getDescPeriodo(), p.getAgregadoPor(), p.getTotalHorasBiblioteca(),
                     p.getTotalAsistenciaSala(), p.getTotalAsistenciaActividadExtraEscolar());
             return p;
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new GenericException("No se puede agregar dos veces el mismo parcial en un periodo");
         }
 
@@ -140,7 +140,7 @@ public class ParcialDaoImpl extends BaseDao implements ParcialDao {
         jdbcTemplate.update(QueriesParcial.QRY_UPDATE,
                 p.getParcial(), p.getParcialActual(), p.getFechaInicio(), p.getFechaFin(),
                 p.getCvePeriodo(), p.getDescPeriodo(), p.getActualizadoPor(), p.getTotalHorasBiblioteca(),
-                p.getTotalAsistenciaSala(), p.getTotalAsistenciaActividadExtraEscolar(),p.getIdParcial());
+                p.getTotalAsistenciaSala(), p.getTotalAsistenciaActividadExtraEscolar(), p.getIdParcial());
         return p;
     }
 }

@@ -93,7 +93,7 @@ public class AsistenciaAPI {
         createDate(fechaInicial, fechas);
 
         while (fechaInicial.before(fechaFinal)) {
-            fechaInicial = UtilDate.getNextDayBySum(fechaInicial, 1);
+            fechaInicial = UtilDate.getDateSumDay(fechaInicial, 1);
             createDate(fechaInicial, fechas);
         }
         return fechas;

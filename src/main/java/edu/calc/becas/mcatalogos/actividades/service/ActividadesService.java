@@ -21,5 +21,5 @@ public interface ActividadesService extends CrudGenericService<ActividadVo> {
 
     DetalleActividadVo updateDetail(DetalleActividadVo detalle) throws GenericException;
 
-    WrapperData getAllByStatusAndTipoActividadHorario(int parseInt, int parseInt1, String status, String tipoActividad, String swHorario);
+    WrapperData<ActividadVo> getAllByStatusAndTipoActividadHorario(int parseInt, int parseInt1, String status, String tipoActividad, String swHorario);
 }
