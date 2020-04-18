@@ -72,13 +72,13 @@ public class LoginDaoImpl extends BaseDao implements LoginDao {
                     return usuario;
 
                 } catch (EmptyResultDataAccessException e) {
-                    log.error(ExceptionUtils.getStackTrace(e));
+                    log.error("Error al consultar datos del alumno");
                     throw new InvalidJwtAuthenticationException("Error al consultar datos del alumno");
                 }
 
 
             } catch (EmptyResultDataAccessException e) {
-                log.error(ExceptionUtils.getStackTrace(e));
+                log.error("usuario no es alumno");
 
                 // valida si es usuario normal
 
@@ -99,7 +99,7 @@ public class LoginDaoImpl extends BaseDao implements LoginDao {
                     return usuario;
 
                 } catch (EmptyResultDataAccessException ex) {
-                    log.error(ExceptionUtils.getStackTrace(ex));
+                    log.error("Usuario o contrase\u00f1a incorrecta");
                     throw new InvalidJwtAuthenticationException("Usuario o contrase\u00f1a incorrecta");
                 }
             }
