@@ -1,11 +1,11 @@
-package edu.calc.becas.mreporte.percent.beca.api;
+package edu.calc.becas.mreporte.actividades.percent.activity.api;
 
 import edu.calc.becas.common.model.Pageable;
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.mreporte.actividades.percent.activity.model.ReportPercentActivity;
+import edu.calc.becas.mreporte.actividades.percent.activity.service.ReportPercentActivitiesService;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mvc.config.security.user.UserRequestService;
-import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
-import edu.calc.becas.mreporte.percent.beca.service.ReportPercentBecaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -25,20 +25,20 @@ import static edu.calc.becas.common.utils.Constant.*;
  * Date: 2019-06-16
  */
 @RestController
-@RequestMapping("/reporte-detallado")
+@RequestMapping("/reporte-actividades")
 @Api(description = "Servicios para consultar reporte de porcentajes de becas")
-public class ReportPercentBecaAPI {
+public class ReportPercentActivitiesAPI {
 
-    private final ReportPercentBecaService reportPercentBecaService;
+    private final ReportPercentActivitiesService reportPercentActivitiesService;
 
     private final UserRequestService userRequestService;
 
-    public ReportPercentBecaAPI(ReportPercentBecaService reportPercentBecaService, UserRequestService userRequestService) {
-        this.reportPercentBecaService = reportPercentBecaService;
+    public ReportPercentActivitiesAPI(ReportPercentActivitiesService reportPercentActivitiesService, UserRequestService userRequestService) {
+        this.reportPercentActivitiesService = reportPercentActivitiesService;
         this.userRequestService = userRequestService;
     }
 
-    @GetMapping
+    @GetMapping("/detallado")
     @ApiOperation(value = "Obtiene el reporte detallado de actividades")
     public WrapperData getAll(
             @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE) @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
@@ -66,14 +66,14 @@ public class ReportPercentBecaAPI {
         Pageable pageable = new Pageable(Integer.parseInt(page), Integer.parseInt(pageSize));
 
 
-        ReporteActividad reporte = defineFilterParam(cicloEscolar, licenciatura, grupo, parcial, actividad, palabraClave, matricula, estatus);
+        ReportPercentActivity reporte = defineFilterParam(cicloEscolar, licenciatura, grupo, parcial, actividad, palabraClave, matricula, estatus);
 
-        return this.reportPercentBecaService.getAll(pageable, reporte);
+        return this.reportPercentActivitiesService.getAll(pageable, reporte);
     }
 
-    private ReporteActividad defineFilterParam(String cicloEscolar, String licenciatura, String grupo, String parcial,
-                                               String actividad, String palabraClave, String matricula, String estatus) {
-        ReporteActividad filter = new ReporteActividad();
+    private ReportPercentActivity defineFilterParam(String cicloEscolar, String licenciatura, String grupo, String parcial,
+                                                    String actividad, String palabraClave, String matricula, String estatus) {
+        ReportPercentActivity filter = new ReportPercentActivity();
 
         filter.setCvePeriodo(cicloEscolar);
         filter.setCveLicenciatura(licenciatura);

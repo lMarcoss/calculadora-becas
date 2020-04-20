@@ -11,7 +11,7 @@ import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
-import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
+import edu.calc.becas.mreporte.actividades.percent.activity.model.ReportPercentActivity;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,11 +114,11 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
     List<RowFile> rows = readRowsAlumnosReportes(pages);
 
 
-    List<ReporteActividad> alumnosReportes = new ArrayList<>();
+    List<ReportPercentActivity> alumnosReportes = new ArrayList<>();
     int rowIni = 0;
     for (RowFile row : rows) {
 
-        ReporteActividad alumno = new ReporteActividad();
+        ReportPercentActivity alumno = new ReportPercentActivity();
         ActividadVo actividadVo = new ActividadVo("S");
         actividadVo.setIdActividad(idActividadBiblioteca);
 

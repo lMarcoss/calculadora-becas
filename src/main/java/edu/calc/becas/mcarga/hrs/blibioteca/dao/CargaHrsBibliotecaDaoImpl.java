@@ -8,7 +8,7 @@ import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
-import edu.calc.becas.mreporte.percent.beca.dao.ReportPercentBecaDao;
+import edu.calc.becas.mreporte.actividades.percent.activity.dao.ReportPercentActivitiesDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,14 +30,14 @@ public class CargaHrsBibliotecaDaoImpl extends BaseDao implements CargaHrsDao {
     private static final Logger LOG = LoggerFactory.getLogger(CargaHrsBibliotecaDaoImpl.class);
 
 
-    private final ReportPercentBecaDao reportPercentBecaDao;
+    private final ReportPercentActivitiesDao reportPercentActivitiesDao;
     private final AlumnoActividadDao alumnoActividadDao;
 
     public CargaHrsBibliotecaDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty,
-                                     ReportPercentBecaDao reportPercentBecaDao,
+                                     ReportPercentActivitiesDao reportPercentActivitiesDao,
                                      AlumnoActividadDao alumnoActividadDao) {
         super(jdbcTemplate, messageApplicationProperty);
-        this.reportPercentBecaDao = reportPercentBecaDao;
+        this.reportPercentActivitiesDao = reportPercentActivitiesDao;
         this.alumnoActividadDao = alumnoActividadDao;
     }
 
@@ -52,7 +52,7 @@ public class CargaHrsBibliotecaDaoImpl extends BaseDao implements CargaHrsDao {
                 // obtiene la actividad del alumno
                 ActividadVo actividadVo = alumnoActividadDao.getActividadByAlumno(alumno.getMatricula(), cicloEscolarActual);
 
-                if (reportPercentBecaDao.actividadAlumnoExists(actividadVo, parcial)) {
+                if (reportPercentActivitiesDao.actividadAlumnoExists(actividadVo, parcial)) {
                     jdbcTemplate.update(QRY_UPDATE_PERCENT_BIBLIOTECA,
                             new Object[]{
                                     percentLibraryTime,

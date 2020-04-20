@@ -1,11 +1,11 @@
-package edu.calc.becas.mreporte.asistencia.api;
+package edu.calc.becas.mreporte.actividades.asistencia.api;
 
 import edu.calc.becas.exceptions.GenericException;
-import edu.calc.becas.mreporte.asistencia.model.AlumnoAsistenciaSala;
-import edu.calc.becas.mreporte.asistencia.model.FechaAsistencia;
-import edu.calc.becas.mreporte.asistencia.model.PaseAsistencia;
-import edu.calc.becas.mreporte.asistencia.model.WrapperAsistenciaAlumno;
-import edu.calc.becas.mreporte.asistencia.service.AsistenciaService;
+import edu.calc.becas.mreporte.actividades.asistencia.model.AlumnoAsistenciaSala;
+import edu.calc.becas.mreporte.actividades.asistencia.model.WrapperAsistenciaAlumno;
+import edu.calc.becas.mreporte.actividades.asistencia.service.AsistenciaService;
+import edu.calc.becas.mreporte.actividades.asistencia.model.FechaAsistencia;
+import edu.calc.becas.mreporte.actividades.asistencia.model.PaseAsistencia;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.security.user.UserRequestService;

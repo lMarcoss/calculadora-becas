@@ -14,8 +14,8 @@ import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
-import edu.calc.becas.mreporte.percent.beca.dao.ReportPercentBecaDao;
-import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
+import edu.calc.becas.mreporte.actividades.percent.activity.dao.ReportPercentActivitiesDao;
+import edu.calc.becas.mreporte.actividades.percent.activity.model.ReportPercentActivity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -36,14 +36,14 @@ import static edu.calc.becas.mcatalogos.actividades.dao.QueriesActividades.*;
 public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
     private static final Logger LOG = LoggerFactory.getLogger(ActividadesDaoImpl.class);
 
-    private final ReportPercentBecaDao reportPercentBecaDao;
+    private final ReportPercentActivitiesDao reportPercentActivitiesDao;
     private final AlumnoActividadDao alumnoActividadDao;
 
     public ActividadesDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty,
-                              ReportPercentBecaDao reportPercentBecaDao,
+                              ReportPercentActivitiesDao reportPercentActivitiesDao,
                               AlumnoActividadDao alumnoActividadDao) {
         super(jdbcTemplate, messageApplicationProperty);
-        this.reportPercentBecaDao = reportPercentBecaDao;
+        this.reportPercentActivitiesDao = reportPercentActivitiesDao;
         this.alumnoActividadDao = alumnoActividadDao;
     }
 
@@ -248,16 +248,16 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
 
     @Override
-    public int persistencePorcentaje(List<ReporteActividad> alumnos, Parcial parcialActual, CicloEscolarVo cicloEscolarActual) {
+    public int persistencePorcentaje(List<ReportPercentActivity> alumnos, Parcial parcialActual, CicloEscolarVo cicloEscolarActual) {
         int count = 0;
-        for (ReporteActividad alumno : alumnos) {
+        for (ReportPercentActivity alumno : alumnos) {
             try {
 
                 // obtiene la actividad del alumno
                 ActividadVo actividadVo = alumnoActividadDao.getActividadByAlumno(alumno.getMatricula(), cicloEscolarActual);
                 UserLogin userLogin = new UserLogin();
                 userLogin.setUsername("ADMIN");
-                reportPercentBecaDao.addPercentActivity(BigDecimal.valueOf(alumno.getPorcentajeActividad()), actividadVo.getIdActividad(), userLogin,parcialActual);
+                reportPercentActivitiesDao.addPercentActivity(BigDecimal.valueOf(alumno.getPorcentajeActividad()), actividadVo.getIdActividad(), userLogin,parcialActual);
 
                 /*if (reportPercentBecaDao.actividadAlumnoExists(actividadVo, parcialActual)) {
                     jdbcTemplate.update(QRY_UPDATE_PERCENT_ACTIVIDAD,

@@ -8,7 +8,7 @@ import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.actividades.model.DetalleActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
-import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
+import edu.calc.becas.mreporte.actividades.percent.activity.model.ReportPercentActivity;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 
 import java.util.List;
@@ -26,6 +26,6 @@ public interface ActividadesDao extends CrudGenericDao<ActividadVo> {
 
     WrapperData<ActividadVo> getAllByStatusAndTipoActividadHorario(int page, int pageSize, String status, String param1, String swHorario);
 
-    int persistencePorcentaje(List<ReporteActividad> alumnos, Parcial parcialActual, CicloEscolarVo cicloEscolarActual);
+    int persistencePorcentaje(List<ReportPercentActivity> alumnos, Parcial parcialActual, CicloEscolarVo cicloEscolarActual);
 }
 

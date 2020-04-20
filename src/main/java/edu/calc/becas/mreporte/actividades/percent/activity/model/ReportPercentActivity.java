@@ -1,5 +1,6 @@
-package edu.calc.becas.mreporte.percent.beca.model;
+package edu.calc.becas.mreporte.actividades.percent.activity.model;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +16,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ReporteActividad implements Serializable {
+@ApiModel(description = "Entidad para definir datos del reporte de actividades")
+public class ReportPercentActivity implements Serializable {
     private int idPorcentajeBeca;
     private int idAlumno;
     private String matricula;

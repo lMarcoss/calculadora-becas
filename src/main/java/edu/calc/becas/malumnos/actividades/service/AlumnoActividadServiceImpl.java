@@ -8,10 +8,9 @@ import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mconfiguracion.parciales.service.ParcialService;
-import edu.calc.becas.mreporte.asistencia.service.AsistenciaService;
-import edu.calc.becas.mreporte.percent.beca.service.ReportPercentBecaService;
+import edu.calc.becas.mreporte.actividades.asistencia.service.AsistenciaService;
+import edu.calc.becas.mreporte.actividades.percent.activity.service.ReportPercentActivitiesService;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
-import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mseguridad.usuarios.service.UsuarioService;
 import edu.calc.becas.utils.UtilDate;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import static edu.calc.becas.common.utils.Constant.ALL_ITEMS;
 import static java.math.BigDecimal.ROUND_HALF_UP;
 
 /**
@@ -36,17 +34,17 @@ public class AlumnoActividadServiceImpl implements AlumnoActividadService {
     private final CicloEscolarService cicloEscolarService;
     private final ParcialService parcialService;
     private final AsistenciaService asistenciaService;
-    private final ReportPercentBecaService reportPercentBecaService;
+    private final ReportPercentActivitiesService reportPercentActivitiesService;
     private final UsuarioService usuarioService;
 
     public AlumnoActividadServiceImpl(AlumnoActividadDao alumnoActividadDao, CicloEscolarService cicloEscolarService,
                                       ParcialService parcialService, AsistenciaService asistenciaService,
-                                      ReportPercentBecaService reportPercentBecaService, UsuarioService usuarioService) {
+                                      ReportPercentActivitiesService reportPercentActivitiesService, UsuarioService usuarioService) {
         this.alumnoActividadDao = alumnoActividadDao;
         this.cicloEscolarService = cicloEscolarService;
         this.parcialService = parcialService;
         this.asistenciaService = asistenciaService;
-        this.reportPercentBecaService = reportPercentBecaService;
+        this.reportPercentActivitiesService = reportPercentActivitiesService;
         this.usuarioService = usuarioService;
     }
 
@@ -98,9 +96,9 @@ public class AlumnoActividadServiceImpl implements AlumnoActividadService {
                 BigDecimal percent = multiplica.divide(asistenciaPorParcial, 0, ROUND_HALF_UP);
 
                 if (actividad.getIdActividad() == 2) {
-                    reportPercentBecaService.addPercentActivitySala(percent, actividad.getIdActividad(), userLogin, parcial);
+                    reportPercentActivitiesService.addPercentActivitySala(percent, actividad.getIdActividad(), userLogin, parcial);
                 } else {
-                    reportPercentBecaService.addPercentActivity(percent, actividad.getIdActividad(), userLogin, parcial);
+                    reportPercentActivitiesService.addPercentActivity(percent, actividad.getIdActividad(), userLogin, parcial);
                 }
 
             });

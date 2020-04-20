@@ -1,4 +1,4 @@
-package edu.calc.becas.mreporte.percent.beca.dao;
+package edu.calc.becas.mreporte.actividades.percent.activity.dao;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -6,9 +6,9 @@ package edu.calc.becas.mreporte.percent.beca.dao;
  * Description:
  * Date: 2019-06-16
  */
-final class QueriesReportPercentBeca {
+final class QueriesReportPercentActivity {
     static final String QRY_COUNT_ID_ACTIVIDAD_ALUMNO =
-            "SELECT COUNT(1) FROM PORCENTAJE_BECA WHERE ID_ACTIVIDAD_ALUMNO = ? and ID_PARCIAL = ? and CVE_PERIODO = ?";
+            "SELECT COUNT(1) FROM PORCENTAJE_ACTIVIDADES WHERE ID_ACTIVIDAD_ALUMNO = ? and ID_PARCIAL = ? and CVE_PERIODO = ?";
 
     static final String QRY_COUNT_DATA_REPORT =
             "SELECT COUNT(1) \n";
@@ -36,7 +36,7 @@ final class QueriesReportPercentBeca {
     static final String QRY_ORDER_BY = "\nORDER BY A.NOMBRES ASC, A.APE_PATERNO ASC, A.APE_MATERNO ASC, ADP.CVE_GRUPO ASC, ADP.DESC_LICENCIATURA ASC";
 
     static final String QRY_FROM_DATA_REPORTE_ACTIVIDADES =
-            "FROM PORCENTAJE_BECA PB,\n" +
+            "FROM PORCENTAJE_ACTIVIDADES PB,\n" +
                     "     PARCIAL_PERIODO PP,\n" +
                     "     PARCIALES P,\n" +
                     "     ACTIVIDAD_ALUMNO AA,\n" +
@@ -67,17 +67,17 @@ final class QueriesReportPercentBeca {
     static final String ADD_CONDITION_BY_STATUS = "\nAND ADP.ESTATUS = %s\n";
 
     static final String QRY_INSERT_PERCENT_ACTIVIDAD =
-            "INSERT INTO PORCENTAJE_BECA (ID_ACTIVIDAD_ALUMNO, PORCENTAJE_ACTIVIDAD, ID_PARCIAL, CVE_PERIODO,DESC_PERIDODO, AGREGADO_POR, FECHA_CREACION) " +
+            "INSERT INTO PORCENTAJE_ACTIVIDADES (ID_ACTIVIDAD_ALUMNO, PORCENTAJE_ACTIVIDAD, ID_PARCIAL, CVE_PERIODO,DESC_PERIDODO, AGREGADO_POR, FECHA_CREACION) " +
                     "VALUE (?, ?, ?, ?, ?, ?, NOW())";
     static final String QRY_UPDATE_PERCENT_ACTIVIDAD =
-            "UPDATE PORCENTAJE_BECA SET PORCENTAJE_ACTIVIDAD = ?, ACTUALIZADO_POR = ? WHERE ID_ACTIVIDAD_ALUMNO = ? AND ID_PARCIAL = ?";
+            "UPDATE PORCENTAJE_ACTIVIDADES SET PORCENTAJE_ACTIVIDAD = ?, ACTUALIZADO_POR = ? WHERE ID_ACTIVIDAD_ALUMNO = ? AND ID_PARCIAL = ?";
 
     static final String QRY_INSERT_PERCENT_SALA =
-            "INSERT INTO PORCENTAJE_BECA (ID_ACTIVIDAD_ALUMNO, PORCENTAJE_SALA, ID_PARCIAL, CVE_PERIODO,DESC_PERIDODO,AGREGADO_POR, FECHA_CREACION) " +
+            "INSERT INTO PORCENTAJE_ACTIVIDADES (ID_ACTIVIDAD_ALUMNO, PORCENTAJE_SALA, ID_PARCIAL, CVE_PERIODO,DESC_PERIDODO,AGREGADO_POR, FECHA_CREACION) " +
                     "VALUE (?, ?, ?, ?,?,?, NOW())";
 
     static final String QRY_UPDATE_PERCENT_SALA =
-            "UPDATE PORCENTAJE_BECA SET PORCENTAJE_SALA = ?, ACTUALIZADO_POR = ? WHERE ID_ACTIVIDAD_ALUMNO = ? AND ID_PARCIAL = ?";
+            "UPDATE PORCENTAJE_ACTIVIDADES SET PORCENTAJE_SALA = ?, ACTUALIZADO_POR = ? WHERE ID_ACTIVIDAD_ALUMNO = ? AND ID_PARCIAL = ?";
 }
 
 

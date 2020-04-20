@@ -1,4 +1,4 @@
-package edu.calc.becas.mreporte.asistencia.model;
+package edu.calc.becas.mreporte.actividades.asistencia.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

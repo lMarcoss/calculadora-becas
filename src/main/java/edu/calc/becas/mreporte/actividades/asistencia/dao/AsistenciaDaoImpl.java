@@ -1,12 +1,12 @@
-package edu.calc.becas.mreporte.asistencia.dao;
+package edu.calc.becas.mreporte.actividades.asistencia.dao;
 
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
-import edu.calc.becas.mreporte.asistencia.model.AlumnoAsistenciaSala;
-import edu.calc.becas.mreporte.asistencia.model.FechaAsistencia;
-import edu.calc.becas.mreporte.asistencia.model.PaseAsistencia;
+import edu.calc.becas.mreporte.actividades.asistencia.model.AlumnoAsistenciaSala;
+import edu.calc.becas.mreporte.actividades.asistencia.model.FechaAsistencia;
+import edu.calc.becas.mreporte.actividades.asistencia.model.PaseAsistencia;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import edu.calc.becas.utils.UtilDate;
@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static edu.calc.becas.mreporte.asistencia.dao.QueriesAsistenciaSala.*;
 import static edu.calc.becas.utils.UtilDate.PATTERN_DIAG;
 
 @Slf4j
@@ -44,7 +43,7 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
                                                                   List<FechaAsistencia> fechasAsistencia,
                                                                   Parcial parcialActual, Parcial parcialAnterior) throws GenericException {
 
-        List<AlumnoAsistenciaSala> alumnoAsistenciaSalas = jdbcTemplate.query(GET_ALUMNOS_BY_USER_AND_SCHEDULE,
+        List<AlumnoAsistenciaSala> alumnoAsistenciaSalas = jdbcTemplate.query(QueriesAsistenciaSala.GET_ALUMNOS_BY_USER_AND_SCHEDULE,
                 new Object[]{usuario.getIdUsuario(), idHorario}, ((rs, i) -> mapperAlumnos(rs)));
 
         Date today;
@@ -76,7 +75,7 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
                 try {
                     String asistencia =
                             jdbcTemplate.
-                                    queryForObject(QRY_GET_ASISTENCIA_BY_ACTIVIDAD_ALUMNO,
+                                    queryForObject(QueriesAsistenciaSala.QRY_GET_ASISTENCIA_BY_ACTIVIDAD_ALUMNO,
                                             new Object[]{alumnoAsistenciaSala.getIdActividadAlumno(),
                                                     fecha.getFechaAsistencia()},
                                             String.class);
@@ -148,14 +147,14 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
         asistencias.forEach((asistencia) -> {
             if (asistencia.getAsistencia() != null) {
                 try {
-                    this.jdbcTemplate.update(QRY_ADD_PRESENCE, asistencia.getIdActividadAlumno(),
+                    this.jdbcTemplate.update(QueriesAsistenciaSala.QRY_ADD_PRESENCE, asistencia.getIdActividadAlumno(),
                             asistencia.getAsistencia().equalsIgnoreCase("true") ? pAsistencia : pFalta,
                             asistencia.getFechaAsistencia(), usuario.getUsername());
                     asistencia.setAdded(true);
                 } catch (Exception e) {
                     log.error(e.getMessage());
                     try {
-                        this.jdbcTemplate.update(QRY_UPDATE_PRESENCE,
+                        this.jdbcTemplate.update(QueriesAsistenciaSala.QRY_UPDATE_PRESENCE,
                                 asistencia.getAsistencia().equalsIgnoreCase("true") ? pAsistencia : pFalta,
                                 usuario.getUsername(),
                                 asistencia.getIdActividadAlumno(), asistencia.getFechaAsistencia());
@@ -175,7 +174,7 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
 
     @Override
     public int countPresenceByActivityAlumno(Integer actividad, String fechaInicio, String fechaFin) {
-        return jdbcTemplate.queryForObject(QRY_COUNT_ASISTENCIAS, new Object[]{actividad, fechaInicio, fechaFin}, Integer.class);
+        return jdbcTemplate.queryForObject(QueriesAsistenciaSala.QRY_COUNT_ASISTENCIAS, new Object[]{actividad, fechaInicio, fechaFin}, Integer.class);
     }
 
     private FechaAsistencia mapperAsistenciaAlumno(ResultSet rs) {

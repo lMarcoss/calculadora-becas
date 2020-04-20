@@ -1,11 +1,11 @@
-package edu.calc.becas.mreporte.percent.beca.dao;
+package edu.calc.becas.mreporte.actividades.percent.activity.dao;
 
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.common.model.Pageable;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
-import edu.calc.becas.mreporte.percent.beca.model.ReporteActividad;
+import edu.calc.becas.mreporte.actividades.percent.activity.model.ReportPercentActivity;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static edu.calc.becas.common.utils.Constant.ALL_ITEMS;
 import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
-import static edu.calc.becas.mreporte.percent.beca.dao.QueriesReportPercentBeca.*;
+import static edu.calc.becas.mreporte.actividades.percent.activity.dao.QueriesReportPercentActivity.*;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -27,9 +27,9 @@ import static edu.calc.becas.mreporte.percent.beca.dao.QueriesReportPercentBeca.
  * Date: 2019-06-16
  */
 @Repository
-public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBecaDao {
+public class ReportPercentActivitiesDaoImpl extends BaseDao implements ReportPercentActivitiesDao {
 
-    public ReportPercentBecaDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
+    public ReportPercentActivitiesDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
         super(jdbcTemplate, messageApplicationProperty);
     }
 
@@ -48,7 +48,7 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
     }
 
     @Override
-    public WrapperData getAll(Pageable pageableQ, ReporteActividad filter) {
+    public WrapperData getAll(Pageable pageableQ, ReportPercentActivity filter) {
         boolean pageable = pageableQ.getPageSize() != Integer.parseInt(ITEMS_FOR_PAGE);
         String queryGetALl = QRY_SELECT_DATA_REPORT.concat(QRY_FROM_DATA_REPORTE_ACTIVIDADES);
         String queryCountALl = QRY_COUNT_DATA_REPORT.concat(QRY_FROM_DATA_REPORTE_ACTIVIDADES);
@@ -62,7 +62,7 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
 
         int lengthDataTable = this.jdbcTemplate.queryForObject(queryCountALl, Integer.class);
 
-        List<ReporteActividad> data = this.jdbcTemplate.query(queryGetALl, (rs, rowNum) -> mapperReporteActividad(rs));
+        List<ReportPercentActivity> data = this.jdbcTemplate.query(queryGetALl, (rs, rowNum) -> mapperReporteActividad(rs));
 
         int page = pageableQ.getPage();
         int pageSize = pageableQ.getPageSize();
@@ -127,7 +127,7 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
         }
     }
 
-    private String createCondition(ReporteActividad filter) {
+    private String createCondition(ReportPercentActivity filter) {
         String conditions = "";
         if (filter.getIdActividad() != 0) {
             conditions = conditions.concat(String.format(ADD_CONDITION_ACTIVIDAD, filter.getIdActividad()));
@@ -164,8 +164,8 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
         return conditions;
     }
 
-    private ReporteActividad mapperReporteActividad(ResultSet rs) throws SQLException {
-        ReporteActividad reporte = new ReporteActividad();
+    private ReportPercentActivity mapperReporteActividad(ResultSet rs) throws SQLException {
+        ReportPercentActivity reporte = new ReportPercentActivity();
         reporte.setMatricula(rs.getString("MATRICULA"));
         reporte.setNombres(rs.getString("NOMBRES"));
         reporte.setApePaterno(rs.getString("APE_PATERNO"));
