@@ -165,6 +165,8 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
         alumno.setApePaterno(rs.getString("APE_PATERNO"));
         alumno.setApeMaterno(rs.getString("APE_MATERNO"));
         alumno.setGrupo(rs.getString("CVE_GRUPO"));
+        alumno.setLicenciatura(rs.getString("DESC_LICENCIATURA"));
+        alumno.setCodigoRFid(rs.getString("CODIGO_RFID"));
         return alumno;
     }
 

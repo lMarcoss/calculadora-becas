@@ -4,6 +4,7 @@ import edu.calc.becas.common.model.CommonData;
 import edu.calc.becas.malumnos.model.AlumnoActividad;
 import edu.calc.becas.mcarga.hrs.blibioteca.model.Hora;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
+import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -50,6 +51,9 @@ public class DetalleActividadVo extends CommonData {
 
     @ApiModelProperty("Alumnos relacionados a la actividad")
     private List<AlumnoActividad> alumnos;
+
+  @ApiModelProperty("Parcial actual")
+    private Parcial parcial;
 
     public DetalleActividadVo() {
     }

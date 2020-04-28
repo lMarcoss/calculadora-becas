@@ -10,6 +10,7 @@ import edu.calc.becas.mcarga.hrs.blibioteca.model.Hora;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.actividades.model.DetalleActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
+import edu.calc.becas.mconfiguracion.parciales.dao.ParcialDao;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
@@ -38,13 +39,16 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
     private final ReportPercentActivitiesDao reportPercentActivitiesDao;
     private final AlumnoActividadDao alumnoActividadDao;
+    private final ParcialDao parcialDao;
 
     public ActividadesDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty,
                               ReportPercentActivitiesDao reportPercentActivitiesDao,
-                              AlumnoActividadDao alumnoActividadDao) {
+                              AlumnoActividadDao alumnoActividadDao,
+                              ParcialDao parcialDao) {
         super(jdbcTemplate, messageApplicationProperty);
         this.reportPercentActivitiesDao = reportPercentActivitiesDao;
         this.alumnoActividadDao = alumnoActividadDao;
+        this.parcialDao = parcialDao;
     }
 
 
@@ -208,14 +212,21 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
         detalle.setNumeroAlumnos(rs.getInt("NUMERO_ALUMNOS"));
         detalle.setNombreActividad(rs.getString("NOMBRE_ACTIVIDAD"));
-        //detalle.setComentario(rs.getString("COMENTARIO"));
 
         detalle.setIdCicloEscolar(rs.getString("CVE_PERIODO"));
         detalle.setCicloEscolar(rs.getString("DESC_PERIDODO"));
-        detalle.setPeriodo(new CicloEscolarVo());
-        List<AlumnoActividad> alumnos = new ArrayList<AlumnoActividad>();
-      alumnos.add(new AlumnoActividad());
-        detalle.setAlumnos(alumnos);
+
+        CicloEscolarVo CicloEscolarVo = new CicloEscolarVo ();
+        CicloEscolarVo.setClave("");
+        CicloEscolarVo cicloEscolarVo = new CicloEscolarVo();
+        cicloEscolarVo.setClave(detalle.getIdCicloEscolar());
+      try {
+        detalle.setParcial(parcialDao.getParcialActual(cicloEscolarVo));
+      }catch (Exception e){
+        e.printStackTrace();
+      }
+
+        List<AlumnoActividad> alumnos = this.jdbcTemplate.query(QRY_AlUMNOS_ACTIVIDAD, new Object[]{detalle.getIdDetalleActividad()},(rsa, rowNum) -> mapperAlumnosActividades(rsa));
         usuario.setIdUsuario(rs.getInt("ID_USUARIO"));
         usuario.setNombres(rs.getString("NOMBRES"));
         usuario.setApePaterno(rs.getString("APE_PATERNO"));
@@ -223,12 +234,24 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
         detalle.setUsuario(usuario);
         detalle.setHorario(hora);
+        detalle.setAlumnos(alumnos);
         return detalle;
     }
 
     private Object[] createObjectParamUpdate(ActividadVo actividad) {
         return new Object[]{actividad.getNombreActividad(), actividad.getEstatus(), actividad.getAgregadoPor()};
     }
+
+
+  private AlumnoActividad mapperAlumnosActividades(ResultSet rsa) throws SQLException {
+    AlumnoActividad alumno = new AlumnoActividad();
+
+    alumno.setLicenciatura(rsa.getString("CVE_LICENCIATURA"));
+    alumno.setMatricula(rsa.getString("MATRICULA"));
+    alumno.setGrupo(rsa.getString("CVE_GRUPO"));
+    return alumno;
+  }
+
 
     //199E2A1EswF5CVrh
     private Object[] createObjectParamDetalle(DetalleActividadVo detalle) {

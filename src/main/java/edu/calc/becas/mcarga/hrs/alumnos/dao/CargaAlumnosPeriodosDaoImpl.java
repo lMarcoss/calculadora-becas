@@ -56,7 +56,8 @@ public class CargaAlumnosPeriodosDaoImpl extends BaseDao implements CargaAlumnos
       detalle.getApePaterno(),
       detalle.getApeMaterno(),
       "S",
-      "ADMIN"
+      "ADMIN",
+      detalle.getCodigoRFid()
     };
   }
   private Object[] createObjectPeriodo(Alumno detalle, CicloEscolarVo cicloEscolarActual, Licenciatura licenciatura) {

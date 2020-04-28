@@ -23,4 +23,5 @@ public class AlumnoActividad {
   @ApiModelProperty("Grupo alumno")
   private String licenciatura;
 
+
 }

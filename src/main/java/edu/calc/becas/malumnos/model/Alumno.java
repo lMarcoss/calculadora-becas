@@ -64,4 +64,6 @@ public class Alumno extends CommonData {
     public String cicloEscolar;
 
     public String licenciatura;
+
+    public String codigoRFid;
 }

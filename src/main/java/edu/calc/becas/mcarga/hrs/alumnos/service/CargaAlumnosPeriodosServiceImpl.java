@@ -53,6 +53,8 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
   @Value("${prop.carga.alumnos.alumnos.posicion.grupo}")
   private int posGrupo;
 
+  @Value("${prop.carga.alumnos.alumnos.posicion.codigoRFid}")
+  private int posCodigoRFid;
 
   @Value("${prop.carga.alumnos.alumnos.posicion.celda.final}")
   private int posEndCell = 4;
@@ -93,6 +95,9 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
           }
           if (i == posNombres){
             alumno.setNombres(row.getCells().get(i).getValue());
+          }
+          if (i == posCodigoRFid){
+            alumno.setCodigoRFid(row.getCells().get(i).getValue());
           }
 
         }

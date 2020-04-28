@@ -58,8 +58,9 @@ prop:
           grupo: 0
           matricula: 1
           curp: 2
-          apePaterno: 3
-          apeMaterno: 4
-          nombres: 5
+          codigoRFid: 3
+          apePaterno: 4
+          apeMaterno: 5
+          nombres: 6
           celda:
-            final: 6
+            final: 7
