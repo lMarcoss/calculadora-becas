@@ -24,7 +24,7 @@ import static edu.calc.becas.common.utils.Constant.*;
  */
 @RestController
 @RequestMapping("/usuarios")
-@Api(description = "Servicios para administración de usuarios")
+@Api(tags = "API Usuario", description = "Servicios para administración de usuarios")
 public class UsuarioAPI {
 
     private static final Logger LOG = LoggerFactory.getLogger(UsuarioAPI.class);

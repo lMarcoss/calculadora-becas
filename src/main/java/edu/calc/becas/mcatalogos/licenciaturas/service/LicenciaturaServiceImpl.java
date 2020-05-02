@@ -2,7 +2,7 @@ package edu.calc.becas.mcatalogos.licenciaturas.service;
 
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
-import edu.calc.becas.mcatalogos.CommonMethodToRestTemplate;
+import edu.calc.becas.mcatalogos.RestTemplateService;
 import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
 import edu.calc.becas.mcatalogos.licenciaturas.model.LicenciaturaDtoSHorario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class LicenciaturaServiceImpl extends CommonMethodToRestTemplate implements LicenciaturaService {
+public class LicenciaturaServiceImpl extends RestTemplateService implements LicenciaturaService {
 
     @Value("${prop.sistema.horarios.api.carreras.vigentes}")
     private String pathCarrerasVigentes;

@@ -14,7 +14,7 @@ import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import java.util.List;
 
 public interface ActividadesDao extends CrudGenericDao<ActividadVo> {
-    WrapperData getAllDetalle(int page, int pageSize, String idActividad, String ciclo, String status, Usuario username);
+    WrapperData<DetalleActividadVo> getAllDetalle(int page, int pageSize, String idActividad, String ciclo, String status, Usuario username);
 
     List<LabelValueData> getActividades();
 

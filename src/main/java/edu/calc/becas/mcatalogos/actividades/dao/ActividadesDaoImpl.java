@@ -259,24 +259,6 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
                 userLogin.setUsername("ADMIN");
                 reportPercentActivitiesDao.addPercentActivity(BigDecimal.valueOf(alumno.getPorcentajeActividad()), actividadVo.getIdActividad(), userLogin,parcialActual);
 
-                /*if (reportPercentBecaDao.actividadAlumnoExists(actividadVo, parcialActual)) {
-                    jdbcTemplate.update(QRY_UPDATE_PERCENT_ACTIVIDAD,
-                            new Object[]{
-                                    //percentLibraryTime,
-                                    alumno.getPorcentajeActividad(),
-                                    actividadVo.getIdActividad(),
-                                    parcialActual.getIdParcial()
-                            });
-                } else {
-                    jdbcTemplate.update(QRY_INSERT_PERCENT_ACTIVIDAD,
-                            actividadVo.getIdActividad(),
-                            alumno.getPorcentajeActividad(),
-                            parcialActual.getIdParcial(),
-                            cicloEscolarActual.getClave(),
-                            cicloEscolarActual.getNombre(),
-                            "ADMIN"
-                    );
-                }*/
 
                 count++;
             } catch (Exception e) {

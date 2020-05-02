@@ -9,7 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static edu.calc.becas.mseguridad.menu.dao.QueriesMenu.QRY_GET_CHLIDS_BY_PARENT;
 import static edu.calc.becas.mseguridad.menu.dao.QueriesMenu.QRY_GET_PARENTS_BY_USER;
@@ -24,24 +26,28 @@ public class MenuDaoImpl extends BaseDao implements MenuDao {
 
     @Override
     public List<Menu> getMenu(String username) throws GenericException {
-        List<Menu> menu = getParents();
-        if (menu == null) {
+        List<Menu> parents = getParents();
+        if (parents == null) {
             throw new GenericException("Menú vacío");
         }
-        getChild(menu, username);
-        return menu;
+        getChild(parents, username);
+        parents = parents.stream().filter(parent -> parent.getChilds().size() > 0).collect(Collectors.toList());
+        return parents;
     }
 
-    private void getChild(List<Menu> menu, String username) {
-        for (Menu menu1 : menu) {
-            menu1.setChilds(
-                    this.jdbcTemplate.query(QRY_GET_CHLIDS_BY_PARENT, new Object[]{
-                              menu1.getIdPadre(),
-                              username,
-                              menu1.getIdPadre(),
-                              username}, ((rs, i) -> mapperMenuChild(rs)))
-            );
-            ;
+    private void getChild(List<Menu> parents, String username) {
+        for (Menu parent : parents) {
+            try {
+                parent.setChilds(
+                        this.jdbcTemplate.query(QRY_GET_CHLIDS_BY_PARENT, new Object[]{
+                                parent.getIdMenu(),
+                                username,
+                                parent.getIdMenu(),
+                                username}, ((rs, i) -> mapperMenuChild(rs))));
+            } catch (Exception e) {
+                parent.setChilds(new ArrayList<>());
+            }
+
         }
     }
 

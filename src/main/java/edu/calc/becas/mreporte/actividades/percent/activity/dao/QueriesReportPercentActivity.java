@@ -59,7 +59,8 @@ final class QueriesReportPercentActivity {
     static final String ADD_CONDITION_CICLO_ESCOLAR = "\nAND ADP.CVE_PERIODO = %s\n";
     static final String ADD_CONDITION_LICENCIATURA = "\nAND ADP.CVE_LICENCIATURA = %s\n";
     static final String ADD_CONDITION_GRUPO = "\nAND ADP.CVE_GRUPO = %s\n";
-    static final String ADD_CONDITION_PARCIAL = "\nAND P.ID_PARCIAL = %s\n";
+    static final String ADD_CONDITION_ID_PARCIAL = "\nAND P.ID_PARCIAL = %s\n";
+    static final String ADD_CONDITION_PARCIAL = "\nAND PP.PARCIAL = %s\n";
 
     static final String ADD_CONDITION_ACTIVIDAD = "\nAND AC.ID_ACTIVIDAD = %s\n";
     static final String ADD_CONDITION_MATRICULA_ALUMNO = "\nAND A.MATRICULA = %s\n";

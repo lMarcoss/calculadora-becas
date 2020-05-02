@@ -6,7 +6,7 @@ import edu.calc.becas.mcarga.hrs.CargaHrsDao;
 import edu.calc.becas.mcarga.hrs.ProcessHoursService;
 import edu.calc.becas.mcarga.hrs.ProcessRow;
 import edu.calc.becas.mcarga.hrs.read.files.model.RowFile;
-import edu.calc.becas.mcarga.hrs.sala.model.AsistenciaSala;
+import edu.calc.becas.mcarga.hrs.sala.model.Asistencia;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mconfiguracion.parciales.service.ParcialService;
@@ -103,11 +103,11 @@ public class CargaHrsSalaServiceImpl extends ProcessRow implements ProcessHoursS
                 BigDecimal multiplica = assis.multiply(BigDecimal.valueOf(100));
                 BigDecimal percent = multiplica.divide(sum, 0, ROUND_HALF_UP);
 
-                AsistenciaSala asistenciaSala = new AsistenciaSala();
-                asistenciaSala.setAsistencia(asistence);
-                asistenciaSala.setFalta(missing);
-                asistenciaSala.setPorcentaje(percent.intValue());
-                alumno.setAsistenciaSala(asistenciaSala);
+                Asistencia asistencia = new Asistencia();
+                asistencia.setAsistencia(asistence);
+                asistencia.setFalta(missing);
+                asistencia.setPorcentaje(percent.intValue());
+                alumno.setAsistencia(asistencia);
             }
             // datos de auditoria
             alumno.setActualizadoPor(commonData.getActualizadoPor());

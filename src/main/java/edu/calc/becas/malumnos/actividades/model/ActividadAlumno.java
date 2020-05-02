@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @ApiModel(value="Actividades de alumnos", description = "Entidad con lo datos de las actividades con los alumnos")
 public class ActividadAlumno extends CommonData {
-  private int idActividad;
+  private int IdActividadAlumno;
   private String nombreActividad;
   private String idAlumno;
   private String matricula;

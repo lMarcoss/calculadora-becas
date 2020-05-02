@@ -11,6 +11,7 @@ import edu.calc.becas.mvc.config.security.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.Tag;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
-@Api(description = "Servicios para realizar el login de la aplicación", position = 0)
+@Api(tags = "API Login", description = "Servicios de autenticación")
 public class LoginAPI {
 
     private final LoginService loginService;
@@ -33,7 +34,7 @@ public class LoginAPI {
 
 
     @PostMapping
-    @ApiOperation(value = "Realiza el login del usuario validando el usuario y contraseña")
+    @ApiOperation(value = "Inicia sesión en la aplicación")
     public UserLogin login(@ApiParam(value = "usuario") @RequestBody DataLogin user) throws InvalidJwtAuthenticationException, ConnectionJdbcException, GenericException {
 
         UserLogin dataUserLogin = new UserLogin();

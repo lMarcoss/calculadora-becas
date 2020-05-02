@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * @author Marcos Santiago Leonardo
- * Meltsan Solutions
+ * Universidad de la Sierra Sur
  * Description: Datos de paginación para consultas
  * Date: 2019-07-10
  */
