@@ -14,7 +14,7 @@ import static edu.calc.becas.common.utils.Constant.*;
 
 /**
  * @author Marcos Santiago Leonardo
- * Meltsan Solutions
+ * Universidad de la Sierra Sur
  * Description: implements services licenciaturas
  * Date: 3/23/19
  */

@@ -14,8 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import static edu.calc.becas.common.utils.Constant.DEFAULT_ESTATUS;
-import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
+import static edu.calc.becas.common.utils.Constant.*;
 import static edu.calc.becas.malumnos.dao.QueriesAlumnos.*;
 
 
@@ -75,22 +74,17 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
                             object.getMatricula()}, Integer.class);
             if (valueAlumnoPeriodo == 0) {
                 this.jdbcTemplate.update(QRY_ADD_ALUMNO_PERIODO,
-                        new Object[]{
-                                object.getMatricula(),
-                                object.getGrupo(),
-                                object.getGrupo(),
-                                object.getLicenciatura(),
-                                object.getLicenciatura(),
-                                object.getCicloEscolar(),
-                                object.getCicloEscolar()
-                        });
+                        object.getMatricula(),
+                        object.getGrupo(),
+                        object.getGrupo(),
+                        object.getLicenciatura(),
+                        object.getLicenciatura(),
+                        object.getCicloEscolar(),
+                        object.getCicloEscolar());
             }
-//INSERT INTO ALUMNOS_DAT_PERIODO (MATRICULA,CVE_GRUPO, DESC_GRUPO, CVE_LICENCIATURA, DESC_LICENCIATURA, CVE_PERIODO, DESC_PERIDODO) VALUES
 
-            this.jdbcTemplate.update(QRY_ADD_ALUMNO_ACTIVIDAD, new Object[]{
-                    object.getIdDetalleActividad(),
-                    object.getMatricula()
-            });
+            this.jdbcTemplate.update(QRY_ADD_ALUMNO_ACTIVIDAD, object.getIdDetalleActividad(),
+                    object.getMatricula());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -157,7 +151,6 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
 
     private Alumno mapperAlumnoCargas(ResultSet rs) throws SQLException {
         Alumno alumno = new Alumno(rs.getString("ESTATUS"));
-        ActividadVo actividadVo = new ActividadVo();
         alumno.setIdAlumno(rs.getString("ID_ALUMNO"));
         alumno.setMatricula(rs.getString("MATRICULA"));
         alumno.setCurp(rs.getString("CURP"));
@@ -165,36 +158,41 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
         alumno.setApePaterno(rs.getString("APE_PATERNO"));
         alumno.setApeMaterno(rs.getString("APE_MATERNO"));
         alumno.setGrupo(rs.getString("CVE_GRUPO"));
+
         alumno.setLicenciatura(rs.getString("DESC_LICENCIATURA"));
         alumno.setCodigoRFid(rs.getString("CODIGO_RFID"));
+        alumno.setIdLicenciatura(rs.getString("CVE_LICENCIATURA"));
+        alumno.setDsGrupo(rs.getString("DESC_GRUPO"));
+
         return alumno;
     }
 
     @Override
-    public WrapperData getAllByStatusLoad(int page, int pageSize, String status, String param1, String param2, String param3) {
+    public WrapperData<Alumno> getAllByStatusLoad(int page, int pageSize, String status, String periodo, String licenciatura, String grupo) {
         boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
         String queryGetALl = "";
 
         queryGetALl = queryGetALl.concat(QRY_ALUMNOS_CARGAS);
+
         //queryGetALl.concat(QRY_CONDITION_ACTIVIDAD.replace("?", "'" + idActividad + "'"));
-        if (!param2.equals("All")) {
-            queryGetALl = queryGetALl.concat(QRY_CONDITION_LIC.replace("?", "'" + param2 + "'"));
+        if (!licenciatura.equals(ALL_ITEMS)) {
+            queryGetALl = queryGetALl.concat(QRY_CONDITION_LIC.replace("?", "'" + licenciatura + "'"));
         }
 
-        if (!param3.equals("All")) {
-            queryGetALl = queryGetALl.concat(QRY_CONDITION_GRUPO.replace("?", "'" + param3 + "'"));
+        if (!grupo.equals(ALL_ITEMS)) {
+            queryGetALl = queryGetALl.concat(QRY_CONDITION_GRUPO.replace("?", "'" + grupo + "'"));
         }
 
 
-        int lengthDataTable = this.jdbcTemplate.queryForObject(createQueryCountItem(QRY_ALUMNOS_CARGAS), new Object[]{param1}, Integer.class);
+        int lengthDataTable = this.jdbcTemplate.queryForObject(createQueryCountItem(QRY_ALUMNOS_CARGAS), new Object[]{periodo}, Integer.class);
 
-        List<Alumno> data = this.jdbcTemplate.query(queryGetALl, new Object[]{param1}, (rs, rowNum) -> mapperAlumnoCargas(rs));
+        List<Alumno> data = this.jdbcTemplate.query(queryGetALl, new Object[]{periodo}, (rs, rowNum) -> mapperAlumnoCargas(rs));
 
         if (!pageable) {
             page = 0;
             pageSize = lengthDataTable;
         }
-        return new WrapperData(data, page, pageSize, lengthDataTable);
+        return new WrapperData<>(data, page, pageSize, lengthDataTable);
     }
 
 

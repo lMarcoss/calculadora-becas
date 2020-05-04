@@ -173,8 +173,8 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
     }
 
     @Override
-    public int countPresenceByActivityAlumno(Integer actividad, String fechaInicio, String fechaFin) {
-        return jdbcTemplate.queryForObject(QueriesAsistenciaSala.QRY_COUNT_ASISTENCIAS, new Object[]{actividad, fechaInicio, fechaFin}, Integer.class);
+    public int countPresenceByActivityAlumno(Integer idActividadAlumno, String fechaInicio, String fechaFin) {
+        return jdbcTemplate.queryForObject(QueriesAsistenciaSala.QRY_COUNT_ASISTENCIAS, new Object[]{idActividadAlumno, fechaInicio, fechaFin}, Integer.class);
     }
 
     private FechaAsistencia mapperAsistenciaAlumno(ResultSet rs) {

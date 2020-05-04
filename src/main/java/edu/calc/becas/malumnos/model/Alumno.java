@@ -3,7 +3,7 @@ package edu.calc.becas.malumnos.model;
 import edu.calc.becas.common.model.CommonData;
 import edu.calc.becas.common.model.LabelValueData;
 import edu.calc.becas.mcarga.hrs.blibioteca.model.Hora;
-import edu.calc.becas.mcarga.hrs.sala.model.AsistenciaSala;
+import edu.calc.becas.mreporte.actividades.asistencia.model.Asistencia;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -46,7 +46,7 @@ public class Alumno extends CommonData {
     private Hora hora;
 
     @ApiModelProperty("Asistencias a sala de cómputo")
-    private AsistenciaSala asistenciaSala;
+    private Asistencia asistencia;
 
     @ApiModelProperty("Actividad en la que está inscripto el alumno")
     private ActividadVo actividad;
@@ -58,6 +58,7 @@ public class Alumno extends CommonData {
     public LabelValueData horario;
 
     public String grupo;
+    public String dsGrupo;
 
     public String idDetalleActividad;
 
@@ -66,4 +67,5 @@ public class Alumno extends CommonData {
     public String licenciatura;
 
     public String codigoRFid;
+    public String IdLicenciatura;
 }

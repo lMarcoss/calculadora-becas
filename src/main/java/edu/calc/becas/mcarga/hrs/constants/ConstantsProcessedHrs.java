@@ -1,4 +1,4 @@
-package edu.calc.becas.mcarga.hrs.sala.constants;
+package edu.calc.becas.mcarga.hrs.constants;
 
 /**
  * @author Marcos Santiago Leonardo

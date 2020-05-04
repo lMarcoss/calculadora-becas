@@ -2,7 +2,7 @@ package edu.calc.becas.mconfiguracion.cicloescolar.service;
 
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
-import edu.calc.becas.mcatalogos.CommonMethodToRestTemplate;
+import edu.calc.becas.mcatalogos.RestTemplateService;
 import edu.calc.becas.mconfiguracion.cicloescolar.dao.CicloEscolarDao;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.PeriodoDtoSHorario;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class CicloEscolarServiceImpl extends CommonMethodToRestTemplate implements CicloEscolarService {
+public class CicloEscolarServiceImpl extends RestTemplateService implements CicloEscolarService {
 
 
     @Value("${prop.sistema.horarios.api.periodo.actual}")

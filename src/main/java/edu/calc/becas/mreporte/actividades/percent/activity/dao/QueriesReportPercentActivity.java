@@ -33,7 +33,7 @@ final class QueriesReportPercentActivity {
                     "       ADP.DESC_PERIDODO,\n" +
                     "       ADP.ESTATUS\n";
 
-    static final String QRY_ORDER_BY = "\nORDER BY A.NOMBRES ASC, A.APE_PATERNO ASC, A.APE_MATERNO ASC, ADP.CVE_GRUPO ASC, ADP.DESC_LICENCIATURA ASC";
+    static final String QRY_ORDER_BY = "\nORDER BY A.NOMBRES, A.APE_PATERNO, A.APE_MATERNO, PP.PARCIAL, ADP.CVE_GRUPO, ADP.DESC_LICENCIATURA\n";
 
     static final String QRY_FROM_DATA_REPORTE_ACTIVIDADES =
             "FROM PORCENTAJE_ACTIVIDADES PB,\n" +
@@ -59,7 +59,9 @@ final class QueriesReportPercentActivity {
     static final String ADD_CONDITION_CICLO_ESCOLAR = "\nAND ADP.CVE_PERIODO = %s\n";
     static final String ADD_CONDITION_LICENCIATURA = "\nAND ADP.CVE_LICENCIATURA = %s\n";
     static final String ADD_CONDITION_GRUPO = "\nAND ADP.CVE_GRUPO = %s\n";
-    static final String ADD_CONDITION_PARCIAL = "\nAND P.ID_PARCIAL = %s\n";
+    static final String ADD_CONDITION_ID_PARCIAL = "\nAND P.ID_PARCIAL = %s\n";
+    static final String ADD_CONDITION_PARCIAL = "\nAND PP.PARCIAL = %s\n";
+    static final String ADD_CONDITION_BY_ALUMNO = "\nAND PB.ID_ACTIVIDAD_ALUMNO = %s\n";
 
     static final String ADD_CONDITION_ACTIVIDAD = "\nAND AC.ID_ACTIVIDAD = %s\n";
     static final String ADD_CONDITION_MATRICULA_ALUMNO = "\nAND A.MATRICULA = %s\n";

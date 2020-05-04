@@ -36,7 +36,20 @@ public class QueriesAlumnos {
     static final String QRY_ADD_ALUMNO_PERIODO = "INSERT INTO ALUMNOS_DAT_PERIODO (MATRICULA,CVE_GRUPO, DESC_GRUPO, CVE_LICENCIATURA, DESC_LICENCIATURA, CVE_PERIODO, DESC_PERIDODO) VALUES\n" +
       "(?,?,?,?,?,?,?);";
 
-    static final String QRY_ALUMNOS_CARGAS = "SELECT ID_ALUMNO, AL.MATRICULA, CURP, NOMBRES, APE_PATERNO, APE_MATERNO, CVE_GRUPO, DESC_GRUPO, AL.ESTATUS, AL.CODIGO_RFID, DESC_LICENCIATURA FROM ALUMNOS AL\n" +
+    static final String QRY_ALUMNOS_CARGAS =
+            "SELECT ID_ALUMNO,\n" +
+                    "       AL.MATRICULA,\n" +
+                    "       CURP,\n" +
+                    "       NOMBRES,\n" +
+                    "       APE_PATERNO,\n" +
+                    "       APE_MATERNO,\n" +
+                    "       CVE_GRUPO,\n" +
+                    "       DESC_GRUPO," +
+                    "       AL.CODIGO_RFID,\n" +
+                    "       ALD.CVE_LICENCIATURA,\n" +
+                    "       ALD.DESC_LICENCIATURA,\n" +
+                    "       AL.ESTATUS \n" +
+                    "FROM ALUMNOS AL\n" +
       "INNER JOIN ALUMNOS_DAT_PERIODO ALD\n" +
       "ON AL.MATRICULA = ALD.MATRICULA\n" +
       "AND CVE_PERIODO  = ?";

@@ -114,41 +114,4 @@ public class SwaggerConfig implements WebMvcConfigurer {
         return Lists.newArrayList(
                 new SecurityReference("JWT", authorizationScopes));
     }
-    /*@Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("edu.calc.becas"))
-                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(apiInfo());
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-        registry.addResourceHandler("/documentation/calc-becas/**").addResourceLocations("classpath:/META-INF/resources/");
-    }
-
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addRedirectViewController("/documentation/calc-becas/v2/api-docs", "/v2/api-docs").setKeepQueryParams(true);
-        registry.addRedirectViewController("/documentation/calc-becas/configuration/ui", "/configuration/ui");
-        registry.addRedirectViewController("/documentation/calc-becas/configuration/security", "/configuration/security");
-        registry.addRedirectViewController("/documentation/calc-becas/swagger-resources", "/swagger-resources");
-        registry.addRedirectViewController("/documentation/calc-becas", "/documentation/calc-becas/swagger-ui.html");
-        registry.addRedirectViewController("/documentation/calc-becas/", "/documentation/calc-becas/swagger-ui.html");
-    }
-
-    private ApiInfo apiInfo() {
-        return new ApiInfo(
-                "Sistema de Control de Becas UNSIS - API REST",
-                "Servicios rest API para el Sistema de Control de Becas UNSIS",
-                "v1.0.0",
-                "Terms of service",
-                new Contact("UNSIS", "http://www.unsis.edu.mx/", ""),
-                "License of API", "API license URL", Collections.emptyList());
-    }*/
 }

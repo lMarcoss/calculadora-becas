@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * @author Marcos Santiago Leonardo
- * Meltsan Solutions
+ * Universidad de la Sierra Sur
  * Description:
  * Date: 2019-07-10
  */
@@ -31,6 +31,7 @@ public class ReportPercentActivity implements Serializable {
     private int idActividad;
     private String nombreActividad;
     private int idParcial;
+    private int parcial;
     private String descParcial;
     private String cvePeriodo;
     private String descPeriodo;

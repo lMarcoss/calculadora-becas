@@ -72,9 +72,9 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
     for (RowFile row : rows) {
       if(rowIni!=0){
         Alumno alumno = new Alumno();
-        ActividadVo actividadVo = new ActividadVo("S");
-        actividadVo.setIdActividad(idActividadBiblioteca);
-        alumno.setActividad(actividadVo);
+        //ActividadVo actividadVo = new ActividadVo("S");
+        //actividadVo.setIdActividad(idActividadBiblioteca);
+        //alumno.setActividad(actividadVo);
 
         for (int i = 0; (i < row.getCells().size() && i <= posEndCell); i++) {
 
@@ -124,8 +124,8 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
     for (RowFile row : rows) {
 
         ReportPercentActivity alumno = new ReportPercentActivity();
-        ActividadVo actividadVo = new ActividadVo("S");
-        actividadVo.setIdActividad(idActividadBiblioteca);
+        //ActividadVo actividadVo = new ActividadVo("S");
+        //actividadVo.setIdActividad(idActividadBiblioteca);
 
 
         for (int i = 0; (i < row.getCells().size() && i <= 32); i++) {

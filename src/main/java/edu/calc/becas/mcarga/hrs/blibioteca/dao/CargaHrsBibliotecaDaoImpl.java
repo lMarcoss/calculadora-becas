@@ -56,12 +56,12 @@ public class CargaHrsBibliotecaDaoImpl extends BaseDao implements CargaHrsDao {
                     jdbcTemplate.update(QRY_UPDATE_PERCENT_BIBLIOTECA,
                             new Object[]{
                                     percentLibraryTime,
-                                    actividadVo.getIdActividad(),
+                                    actividadVo.getIdActividadAlumno(),
                                     parcial.getIdParcial()
                             });
                 } else {
                     jdbcTemplate.update(QRY_INSERT_PERCENT_BIBLIOTECA,
-                            actividadVo.getIdActividad(),
+                            actividadVo.getIdActividadAlumno(),
                             percentLibraryTime,
                             parcial.getIdParcial(),
                             cicloEscolarActual.getClave(),

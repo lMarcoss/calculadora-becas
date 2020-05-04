@@ -13,6 +13,7 @@ import lombok.ToString;
 @ApiModel(value = "Actividad",description = "Entidad con los datos de la actividad")
 public class ActividadVo extends CommonData {
     private int idActividad;
+    private int idActividadAlumno;
     private String nombreActividad;
     private String cicloEscolar;
     private String obligatorio;

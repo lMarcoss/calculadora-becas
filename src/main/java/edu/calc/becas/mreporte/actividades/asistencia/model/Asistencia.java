@@ -1,4 +1,4 @@
-package edu.calc.becas.mcarga.hrs.sala.model;
+package edu.calc.becas.mreporte.actividades.asistencia.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Setter
 @Getter
 @ToString
-public class AsistenciaSala implements Serializable {
+public class Asistencia implements Serializable {
     private int asistencia;
     private int falta;
     private int porcentaje;

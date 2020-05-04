@@ -2,7 +2,7 @@ package edu.calc.becas.mcatalogos.grupos.service;
 
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
-import edu.calc.becas.mcatalogos.CommonMethodToRestTemplate;
+import edu.calc.becas.mcatalogos.RestTemplateService;
 import edu.calc.becas.mcatalogos.grupos.model.Grupo;
 import edu.calc.becas.mcatalogos.grupos.model.GrupoDtoSHorario;
 import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
@@ -32,7 +32,7 @@ import static edu.calc.becas.common.utils.Constant.LICENCIATURA_DEFAULT;
  */
 @Service
 @Slf4j
-public class GrupoServiceImpl extends CommonMethodToRestTemplate implements GrupoService {
+public class GrupoServiceImpl extends RestTemplateService implements GrupoService {
 
     @Value("${prop.sistema.horarios.api.grupos}")
     private String pathGrupos;

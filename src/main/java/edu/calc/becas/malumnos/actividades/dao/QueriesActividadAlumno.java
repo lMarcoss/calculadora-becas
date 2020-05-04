@@ -8,17 +8,16 @@ package edu.calc.becas.malumnos.actividades.dao;
  */
 final class QueriesActividadAlumno {
     static final String QRY_GET_ACTIVIDAD_BY_ALUMNO =
-            "SELECT AA.ID_ACTIVIDAD_ALUMNO\n" +
+            "SELECT AA.ID_ACTIVIDAD_ALUMNO, A.NOMBRE_ACTIVIDAD, A.ID_ACTIVIDAD\n" +
                     "FROM ALUMNOS AL, ALUMNOS_DAT_PERIODO ADP, ACTIVIDAD_ALUMNO AA, HORARIO_ACTIVIDAD HA, ACTIVIDADES A\n" +
                     "WHERE AL.MATRICULA = ?\n" +
                     "  AND AL.ESTATUS = 'S'\n" +
                     "  AND HA.ESTATUS = 'S'\n" +
-                    "  AND ADP.ESTATUS = 'S'\n" +
                     "  AND A.ESTATUS = 'S'\n" +
                     "  AND A.TIPO_ACTIVIDAD = 'EX'\n" +
                     "  AND AL.MATRICULA = ADP.MATRICULA\n" +
+                    "  AND ADP.ID_ALUMNOP = (SELECT MAX(AD.ID_ALUMNOP) FROM ALUMNOS_DAT_PERIODO AD WHERE AD.MATRICULA = ADP.MATRICULA)\n" +
                     "  AND HA.ID_HORARIO_ACTIVIDAD = AA.ID_HORARIO_ACTIVIDAD\n" +
-                    "  AND ADP.ID_ALUMNOP = AA.ID_ALUMNO_P\n" +
                     "  AND HA.ID_ACTIVIDAD = A.ID_ACTIVIDAD\n" +
                     "  AND ADP.CVE_PERIODO = ?";
 

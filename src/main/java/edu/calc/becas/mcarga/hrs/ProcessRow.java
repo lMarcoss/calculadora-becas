@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.calc.becas.mcarga.hrs.sala.constants.ConstantsProcessedHrs.VALUE_FORMULA;
+import static edu.calc.becas.mcarga.hrs.constants.ConstantsProcessedHrs.VALUE_FORMULA;
 
 /**
  * @author Marcos Santiago Leonardo

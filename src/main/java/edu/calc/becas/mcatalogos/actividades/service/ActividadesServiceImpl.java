@@ -43,7 +43,7 @@ public class ActividadesServiceImpl implements ActividadesService{
     }
 
     @Override
-    public WrapperData getAllDetalle(int page, int pageSize, String idActividad, String ciclo, String status, String username) {
+    public WrapperData<DetalleActividadVo> getAllDetalle(int page, int pageSize, String idActividad, String ciclo, String status, String username) {
         Usuario usuario;
         if(username.equalsIgnoreCase(ALL_ITEMS)){
             usuario = new Usuario();

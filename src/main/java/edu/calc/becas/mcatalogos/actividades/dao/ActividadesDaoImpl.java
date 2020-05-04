@@ -124,7 +124,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
             page = 0;
             pageSize = lengthDatable;
         }
-        return new WrapperData(data, page, pageSize, lengthDatable);
+        return new WrapperData<>(data, page, pageSize, lengthDatable);
     }
 
 
@@ -280,26 +280,8 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
                 ActividadVo actividadVo = alumnoActividadDao.getActividadByAlumno(alumno.getMatricula(), cicloEscolarActual);
                 UserLogin userLogin = new UserLogin();
                 userLogin.setUsername("ADMIN");
-                reportPercentActivitiesDao.addPercentActivity(BigDecimal.valueOf(alumno.getPorcentajeActividad()), actividadVo.getIdActividad(), userLogin,parcialActual);
+                reportPercentActivitiesDao.addPercentActivity(BigDecimal.valueOf(alumno.getPorcentajeActividad()), actividadVo.getIdActividadAlumno(), userLogin,parcialActual);
 
-                /*if (reportPercentBecaDao.actividadAlumnoExists(actividadVo, parcialActual)) {
-                    jdbcTemplate.update(QRY_UPDATE_PERCENT_ACTIVIDAD,
-                            new Object[]{
-                                    //percentLibraryTime,
-                                    alumno.getPorcentajeActividad(),
-                                    actividadVo.getIdActividad(),
-                                    parcialActual.getIdParcial()
-                            });
-                } else {
-                    jdbcTemplate.update(QRY_INSERT_PERCENT_ACTIVIDAD,
-                            actividadVo.getIdActividad(),
-                            alumno.getPorcentajeActividad(),
-                            parcialActual.getIdParcial(),
-                            cicloEscolarActual.getClave(),
-                            cicloEscolarActual.getNombre(),
-                            "ADMIN"
-                    );
-                }*/
 
                 count++;
             } catch (Exception e) {

@@ -51,6 +51,7 @@ public class AlumnosAPI {
         alumnosService.add(alumno);
         return alumno;
     }
+
     @GetMapping("/info")
     @ApiOperation(value = "Obtiene datos del alumno")
     public Usuario getAlumno(@RequestParam(value = "matricula", defaultValue = DEFAULT_ESTATUS, required = false) String matricula) throws GenericException {
@@ -58,29 +59,33 @@ public class AlumnosAPI {
     }
 
 
+    @GetMapping("/cargas")
+    @ApiOperation(value = "Obtiene el listado de alumnos")
+    public WrapperData getAlumnoCargado(
+            @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
+            @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
 
-  @GetMapping("/cargas")
-  @ApiOperation(value = "Obtiene el listado de alumnos")
-  public WrapperData getAlumnoCargado(
-    @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
-    @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
-    @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)
-    @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,
-    @ApiParam(value = "Estatus de los registros a recuperar", defaultValue = DEFAULT_ESTATUS)
-    @RequestParam(value = "status", defaultValue = DEFAULT_ESTATUS, required = false) String status,
-    @ApiParam(value = "Id de la actividad a la que perteneco el alumno", defaultValue = DEFAULT_ESTATUS)
-    @RequestParam(value = "cicloEscolar", defaultValue = DEFAULT_ESTATUS, required = false) String cicloEscolar,
-    @ApiParam(value = "Id de la actividad a la que perteneco el alumno", defaultValue = DEFAULT_ESTATUS)
-    @RequestParam(value = "licenciatura", defaultValue = DEFAULT_ESTATUS, required = false) String licenciatura,
-  @ApiParam(value = "Id de la actividad a la que perteneco el alumno", defaultValue = DEFAULT_ESTATUS)
-    @RequestParam(value = "grupo", defaultValue = DEFAULT_ESTATUS, required = false) String grupo) {
+            @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)
+            @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,
 
-    if (pageSize.equalsIgnoreCase(ALL_ITEMS)) {
-      pageSize = ITEMS_FOR_PAGE;
+            @ApiParam(value = "Estatus de los registros a recuperar", defaultValue = ALL_ITEMS)
+            @RequestParam(value = "status", defaultValue = ALL_ITEMS, required = false) String status,
+
+            @ApiParam(value = "Id de la actividad a la que perteneco el alumno", defaultValue = ALL_ITEMS)
+            @RequestParam(value = "cicloEscolar", defaultValue = ALL_ITEMS, required = false) String cicloEscolar,
+
+            @ApiParam(value = "Id de la actividad a la que perteneco el alumno", defaultValue = ALL_ITEMS)
+            @RequestParam(value = "licenciatura", defaultValue = ALL_ITEMS, required = false) String licenciatura,
+
+            @ApiParam(value = "Id de la actividad a la que perteneco el alumno", defaultValue = ALL_ITEMS)
+            @RequestParam(value = "grupo", defaultValue = ALL_ITEMS, required = false) String grupo) {
+
+        if (pageSize.equalsIgnoreCase(ALL_ITEMS)) {
+            pageSize = ITEMS_FOR_PAGE;
+        }
+
+        return alumnosService.getAllByStatusLoad(Integer.parseInt(page), Integer.parseInt(pageSize), status, cicloEscolar, licenciatura, grupo);
     }
-
-    return alumnosService.getAllByStatusLoad(Integer.parseInt(page), Integer.parseInt(pageSize), status, cicloEscolar, licenciatura, grupo);
-  }
 
 
 }

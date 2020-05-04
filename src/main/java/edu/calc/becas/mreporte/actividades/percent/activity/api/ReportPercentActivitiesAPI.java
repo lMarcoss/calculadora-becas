@@ -2,6 +2,7 @@ package edu.calc.becas.mreporte.actividades.percent.activity.api;
 
 import edu.calc.becas.common.model.Pageable;
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mreporte.actividades.percent.activity.model.ReportPercentActivity;
 import edu.calc.becas.mreporte.actividades.percent.activity.service.ReportPercentActivitiesService;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
@@ -9,10 +10,7 @@ import edu.calc.becas.mvc.config.security.user.UserRequestService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,12 +19,12 @@ import static edu.calc.becas.common.utils.Constant.*;
 /**
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
+ * Description: Servicios para consultar reporte de porcentajes de becas
  * Date: 2019-06-16
  */
 @RestController
 @RequestMapping("/reporte-actividades")
-@Api(description = "Servicios para consultar reporte de porcentajes de becas")
+@Api(description = "Servicios para administración de porcentaje de actividades")
 public class ReportPercentActivitiesAPI {
 
     private final ReportPercentActivitiesService reportPercentActivitiesService;
@@ -99,5 +97,24 @@ public class ReportPercentActivitiesAPI {
 
         filter.setCveEstatus(estatus);
         return filter;
+    }
+
+
+    @PostMapping("/calcula-porcentaje-actividad/periodo")
+    @ApiOperation(value = "Calcula porcentaje de actividad extra-escolar de todos los parciales del periodo en curso")
+    public String calculatePercentActivityByAllParcialPeriodo(HttpServletRequest httpServletRequest) throws GenericException {
+        UserLogin userLogin = userRequestService.getUserLogin(httpServletRequest);
+        return reportPercentActivitiesService.calculatePercentActivityByPeriodo(userLogin);
+    }
+
+    @PostMapping("/calcula-porcentaje-actividad/horario/{id-horario}/parcial/{parcial}")
+    @ApiOperation(value = "Calcula porcentaje de actividad extra-escolar de alumnos por horario de actividad")
+    public String calculatePercentActivityBySchedule(
+            @ApiParam(value = "Identificador de horario de la actividad extra-escolar", required = true) @PathVariable("id-horario") int idHorario,
+            @ApiParam(value = "Parcial del periodo actual a calcular el porcentaje de actividad (1,2 o3)", required = true) @PathVariable("parcial") int idParcial,
+            HttpServletRequest httpServletRequest
+    ) throws Exception {
+        UserLogin userLogin = userRequestService.getUserLogin(httpServletRequest);
+        return reportPercentActivitiesService.calculatePercentActivityBySchedule(idHorario, idParcial, userLogin);
     }
 }

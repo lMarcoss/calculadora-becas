@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
  * Date: 09/03/20
  */
 @Component
-public class CommonMethodToRestTemplate {
+public class RestTemplateService {
 
     @Value("${prop.sistema.horarios.url}")
     protected String urlSistemaHorarios;
@@ -23,7 +23,7 @@ public class CommonMethodToRestTemplate {
 
     protected HttpHeaders headers;
 
-    public CommonMethodToRestTemplate(RestTemplate restTemplate, MessageApplicationProperty messageApplicationProperty) {
+    public RestTemplateService(RestTemplate restTemplate, MessageApplicationProperty messageApplicationProperty) {
         this.restTemplate = restTemplate;
         this.messageApplicationProperty = messageApplicationProperty;
 

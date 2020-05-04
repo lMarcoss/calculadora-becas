@@ -5,7 +5,6 @@ import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.malumnos.actividades.model.ActividadAlumno;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
-import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -40,7 +39,9 @@ public class AlumnoActividadDaoImpl extends BaseDao implements AlumnoActividadDa
 
     private ActividadVo mapperActividadAlumnoPorMatriculaYCvePeriodo(ResultSet rs) throws SQLException {
         ActividadVo actividadVo = new ActividadVo(ESTATUS_ACTIVE);
-        actividadVo.setIdActividad(rs.getInt("ID_ACTIVIDAD_ALUMNO"));
+        actividadVo.setIdActividadAlumno(rs.getInt("ID_ACTIVIDAD_ALUMNO"));
+        actividadVo.setNombreActividad(rs.getString("NOMBRE_ACTIVIDAD"));
+        actividadVo.setIdActividad(rs.getInt("ID_ACTIVIDAD"));
         return actividadVo;
     }
 
@@ -51,7 +52,6 @@ public class AlumnoActividadDaoImpl extends BaseDao implements AlumnoActividadDa
         boolean byActividad = !idActividad.equalsIgnoreCase(ALL_ITEMS);
         if (byActividad) {
             queryGetAll = queryGetAll.concat(QRY_CONDITION_ID_ACTIVIDAD.replace("?", "'" + idActividad + "'"));
-            //queryCountItem = queryGetAll.concat(QRY_CONDITION_ID_ACTIVIDAD.replace("?", "'" + idActividad + "'"));
         }
 
         queryGetAll = addQueryPageable(page, pageSize, queryGetAll);
@@ -66,7 +66,7 @@ public class AlumnoActividadDaoImpl extends BaseDao implements AlumnoActividadDa
             pageSize = lengthDatable;
         }
 
-        return new WrapperData(data, page, pageSize, lengthDatable);
+        return new WrapperData<>(data, page, pageSize, lengthDatable);
     }
 
     @Override
@@ -78,22 +78,25 @@ public class AlumnoActividadDaoImpl extends BaseDao implements AlumnoActividadDa
 
     private ActividadAlumno mapperActividadAlumnoOneColumn(ResultSet rs) throws SQLException {
         ActividadAlumno actividadAlumno = new ActividadAlumno();
-        actividadAlumno.setIdAlumno(rs.getString("ID_ACTIVIDAD_ALUMNO"));
-        actividadAlumno.setIdActividad(rs.getInt("ID_ACTIVIDAD"));
+        actividadAlumno.setIdActividadAlumno(rs.getInt("ID_ACTIVIDAD_ALUMNO"));
+
+        ActividadVo actividadVo = new ActividadVo();
+        actividadVo.setIdActividad(rs.getInt("ID_ACTIVIDAD"));
+
+        actividadAlumno.setActividad(actividadVo);
         return actividadAlumno;
     }
 
     private ActividadVo mapperActividadAlumno(ResultSet rs) throws SQLException {
         ActividadVo actividadVo = new ActividadVo(rs.getString("ESTATUS"));
-        actividadVo.setIdActividad(rs.getInt("ID_ACTIVIDAD_ALUMNO"));
+        actividadVo.setIdActividadAlumno(rs.getInt("ID_ACTIVIDAD_ALUMNO"));
         actividadVo.setNombreActividad(rs.getString("NOMBRE_ACTIVIDAD"));
         return actividadVo;
     }
 
-    /*ACT.ID_ACTIVIDAD, ACT.NOMBRE_ACTIVIDAD, AL.ID_ALUMNO, AL.MATRICULA, AL.NOMBRES, AL.APE_PATERNO, AL.APE_MATERNO*/
     private ActividadAlumno mapperActividadesAlumnos(ResultSet rs) throws SQLException {
         ActividadAlumno actividadVo = new ActividadAlumno();
-        actividadVo.setIdActividad(rs.getInt("ID_ACTIVIDAD"));
+        actividadVo.setIdActividadAlumno(rs.getInt("ID_ACTIVIDAD"));
         actividadVo.setNombreActividad(rs.getString("NOMBRE_ACTIVIDAD"));
         actividadVo.setIdAlumno(rs.getString("ID_ALUMNO_P"));
         actividadVo.setMatricula(rs.getString("MATRICULA"));

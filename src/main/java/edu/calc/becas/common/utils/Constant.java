@@ -2,7 +2,7 @@ package edu.calc.becas.common.utils;
 
 /**
  * @author Marcos Santiago Leonardo
- * Meltsan Solutions
+ * Universidad de la Sierra Sur
  * Description: define constans for the project
  * Date: 3/23/19
  */

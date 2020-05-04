@@ -5,14 +5,11 @@ import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.actividades.service.AlumnoActividadService;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
-import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mvc.config.security.user.UserRequestService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static edu.calc.becas.common.utils.Constant.*;
 
@@ -44,42 +41,29 @@ public class AlumnoActividadAPI {
     }
 
     @GetMapping("/alumnos/actividades")
-    @ApiOperation(value = "Obtiene el listado de horarios de las actividades")
+    @ApiOperation(value = "Obtiene el listado de detalle de actividades de los alumnos")
     public WrapperData getAll(
-      @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
-      @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
+            @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
+            @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
 
-      @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)
-      @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,
+            @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)
+            @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,
 
-      @ApiParam(value = "Estatus de los registros a recuperar", defaultValue = DEFAULT_ESTATUS)
-      @RequestParam(value = "status", defaultValue = DEFAULT_ESTATUS, required = false) String status,
+            @ApiParam(value = "Estatus de los registros a recuperar", defaultValue = DEFAULT_ESTATUS)
+            @RequestParam(value = "status", defaultValue = DEFAULT_ESTATUS, required = false) String status,
 
-      @ApiParam(value = "Identificador de la actividad a recuperar el detalle", defaultValue = ALL_ITEMS)
-      @RequestParam(value = "actividad", defaultValue = ALL_ITEMS, required = false) String idActividad,
+            @ApiParam(value = "Identificador de la actividad a recuperar el detalle", defaultValue = ALL_ITEMS)
+            @RequestParam(value = "actividad", defaultValue = ALL_ITEMS, required = false) String idActividad,
 
-      @ApiParam(value = "Identificador del ciclo escolar asociado a la actividad", defaultValue = DEFAULT_ESTATUS)
-      @RequestParam(value = "ciclo", defaultValue = DEFAULT_ESTATUS, required = false) String idCiclo
-            /*, @ApiParam(value = "Encargado de la actividad", defaultValue = ALL_ITEMS)
-      @RequestParam(value = "username", defaultValue = ALL_ITEMS, required = false) String username*/
-    ){
+            @ApiParam(value = "Identificador del ciclo escolar asociado a la actividad", defaultValue = DEFAULT_ESTATUS)
+            @RequestParam(value = "ciclo", defaultValue = DEFAULT_ESTATUS, required = false) String idCiclo
+    ) {
 
-      if (pageSize.equalsIgnoreCase(ALL_ITEMS)) {
-        pageSize = ITEMS_FOR_PAGE;
-      }
-      return alumnoActividadService.getAllAlumnosByActividad(Integer.parseInt(page), Integer.parseInt(pageSize), idActividad, idCiclo);
+        if (pageSize.equalsIgnoreCase(ALL_ITEMS)) {
+            pageSize = ITEMS_FOR_PAGE;
+        }
+        return alumnoActividadService.getAllAlumnosByActividad(Integer.parseInt(page), Integer.parseInt(pageSize), idActividad, idCiclo);
     }
-
-   @PostMapping("/alumnos/calcula-porcentaje-actividad/horario/{id-horario}/parcial/{parcial}")
-   @ApiOperation(value = "Calcula porcentaje de actividad extra-escoalar de alumnos por horario de actividad")
-   public String calculatePercentActivityBySchedule(
-            @ApiParam(value = "Identificador de horario de la actividad extra-escolar", required = true) @PathVariable("id-horario") int idHorario,
-            @ApiParam(value = "Parcial del periodo actual a calcular el porcentaje de actividad (1,2 o3)", required = true) @PathVariable("parcial") int idParcial,
-            HttpServletRequest httpServletRequest
-   ) throws Exception {
-       UserLogin userLogin = userRequestService.getUserLogin(httpServletRequest);
-       return alumnoActividadService.calculatePercentActivityBySchedule(idHorario, idParcial, userLogin);
-   }
 
 
 }

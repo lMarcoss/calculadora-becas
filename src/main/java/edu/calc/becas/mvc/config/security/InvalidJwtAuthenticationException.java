@@ -2,7 +2,7 @@ package edu.calc.becas.mvc.config.security;
 
 /**
  * @author Marcos Santiago Leonardo
- * Meltsan Solutions
+ * Universidad de la Sierra Sur
  * Description:
  * Date: 4/16/19
  */
