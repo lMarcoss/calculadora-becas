@@ -47,7 +47,7 @@ public class ReportPercentBecaAPI {
     }
 
     @GetMapping("/detalle/periodo/{cve-periodo}")
-    @ApiOperation(value = "Obtiene el listado de alumnos con sus respectivos % de beca en el periodo ")
+    @ApiOperation(value = "Obtiene la propuesta de beca-colegiatura del periodo cve-periodo")
     public WrapperData<ReporteBecaPeriodo> getAll(
             @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
             @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
@@ -69,7 +69,7 @@ public class ReportPercentBecaAPI {
     }
 
     @GetMapping("/detalle/periodo/{cve-periodo}/export")
-    @ApiOperation(value = "Obtiene el listado de alumnos con sus respectivos % de beca en el periodo ")
+    @ApiOperation(value = "Descargar propuesta de beca-colegiatura del periodo cve-periodo en excel")
     public ResponseEntity<InputStreamResource> exportReportToXLSX(
             @ApiParam(value = "Clave Periodo a recuperar", required = true) @PathVariable("cve-periodo") String cvePeriodo
     ) throws IOException {
