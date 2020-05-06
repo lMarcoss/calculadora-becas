@@ -73,7 +73,10 @@ final class QueriesReportPercentBeca {
     static String QRY_COUNT_ALL_BY_PERIODO =
             "SELECT COUNT(1)\n" +
                     "FROM PORCENTAJE_BECA\n" +
-                    "WHERE CVE_PERIODO =?";
+                    "WHERE CVE_PERIODO =?\n";
+
+    static String QRY_ADD_CONDITION_LIKE_PALABRA_CLAVE =
+            "\nAND MATRICULA LIKE '%?%' OR NOMBRES LIKE '%?%'\n";
     static String QRY_PAGEABLE =
             "\nLIMIT ? OFFSET ? \n";
 }

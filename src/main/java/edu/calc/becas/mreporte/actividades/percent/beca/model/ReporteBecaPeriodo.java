@@ -17,7 +17,7 @@ import lombok.Setter;
 public class ReporteBecaPeriodo extends CommonData {
     private int idPorcentajeBeca;
     private String matricula;
-    private String Nombres;
+    private String nombres;
     private String cveGrupo;
     private String descGrupo;
     private String cveLicenciatura;

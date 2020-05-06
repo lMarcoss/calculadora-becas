@@ -15,5 +15,5 @@ public interface ReportPercentBecaDao {
 
     void updatePercentBecaByAlumno(ReporteBecaPeriodo reporteBecaPeriodo, UserLogin userLogin);
 
-    WrapperData<ReporteBecaPeriodo> getAllReportByPeriodo(int page, int pageSize, String cvePeriodo);
+    WrapperData<ReporteBecaPeriodo> getAllReportByPeriodo(int page, int pageSize, String cvePeriodo, String palabraClave);
 }

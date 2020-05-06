@@ -1,6 +1,7 @@
 package edu.calc.becas.mreporte.actividades.percent.beca.service;
 
 import edu.calc.becas.common.model.WrapperData;
+import edu.calc.becas.excel.write.report.beca.periodo.ExcelWritterReportBeca;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.actividades.service.AlumnoActividadService;
 import edu.calc.becas.malumnos.model.Alumno;
@@ -18,8 +19,10 @@ import edu.calc.becas.mreporte.actividades.percent.activity.service.ReportPercen
 import edu.calc.becas.mreporte.actividades.percent.beca.dao.ReportPercentBecaDao;
 import edu.calc.becas.mreporte.actividades.percent.beca.model.ReporteBecaPeriodo;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 import static edu.calc.becas.common.utils.Constant.*;
@@ -119,8 +122,14 @@ public class ReportPercentBecaServiceImpl implements ReportPercentBecaService {
     }
 
     @Override
-    public WrapperData<ReporteBecaPeriodo> getAllReportByPeriodo(int page, int pageSize, String cvePeriodo) {
-        return reportPercentBecaDao.getAllReportByPeriodo(page, pageSize, cvePeriodo);
+    public WrapperData<ReporteBecaPeriodo> getAllReportByPeriodo(int page, int pageSize, String cvePeriodo, String palabraClave) {
+        return reportPercentBecaDao.getAllReportByPeriodo(page, pageSize, cvePeriodo, palabraClave);
+    }
+
+    @Override
+    public InputStreamResource exportDataByPeriodoToXLSX(String cvePeriodo) throws IOException {
+        WrapperData<ReporteBecaPeriodo> dataReportByPeriodo = getAllReportByPeriodo(0, -1, cvePeriodo, null);
+        return ExcelWritterReportBeca.export(dataReportByPeriodo);
     }
 
     private String getNombreAlumno(Alumno alumno) {

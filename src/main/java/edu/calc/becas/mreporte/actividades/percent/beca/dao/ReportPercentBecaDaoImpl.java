@@ -5,6 +5,7 @@ import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.mreporte.actividades.percent.beca.model.ReporteBecaPeriodo;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -92,28 +93,47 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
     }
 
     @Override
-    public WrapperData<ReporteBecaPeriodo> getAllReportByPeriodo(int page, int pageSize, String cvePeriodo) {
+    public WrapperData<ReporteBecaPeriodo> getAllReportByPeriodo(int page, int pageSize, String cvePeriodo, String palabraClave) {
         WrapperData<ReporteBecaPeriodo> reporteBecaPeriodoWrapperData = new WrapperData<>();
         ArrayList<Object> parameters = new ArrayList<>();
         parameters.add(cvePeriodo);
 
-        if (pageSize != Integer.parseInt(ITEMS_FOR_PAGE)) {
-            // paginate rows
-            Integer count = this.jdbcTemplate.queryForObject(QRY_COUNT_ALL_BY_PERIODO, new Object[]{cvePeriodo}, Integer.class);
+        String qryGetAllRow = QRY_GET_ALL_REPORTE_BECA;
+
+        if(StringUtils.isNotBlank(palabraClave)){
+            // add condition search by word key
+            qryGetAllRow = addConditionPalabraClave(qryGetAllRow, palabraClave);
+        }
+
+        if (pageSize != Integer.parseInt(ITEMS_FOR_PAGE)) {// paginate rows
+
+            String queryCountAll = QRY_COUNT_ALL_BY_PERIODO;
+
+            if(StringUtils.isNotBlank(palabraClave)){
+                // add condition search by word key
+                queryCountAll = addConditionPalabraClave(queryCountAll, palabraClave);
+            }
+
+            Integer count = this.jdbcTemplate.queryForObject(queryCountAll, new Object[]{cvePeriodo}, Integer.class);
+
             if (count != null && count > 0) {
                 parameters.add(pageSize);
                 parameters.add((page * pageSize));
 
-                reporteBecaPeriodoWrapperData.setData(getAllReportByPeriodo(QRY_GET_ALL_REPORTE_BECA.concat(QRY_PAGEABLE), parameters));
+                // add query pageable
+                reporteBecaPeriodoWrapperData.setData(
+                        getAllReportByPeriodo(qryGetAllRow.concat(QRY_PAGEABLE), parameters)
+                );
+
                 reporteBecaPeriodoWrapperData.setLengthData(count);
             } else {
                 reporteBecaPeriodoWrapperData.setData(new ArrayList<>());
             }
 
-        } else {
-            // all row for report
+        } else {// all row for report
+
             reporteBecaPeriodoWrapperData.setData(
-                    getAllReportByPeriodo(QRY_GET_ALL_REPORTE_BECA, parameters)
+                    getAllReportByPeriodo(qryGetAllRow, parameters)
             );
             if (!reporteBecaPeriodoWrapperData.getData().isEmpty()) {
                 reporteBecaPeriodoWrapperData.setLengthData(reporteBecaPeriodoWrapperData.getData().size());
@@ -121,8 +141,11 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
 
         }
 
-
         return reporteBecaPeriodoWrapperData;
+    }
+
+    private String addConditionPalabraClave(String query, String palabraClave) {
+        return query.concat(QRY_ADD_CONDITION_LIKE_PALABRA_CLAVE.replace("?", palabraClave));
     }
 
     private List<ReporteBecaPeriodo> getAllReportByPeriodo(String qry, ArrayList<Object> parameters) {
