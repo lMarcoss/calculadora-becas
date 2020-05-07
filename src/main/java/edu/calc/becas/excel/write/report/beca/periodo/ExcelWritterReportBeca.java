@@ -114,44 +114,44 @@ public final class ExcelWritterReportBeca {
         row.setHeight((short) 800);
 
         // NUMERO
-        addCell(row, "N\u00famero", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, positionCell, pageBecaPercent);
+        addCellHeaderData(row, "N\u00famero", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, positionCell, pageBecaPercent);
         //MATRICULA
-        addCell(row, "Matr\u00edcula", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "Nombre", cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "Programa Educativo", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "Grupo", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "Matr\u00edcula", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "Nombre", cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "Programa Educativo", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "Grupo", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
 
         //talleres
-        addCell(row, "1er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "2do Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "3er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "80%", cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "10%", cellStyleHeaderYellowNormal, positionRow, positionRow + 1, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "1er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "2do Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "3er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "80%", cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "10%", cellStyleHeaderYellowNormal, positionRow, positionRow + 1, ++positionCell, pageBecaPercent);
 
         Row row3 = pageBecaPercent.createRow(positionRow + 2);
         row3.setHeight((short) 800);
-        addCell(row3, "0%", cellStyleHeaderYellowNormal, positionRow + 2, positionRow + 3, positionCell, pageBecaPercent);//10%/0
+        addCellHeaderData(row3, "0%", cellStyleHeaderYellowNormal, positionRow + 2, positionRow + 3, positionCell, pageBecaPercent);//10%/0
 
         // biblioteca
-        addCell(row, "1er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "2do Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "3er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "80%", cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "15%", cellStyleHeaderYellowNormal, positionRow, positionRow + 1, ++positionCell, pageBecaPercent);
-        addCell(row3, "0%", cellStyleHeaderYellowNormal, positionRow + 2, positionRow + 3, positionCell, pageBecaPercent);//15%/0
+        addCellHeaderData(row, "1er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "2do Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "3er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "80%", cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "15%", cellStyleHeaderYellowNormal, positionRow, positionRow + 1, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row3, "0%", cellStyleHeaderYellowNormal, positionRow + 2, positionRow + 3, positionCell, pageBecaPercent);//15%/0
 
 
         // sala
-        addCell(row, "1er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "2do Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "3er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "80%", cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCell(row, "15%", cellStyleHeaderYellowNormal, positionRow, positionRow + 1, ++positionCell, pageBecaPercent);
-        addCell(row3, "0%", cellStyleHeaderYellowNormal, positionRow + 2, positionRow + 3, positionCell, pageBecaPercent);//15%/0
+        addCellHeaderData(row, "1er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "2do Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "3er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "80%", cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, "15%", cellStyleHeaderYellowNormal, positionRow, positionRow + 1, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row3, "0%", cellStyleHeaderYellowNormal, positionRow + 2, positionRow + 3, positionCell, pageBecaPercent);//15%/0
 
     }
 
-    private static void addCell(Row row, String value, CellStyle cellStyle, int positionRow, int endPositionRow, int positionCell, Sheet pageBecaPercent) {
+    private static void addCellHeaderData(Row row, String value, CellStyle cellStyle, int positionRow, int endPositionRow, int positionCell, Sheet pageBecaPercent) {
         Cell cellNumeroConsecutivo = row.createCell(positionCell);
         cellNumeroConsecutivo.setCellValue(value);
         cellNumeroConsecutivo.setCellStyle(cellStyle);
