@@ -74,7 +74,7 @@ public class ReportPercentBecaAPI {
             @ApiParam(value = "Clave Periodo a recuperar", required = true) @PathVariable("cve-periodo") String cvePeriodo
     ) throws IOException {
 
-        String filename = "PROPUESTA DE BECA COLEGIATURA " + cvePeriodo + ".xlsx";
+        String filename = "PROPUESTA DE BECA COLEGIATURA " + cvePeriodo + ".xls";
 
         InputStreamResource inputStreamResource = reportPercentBecaService.exportDataByPeriodoToXLSX(cvePeriodo);
         HttpHeaders headers = new HttpHeaders();

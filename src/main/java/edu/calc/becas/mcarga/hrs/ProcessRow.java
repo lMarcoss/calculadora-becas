@@ -2,10 +2,7 @@ package edu.calc.becas.mcarga.hrs;
 
 import edu.calc.becas.mcarga.hrs.read.files.model.CellFile;
 import edu.calc.becas.mcarga.hrs.read.files.model.RowFile;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,7 +77,7 @@ public class ProcessRow {
           for (Cell cell : row) {
             CellFile cellFile = new CellFile();
 
-            cell.setCellType(1);
+            cell.setCellType(CellType.forInt(1));
             String value = readCellByType(cell);
             if (value != null && !value.trim().equalsIgnoreCase("") && value.length() > 0) {
               cellFile.setValue(
@@ -124,7 +121,7 @@ public class ProcessRow {
           for (Cell cell : row) {
             CellFile cellFile = new CellFile();
 
-            cell.setCellType(1);
+            cell.setCellType(CellType.forInt(1));
             String value = readCellByType(cell);
             if (value != null && !value.trim().equalsIgnoreCase("") && value.length() > 0) {
               cellFile.setValue(
