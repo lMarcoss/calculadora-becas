@@ -29,6 +29,44 @@ public final class ExcelWritterReportBeca {
     private ExcelWritterReportBeca() {
     }
 
+    private static Font createFont(Workbook workbook, IndexedColors color, boolean bold) {
+        Font font = workbook.createFont();
+        font.setFontName("Arial");
+        font.setItalic(false);
+        font.setColor(color.getIndex());
+        font.setBold(bold);
+
+        return font;
+    }
+
+    /**
+     * @param workbook
+     * @param font
+     * @param color
+     * @param rotation
+     * @param wrapperText
+     * @return
+     */
+    private static CellStyle createCellStyle(Workbook workbook, Font font, IndexedColors color, boolean rotation,
+                                             boolean wrapperText) {
+        CellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        cellStyle.setFillForegroundColor(color.getIndex());
+        cellStyle.setFont(font);
+        /*cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setBottomBorderColor(IndexedColors.GREY_40_PERCENT.getIndex());*/
+        if (rotation) {
+            cellStyle.setRotation((short) 90);
+        }
+        if (wrapperText) {
+            cellStyle.setWrapText(true);
+        }
+        return cellStyle;
+    }
+
+
     /***
      *
      * @param wrapperDataReport
@@ -40,10 +78,23 @@ public final class ExcelWritterReportBeca {
                                              DefPorcentajeActividad defPorcentajeActividad) throws IOException {
 
         Workbook workbook = generateExcel(wrapperDataReport, defPorcentajeActividad);
-
         InputStream inputStream = write(workbook);
-
         return new InputStreamResource(inputStream);
+    }
+
+
+    /***
+     *
+     * @return Generate content excel
+     * @param wrapperDataReport
+     * @param defPorcentajeActividad
+     */
+    private static Workbook generateExcel(WrapperData<AlumnoReporteBecaPeriodo> wrapperDataReport,
+                                          DefPorcentajeActividad defPorcentajeActividad) {
+
+        Workbook workbook = new XSSFWorkbook();
+        createBecaPercentPage(workbook, wrapperDataReport, defPorcentajeActividad);
+        return workbook;
     }
 
     /***
@@ -58,33 +109,6 @@ public final class ExcelWritterReportBeca {
         workbook.close();
         byte[] barray = bos.toByteArray();
         return new ByteArrayInputStream(barray);
-    }
-
-    /***
-     *
-     * @return Generate content excel
-     * @param wrapperDataReport
-     * @param defPorcentajeActividad
-     */
-    private static Workbook generateExcel(WrapperData<AlumnoReporteBecaPeriodo> wrapperDataReport,
-                                          DefPorcentajeActividad defPorcentajeActividad) {
-
-        Workbook workbook = new XSSFWorkbook();
-
-        createBecaPercentPage(workbook, wrapperDataReport, defPorcentajeActividad);
-
-
-        return workbook;
-    }
-
-    private static Font createFont(Workbook workbook, IndexedColors color, boolean bold) {
-        Font font = workbook.createFont();
-        font.setFontName("Arial");
-        font.setItalic(false);
-        font.setColor(color.getIndex());
-        font.setBold(bold);
-
-        return font;
     }
 
     /**
@@ -120,7 +144,6 @@ public final class ExcelWritterReportBeca {
 
             int finalNumRow = 7;
 
-
             listDataReport.forEach(alumnoReporteBecaPeriodo -> {
                 Row row = pageBecaPercent.createRow(finalNumRow + alumnoReporteBecaPeriodo.getIndex());
 
@@ -139,7 +162,6 @@ public final class ExcelWritterReportBeca {
             });
         }
 
-
     }
 
     private static void addCellData(Row row, CellStyle cellStyle, AlumnoReporteBecaPeriodo alumnoReporteBecaPeriodo,
@@ -151,6 +173,7 @@ public final class ExcelWritterReportBeca {
         Field property = alumnoReporteBecaPeriodo.getClass().getDeclaredField(col.getNamePropertyCol());
         property.setAccessible(true);
 
+        // celda por tipo
         if (!col.isNumber()) {
             String value = null;
             if (col.isPercent()) {
@@ -266,13 +289,11 @@ public final class ExcelWritterReportBeca {
         CellRangeAddress cellRangeAddressDatosAlumnos = new CellRangeAddress(0, 1, 0, 4);
         pageBecaPercent.addMergedRegion(cellRangeAddressDatosAlumnos);
 
-
         // actividades extraescolares
         Cell cellActividadesExtraExcolares = row.createCell(5);
         cellActividadesExtraExcolares.setCellValue("ACTIVIDADES EXTRAESCOLARES");
         cellActividadesExtraExcolares.setCellStyle(cellStyleHeaderGreen);
         pageBecaPercent.addMergedRegion(new CellRangeAddress(0, 0, 5, 19));
-
 
         // talleres y clubes
         Row rowSubtitle = pageBecaPercent.createRow(1);
@@ -292,25 +313,7 @@ public final class ExcelWritterReportBeca {
         cellSalaDeComputo.setCellStyle(cellStyleHeaderGreen);
         pageBecaPercent.addMergedRegion(new CellRangeAddress(1, 1, 15, 19));
 
-
     }
 
-    private static CellStyle createCellStyle(Workbook workbook, Font font, IndexedColors color, boolean rotation, boolean wrapperText) {
-        CellStyle cellStyle = workbook.createCellStyle();
-        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-        cellStyle.setAlignment(HorizontalAlignment.CENTER);
-        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        cellStyle.setFillForegroundColor(color.getIndex());
-        cellStyle.setFont(font);
-        /*cellStyle.setBorderBottom(BorderStyle.THIN);
-        cellStyle.setBottomBorderColor(IndexedColors.GREY_40_PERCENT.getIndex());*/
-        if (rotation) {
-            cellStyle.setRotation((short) 90);
-        }
-        if (wrapperText) {
-            cellStyle.setWrapText(true);
-        }
-        return cellStyle;
-    }
 
 }
