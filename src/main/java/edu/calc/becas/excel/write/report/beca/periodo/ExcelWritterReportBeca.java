@@ -121,16 +121,16 @@ public final class ExcelWritterReportBeca {
             int finalNumRow = 7;
 
 
-            listDataReport.forEach(reporteBecaPeriodo -> {
-                Row row = pageBecaPercent.createRow(finalNumRow + reporteBecaPeriodo.getIndex());
+            listDataReport.forEach(alumnoReporteBecaPeriodo -> {
+                Row row = pageBecaPercent.createRow(finalNumRow + alumnoReporteBecaPeriodo.getIndex());
 
                 for (ColumnWriteExcel col : ColumnWriteExcel.values()) {
 
                     try {
-                        addCellData(row, cellStyleWhite, reporteBecaPeriodo, col);
+                        addCellData(row, cellStyleWhite, alumnoReporteBecaPeriodo, col);
                     } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
                         log.error(String.format("Error add property %s from alumno %s. Error %s",
-                                col.getNamePropertyCol(), reporteBecaPeriodo.getMatricula(), e.getMessage()));
+                                col.getNamePropertyCol(), alumnoReporteBecaPeriodo.getMatricula(), e.getMessage()));
                         log.error(ExceptionUtils.getStackTrace(e));
 
                     }
