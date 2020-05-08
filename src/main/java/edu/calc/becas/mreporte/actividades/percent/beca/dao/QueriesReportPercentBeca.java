@@ -12,11 +12,15 @@ final class QueriesReportPercentBeca {
 
     static String QRY_ADD_PERCENT_BECA =
             "INSERT INTO PORCENTAJE_BECA (MATRICULA, NOMBRES, CVE_GRUPO, DESC_GRUPO, CVE_LICENCIATURA, DESC_LICENCIATURA,\n" +
-                    "                             CVE_PERIODO, DESC_PERIDODO, ID_ACTIVIDAD, DS_ACTIVIDAD, PORCENTAJE_TALLER_CLUB_P1,\n" +
-                    "                             PORCENTAJE_TALLER_CLUB_P2, PORCENTAJE_TALLER_CLUB_P3, PORCENTAJE_BIBLIOTECA_P1,\n" +
-                    "                             PORCENTAJE_BIBLIOTECA_P2, PORCENTAJE_BIBLIOTECA_P3, PORCENTAJE_SALA_COMPUTO_P1,\n" +
-                    "                             PORCENTAJE_SALA_COMPUTO_P2, PORCENTAJE_SALA_COMPUTO_P3, AGREGADO_POR, FECHA_CREACION)\n" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                    "                             CVE_PERIODO, DESC_PERIDODO, ID_ACTIVIDAD, DS_ACTIVIDAD, " +
+                    "                             PORCENTAJE_TALLER_CLUB_P1, PORCENTAJE_TALLER_CLUB_P2, PORCENTAJE_TALLER_CLUB_P3, \n" +
+                    "                             PROMEDIO_PARCIAL_TALLER_CLUB, PORCENTAJE_LOGRADO_TALLER_CLUB, \n" +
+                    "                             PORCENTAJE_BIBLIOTECA_P1, PORCENTAJE_BIBLIOTECA_P2, PORCENTAJE_BIBLIOTECA_P3, \n" +
+                    "                             PROMEDIO_PARCIAL_BIBLIOTECA, PORCENTAJE_LOGRADO_BIBLIOTECA, \n" +
+                    "                             PORCENTAJE_SALA_COMPUTO_P1, PORCENTAJE_SALA_COMPUTO_P2, PORCENTAJE_SALA_COMPUTO_P3, \n" +
+                    "                             PROMEDIO_PARCIAL_SALA, PORCENTAJE_LOGRADO_SALA_COMPUTO, \n" +
+                    "                             AGREGADO_POR, FECHA_CREACION)\n" +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
     static String QRY_UPDATE_PERCENT_BECA =
             "UPDATE PORCENTAJE_BECA\n" +
                     "SET NOMBRES                    = ?,\n" +
@@ -30,12 +34,21 @@ final class QueriesReportPercentBeca {
                     "    PORCENTAJE_TALLER_CLUB_P1  = ?,\n" +
                     "    PORCENTAJE_TALLER_CLUB_P2  = ?,\n" +
                     "    PORCENTAJE_TALLER_CLUB_P3  = ?,\n" +
+                    "    PROMEDIO_PARCIAL_TALLER_CLUB  = ?,\n" +
+                    "    PORCENTAJE_LOGRADO_TALLER_CLUB  = ?,\n" +
+
                     "    PORCENTAJE_BIBLIOTECA_P1   = ?,\n" +
                     "    PORCENTAJE_BIBLIOTECA_P2   = ?,\n" +
                     "    PORCENTAJE_BIBLIOTECA_P3   = ?,\n" +
+                    "    PROMEDIO_PARCIAL_BIBLIOTECA   = ?,\n" +
+                    "    PORCENTAJE_LOGRADO_BIBLIOTECA   = ?,\n" +
+
                     "    PORCENTAJE_SALA_COMPUTO_P1 = ?,\n" +
                     "    PORCENTAJE_SALA_COMPUTO_P2 = ?,\n" +
                     "    PORCENTAJE_SALA_COMPUTO_P3 = ?," +
+                    "    PROMEDIO_PARCIAL_SALA = ?," +
+                    "    PORCENTAJE_LOGRADO_SALA_COMPUTO = ?," +
+
                     "    ACTUALIZADO_POR = ?,\n" +
                     "    FECHA_ACTUALIZACION = NOW()\n" +
                     "where MATRICULA = ?\n" +
@@ -61,12 +74,18 @@ final class QueriesReportPercentBeca {
                     "       PORCENTAJE_TALLER_CLUB_P1,\n" +
                     "       PORCENTAJE_TALLER_CLUB_P2,\n" +
                     "       PORCENTAJE_TALLER_CLUB_P3,\n" +
+                    "       PROMEDIO_PARCIAL_TALLER_CLUB,\n" +
+                    "       PORCENTAJE_LOGRADO_TALLER_CLUB,\n" +
                     "       PORCENTAJE_BIBLIOTECA_P1,\n" +
                     "       PORCENTAJE_BIBLIOTECA_P2,\n" +
                     "       PORCENTAJE_BIBLIOTECA_P3,\n" +
+                    "       PROMEDIO_PARCIAL_BIBLIOTECA,\n" +
+                    "       PORCENTAJE_LOGRADO_BIBLIOTECA,\n" +
                     "       PORCENTAJE_SALA_COMPUTO_P1,\n" +
                     "       PORCENTAJE_SALA_COMPUTO_P2,\n" +
-                    "       PORCENTAJE_SALA_COMPUTO_P3\n" +
+                    "       PORCENTAJE_SALA_COMPUTO_P3,\n" +
+                    "       PROMEDIO_PARCIAL_SALA,\n" +
+                    "       PORCENTAJE_LOGRADO_SALA_COMPUTO\n" +
                     "FROM PORCENTAJE_BECA\n" +
                     "WHERE CVE_PERIODO = ?\n";
 

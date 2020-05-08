@@ -6,12 +6,11 @@ import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.mcatalogos.defpercentbeca.model.DefPorcentajeActividad;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
-import edu.calc.becas.mreporte.actividades.percent.beca.model.ReporteBecaPeriodo;
+import edu.calc.becas.mreporte.actividades.percent.beca.model.AlumnoReporteBecaPeriodo;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import org.springframework.core.io.InputStreamResource;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -24,9 +23,9 @@ public interface ReportPercentBecaService {
 
     String calculaPorcentajeBecaDelAlumnoPorParcialYPeriodo(Alumno alumno, Parcial parcial, CicloEscolarVo periodo, DefPorcentajeActividad defPorcentajeActividad, UserLogin userLogin);
 
-    void addPercentBecaByAlumno(ReporteBecaPeriodo reporteBecaPeriodo, UserLogin userLogin);
+    void addPercentBecaByAlumno(AlumnoReporteBecaPeriodo alumnoReporteBecaPeriodo, UserLogin userLogin);
 
-    WrapperData<ReporteBecaPeriodo> getAllReportByPeriodo(int page, int pageSize, String cvePeriodo, String palabraClave);
+    WrapperData<AlumnoReporteBecaPeriodo> getAllReportByPeriodo(int page, int pageSize, String cvePeriodo, String palabraClave);
 
     InputStreamResource exportDataByPeriodoToXLSX(String cvePeriodo) throws IOException;
 }

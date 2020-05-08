@@ -29,8 +29,8 @@ public class DefPorcentajeActividadDaoImpl extends BaseDao implements DefPorcent
     public DefPorcentajeActividad getDefPorcentajeActividades() {
         DefPorcentajeActividad defPorcentajeActividades = new DefPorcentajeActividad();
         defPorcentajeActividades.setPorcentajeBecaBiblioteca(getDePorcentajeActividad(TipoActividad.BIBLIOTECA));
-        defPorcentajeActividades.setPorcentajeBecaBiblioteca(getDePorcentajeActividad(TipoActividad.SALA_DE_COMPUTO));
-        defPorcentajeActividades.setPorcentajeBecaBiblioteca(getDePorcentajeActividad(TipoActividad.TALLER_O_CLUB));
+        defPorcentajeActividades.setPorcentajeBecaSala(getDePorcentajeActividad(TipoActividad.SALA_DE_COMPUTO));
+        defPorcentajeActividades.setPorcentajeBecaTaller(getDePorcentajeActividad(TipoActividad.TALLER_O_CLUB));
         return defPorcentajeActividades;
     }
 

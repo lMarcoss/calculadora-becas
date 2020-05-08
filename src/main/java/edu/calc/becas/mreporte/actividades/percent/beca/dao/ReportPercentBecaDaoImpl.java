@@ -2,7 +2,7 @@ package edu.calc.becas.mreporte.actividades.percent.beca.dao;
 
 import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.common.model.WrapperData;
-import edu.calc.becas.mreporte.actividades.percent.beca.model.ReporteBecaPeriodo;
+import edu.calc.becas.mreporte.actividades.percent.beca.model.AlumnoReporteBecaPeriodo;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.apache.commons.lang3.StringUtils;
@@ -30,71 +30,88 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
     }
 
     @Override
-    public void addPercentBecaByAlumno(ReporteBecaPeriodo reporteBecaPeriodo, UserLogin userLogin) {
+    public void addPercentBecaByAlumno(AlumnoReporteBecaPeriodo alumnoReporteBecaPeriodo, UserLogin userLogin) {
         Integer countMatricula = this.jdbcTemplate.queryForObject(
                 QRY_VALIDATE_MATRICULA_EXISTS,
-                new Object[]{reporteBecaPeriodo.getMatricula(), reporteBecaPeriodo.getCvePeriodo()},
+                new Object[]{alumnoReporteBecaPeriodo.getMatricula(), alumnoReporteBecaPeriodo.getCvePeriodo()},
                 Integer.class);
 
         if (countMatricula == null || countMatricula == 0) {
             this.jdbcTemplate.update(QRY_ADD_PERCENT_BECA,
-                    reporteBecaPeriodo.getMatricula(),
-                    reporteBecaPeriodo.getNombres(),
-                    reporteBecaPeriodo.getCveGrupo(),
-                    reporteBecaPeriodo.getDescGrupo(),
-                    reporteBecaPeriodo.getCveLicenciatura(),
-                    reporteBecaPeriodo.getDescLicenciatura(),
-                    reporteBecaPeriodo.getCvePeriodo(),
-                    reporteBecaPeriodo.getDescPeriodo(),
-                    reporteBecaPeriodo.getIdActividad(),
-                    reporteBecaPeriodo.getDescActividad(),
-                    reporteBecaPeriodo.getPorcentajeBecaTallerCLubP1(),
-                    reporteBecaPeriodo.getPorcentajeBecaTallerCLubP2(),
-                    reporteBecaPeriodo.getPorcentajeBecaTallerCLubP3(),
-                    reporteBecaPeriodo.getPorcentajeBecaBibliotecaP1(),
-                    reporteBecaPeriodo.getPorcentajeBecaBibliotecaP2(),
-                    reporteBecaPeriodo.getPorcentajeBecaBibliotecaP3(),
-                    reporteBecaPeriodo.getPorcentajeBecaSalaComputoP1(),
-                    reporteBecaPeriodo.getPorcentajeBecaSalaComputoP2(),
-                    reporteBecaPeriodo.getPorcentajeBecaSalaComputoP3(),
+                    alumnoReporteBecaPeriodo.getMatricula(),
+                    alumnoReporteBecaPeriodo.getNombres(),
+                    alumnoReporteBecaPeriodo.getCveGrupo(),
+                    alumnoReporteBecaPeriodo.getDescGrupo(),
+                    alumnoReporteBecaPeriodo.getCveLicenciatura(),
+                    alumnoReporteBecaPeriodo.getDescLicenciatura(),
+                    alumnoReporteBecaPeriodo.getCvePeriodo(),
+                    alumnoReporteBecaPeriodo.getDescPeriodo(),
+                    alumnoReporteBecaPeriodo.getIdActividad(),
+                    alumnoReporteBecaPeriodo.getDescActividad(),
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaTallerCLubP1(),
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaTallerCLubP2(),
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaTallerCLubP3(),
+                    alumnoReporteBecaPeriodo.getPorcentajePromedioTallerClub(),
+                    alumnoReporteBecaPeriodo.getPorcentajeLogradoTalleClub(),
+
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaBibliotecaP1(),
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaBibliotecaP2(),
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaBibliotecaP3(),
+                    alumnoReporteBecaPeriodo.getPorcentajePromedioBiblioteca(),
+                    alumnoReporteBecaPeriodo.getPorcentajeLogradoBilioteca(),
+
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaSalaComputoP1(),
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaSalaComputoP2(),
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaSalaComputoP3(),
+                    alumnoReporteBecaPeriodo.getPorcentajePromedioSala(),
+                    alumnoReporteBecaPeriodo.getPorcentajeLogradoSala(),
                     userLogin.getUsername()
 
             );
         } else {
-            updatePercentBecaByAlumno(reporteBecaPeriodo, userLogin);
+            updatePercentBecaByAlumno(alumnoReporteBecaPeriodo, userLogin);
         }
 
 
     }
 
     @Override
-    public void updatePercentBecaByAlumno(ReporteBecaPeriodo reporteBecaPeriodo, UserLogin userLogin) {
+    public void updatePercentBecaByAlumno(AlumnoReporteBecaPeriodo alumnoReporteBecaPeriodo, UserLogin userLogin) {
         this.jdbcTemplate.update(QRY_UPDATE_PERCENT_BECA,
-                reporteBecaPeriodo.getNombres(),
-                reporteBecaPeriodo.getCveGrupo(),
-                reporteBecaPeriodo.getDescGrupo(),
-                reporteBecaPeriodo.getCveLicenciatura(),
-                reporteBecaPeriodo.getDescLicenciatura(),
-                reporteBecaPeriodo.getIdActividad(),
-                reporteBecaPeriodo.getDescActividad(),
-                reporteBecaPeriodo.getPorcentajeBecaTallerCLubP1(),
-                reporteBecaPeriodo.getPorcentajeBecaTallerCLubP2(),
-                reporteBecaPeriodo.getPorcentajeBecaTallerCLubP3(),
-                reporteBecaPeriodo.getPorcentajeBecaBibliotecaP1(),
-                reporteBecaPeriodo.getPorcentajeBecaBibliotecaP2(),
-                reporteBecaPeriodo.getPorcentajeBecaBibliotecaP3(),
-                reporteBecaPeriodo.getPorcentajeBecaSalaComputoP1(),
-                reporteBecaPeriodo.getPorcentajeBecaSalaComputoP2(),
-                reporteBecaPeriodo.getPorcentajeBecaSalaComputoP3(),
+                alumnoReporteBecaPeriodo.getNombres(),
+                alumnoReporteBecaPeriodo.getCveGrupo(),
+                alumnoReporteBecaPeriodo.getDescGrupo(),
+                alumnoReporteBecaPeriodo.getCveLicenciatura(),
+                alumnoReporteBecaPeriodo.getDescLicenciatura(),
+                alumnoReporteBecaPeriodo.getIdActividad(),
+                alumnoReporteBecaPeriodo.getDescActividad(),
+                alumnoReporteBecaPeriodo.getPorcentajeBecaTallerCLubP1(),
+                alumnoReporteBecaPeriodo.getPorcentajeBecaTallerCLubP2(),
+                alumnoReporteBecaPeriodo.getPorcentajeBecaTallerCLubP3(),
+                alumnoReporteBecaPeriodo.getPorcentajePromedioTallerClub(),
+                alumnoReporteBecaPeriodo.getPorcentajeLogradoTalleClub(),
+
+                alumnoReporteBecaPeriodo.getPorcentajeBecaBibliotecaP1(),
+                alumnoReporteBecaPeriodo.getPorcentajeBecaBibliotecaP2(),
+                alumnoReporteBecaPeriodo.getPorcentajeBecaBibliotecaP3(),
+                alumnoReporteBecaPeriodo.getPorcentajePromedioBiblioteca(),
+                alumnoReporteBecaPeriodo.getPorcentajeLogradoBilioteca(),
+
+                alumnoReporteBecaPeriodo.getPorcentajeBecaSalaComputoP1(),
+                alumnoReporteBecaPeriodo.getPorcentajeBecaSalaComputoP2(),
+                alumnoReporteBecaPeriodo.getPorcentajeBecaSalaComputoP3(),
+                alumnoReporteBecaPeriodo.getPorcentajePromedioSala(),
+                alumnoReporteBecaPeriodo.getPorcentajeLogradoSala(),
+
                 userLogin.getUsername(),
-                reporteBecaPeriodo.getMatricula(),
-                reporteBecaPeriodo.getCvePeriodo()
+                alumnoReporteBecaPeriodo.getMatricula(),
+                alumnoReporteBecaPeriodo.getCvePeriodo()
         );
     }
 
     @Override
-    public WrapperData<ReporteBecaPeriodo> getAllReportByPeriodo(int page, int pageSize, String cvePeriodo, String palabraClave) {
-        WrapperData<ReporteBecaPeriodo> reporteBecaPeriodoWrapperData = new WrapperData<>();
+    public WrapperData<AlumnoReporteBecaPeriodo> getAllReportByPeriodo(int page, int pageSize, String cvePeriodo, String palabraClave) {
+        WrapperData<AlumnoReporteBecaPeriodo> reporteBecaPeriodoWrapperData = new WrapperData<>();
         ArrayList<Object> parameters = new ArrayList<>();
         parameters.add(cvePeriodo);
 
@@ -148,32 +165,39 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
         return query.concat(QRY_ADD_CONDITION_LIKE_PALABRA_CLAVE.replace("?", palabraClave));
     }
 
-    private List<ReporteBecaPeriodo> getAllReportByPeriodo(String qry, ArrayList<Object> parameters) {
-        return this.jdbcTemplate.query(qry, parameters.toArray(), (rs, rowNUm) -> mapperReporteBeca(rs));
+    private List<AlumnoReporteBecaPeriodo> getAllReportByPeriodo(String qry, ArrayList<Object> parameters) {
+        return this.jdbcTemplate.query(qry, parameters.toArray(), this::mapperReporteBeca);
     }
 
 
-    private ReporteBecaPeriodo mapperReporteBeca(ResultSet rs) throws SQLException {
-        ReporteBecaPeriodo reporteBecaPeriodo = new ReporteBecaPeriodo();
-        reporteBecaPeriodo.setMatricula(rs.getString("MATRICULA"));
-        reporteBecaPeriodo.setNombres(rs.getString("NOMBRES"));
-        reporteBecaPeriodo.setCveGrupo(rs.getString("CVE_GRUPO"));
-        reporteBecaPeriodo.setDescGrupo(rs.getString("DESC_GRUPO"));
-        reporteBecaPeriodo.setCveLicenciatura(rs.getString("CVE_LICENCIATURA"));
-        reporteBecaPeriodo.setDescLicenciatura(rs.getString("DESC_LICENCIATURA"));
-        reporteBecaPeriodo.setCvePeriodo(rs.getString("CVE_PERIODO"));
-        reporteBecaPeriodo.setDescPeriodo(rs.getString("DESC_PERIDODO"));
-        reporteBecaPeriodo.setIdActividad(rs.getInt("ID_ACTIVIDAD"));
-        reporteBecaPeriodo.setDescActividad(rs.getString("DS_ACTIVIDAD"));
-        reporteBecaPeriodo.setPorcentajeBecaTallerCLubP1(rs.getInt("PORCENTAJE_TALLER_CLUB_P1"));
-        reporteBecaPeriodo.setPorcentajeBecaTallerCLubP2(rs.getInt("PORCENTAJE_TALLER_CLUB_P2"));
-        reporteBecaPeriodo.setPorcentajeBecaTallerCLubP3(rs.getInt("PORCENTAJE_TALLER_CLUB_P3"));
-        reporteBecaPeriodo.setPorcentajeBecaBibliotecaP1(rs.getInt("PORCENTAJE_BIBLIOTECA_P1"));
-        reporteBecaPeriodo.setPorcentajeBecaBibliotecaP2(rs.getInt("PORCENTAJE_BIBLIOTECA_P2"));
-        reporteBecaPeriodo.setPorcentajeBecaBibliotecaP3(rs.getInt("PORCENTAJE_BIBLIOTECA_P3"));
-        reporteBecaPeriodo.setPorcentajeBecaSalaComputoP1(rs.getInt("PORCENTAJE_SALA_COMPUTO_P1"));
-        reporteBecaPeriodo.setPorcentajeBecaSalaComputoP2(rs.getInt("PORCENTAJE_SALA_COMPUTO_P2"));
-        reporteBecaPeriodo.setPorcentajeBecaSalaComputoP3(rs.getInt("PORCENTAJE_SALA_COMPUTO_P3"));
-        return reporteBecaPeriodo;
+    private AlumnoReporteBecaPeriodo mapperReporteBeca(ResultSet rs, int rowNum) throws SQLException {
+        AlumnoReporteBecaPeriodo alumnoReporteBecaPeriodo = new AlumnoReporteBecaPeriodo();
+        alumnoReporteBecaPeriodo.setIndex(rowNum);
+        alumnoReporteBecaPeriodo.setMatricula(rs.getString("MATRICULA"));
+        alumnoReporteBecaPeriodo.setNombres(rs.getString("NOMBRES"));
+        alumnoReporteBecaPeriodo.setCveGrupo(rs.getString("CVE_GRUPO"));
+        alumnoReporteBecaPeriodo.setDescGrupo(rs.getString("DESC_GRUPO"));
+        alumnoReporteBecaPeriodo.setCveLicenciatura(rs.getString("CVE_LICENCIATURA"));
+        alumnoReporteBecaPeriodo.setDescLicenciatura(rs.getString("DESC_LICENCIATURA"));
+        alumnoReporteBecaPeriodo.setCvePeriodo(rs.getString("CVE_PERIODO"));
+        alumnoReporteBecaPeriodo.setDescPeriodo(rs.getString("DESC_PERIDODO"));
+        alumnoReporteBecaPeriodo.setIdActividad(rs.getInt("ID_ACTIVIDAD"));
+        alumnoReporteBecaPeriodo.setDescActividad(rs.getString("DS_ACTIVIDAD"));
+        alumnoReporteBecaPeriodo.setPorcentajeBecaTallerCLubP1(rs.getInt("PORCENTAJE_TALLER_CLUB_P1"));
+        alumnoReporteBecaPeriodo.setPorcentajeBecaTallerCLubP2(rs.getInt("PORCENTAJE_TALLER_CLUB_P2"));
+        alumnoReporteBecaPeriodo.setPorcentajeBecaTallerCLubP3(rs.getInt("PORCENTAJE_TALLER_CLUB_P3"));
+        alumnoReporteBecaPeriodo.setPorcentajePromedioTallerClub(rs.getInt("PROMEDIO_PARCIAL_TALLER_CLUB"));
+        alumnoReporteBecaPeriodo.setPorcentajeLogradoTalleClub(rs.getInt("PORCENTAJE_LOGRADO_TALLER_CLUB"));
+        alumnoReporteBecaPeriodo.setPorcentajeBecaBibliotecaP1(rs.getInt("PORCENTAJE_BIBLIOTECA_P1"));
+        alumnoReporteBecaPeriodo.setPorcentajeBecaBibliotecaP2(rs.getInt("PORCENTAJE_BIBLIOTECA_P2"));
+        alumnoReporteBecaPeriodo.setPorcentajeBecaBibliotecaP3(rs.getInt("PORCENTAJE_BIBLIOTECA_P3"));
+        alumnoReporteBecaPeriodo.setPorcentajePromedioBiblioteca(rs.getInt("PROMEDIO_PARCIAL_BIBLIOTECA"));
+        alumnoReporteBecaPeriodo.setPorcentajeLogradoBilioteca(rs.getInt("PORCENTAJE_LOGRADO_BIBLIOTECA"));
+        alumnoReporteBecaPeriodo.setPorcentajeBecaSalaComputoP1(rs.getInt("PORCENTAJE_SALA_COMPUTO_P1"));
+        alumnoReporteBecaPeriodo.setPorcentajeBecaSalaComputoP2(rs.getInt("PORCENTAJE_SALA_COMPUTO_P2"));
+        alumnoReporteBecaPeriodo.setPorcentajeBecaSalaComputoP3(rs.getInt("PORCENTAJE_SALA_COMPUTO_P3"));
+        alumnoReporteBecaPeriodo.setPorcentajePromedioSala(rs.getInt("PROMEDIO_PARCIAL_SALA"));
+        alumnoReporteBecaPeriodo.setPorcentajeLogradoSala(rs.getInt("PORCENTAJE_LOGRADO_SALA_COMPUTO"));
+        return alumnoReporteBecaPeriodo;
     }
 }

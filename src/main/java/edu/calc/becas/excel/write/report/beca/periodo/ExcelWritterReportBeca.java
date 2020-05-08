@@ -1,16 +1,21 @@
 package edu.calc.becas.excel.write.report.beca.periodo;
 
 import edu.calc.becas.common.model.WrapperData;
-import edu.calc.becas.mreporte.actividades.percent.beca.model.ReporteBecaPeriodo;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import edu.calc.becas.mcatalogos.defpercentbeca.model.DefPorcentajeActividad;
+import edu.calc.becas.mreporte.actividades.percent.beca.model.AlumnoReporteBecaPeriodo;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.InputStreamResource;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -18,6 +23,7 @@ import java.io.InputStream;
  * Description: Generate report xlsx by periodo
  * Date: 06/05/20
  */
+@Slf4j
 public final class ExcelWritterReportBeca {
 
     private ExcelWritterReportBeca() {
@@ -26,12 +32,14 @@ public final class ExcelWritterReportBeca {
     /***
      *
      * @param wrapperDataReport
+     * @param defPorcentajeActividad
      * @return File report generated
      * @throws IOException
      */
-    public static InputStreamResource export(WrapperData<ReporteBecaPeriodo> wrapperDataReport) throws IOException {
+    public static InputStreamResource export(WrapperData<AlumnoReporteBecaPeriodo> wrapperDataReport,
+                                             DefPorcentajeActividad defPorcentajeActividad) throws IOException {
 
-        Workbook workbook = generateExcel(wrapperDataReport);
+        Workbook workbook = generateExcel(wrapperDataReport, defPorcentajeActividad);
 
         InputStream inputStream = write(workbook);
 
@@ -56,12 +64,14 @@ public final class ExcelWritterReportBeca {
      *
      * @return Generate content excel
      * @param wrapperDataReport
+     * @param defPorcentajeActividad
      */
-    private static Workbook generateExcel(WrapperData<ReporteBecaPeriodo> wrapperDataReport) {
+    private static Workbook generateExcel(WrapperData<AlumnoReporteBecaPeriodo> wrapperDataReport,
+                                          DefPorcentajeActividad defPorcentajeActividad) {
 
-        Workbook workbook = new HSSFWorkbook();
+        Workbook workbook = new XSSFWorkbook();
 
-        createBecaPercentPage(workbook, wrapperDataReport);
+        createBecaPercentPage(workbook, wrapperDataReport, defPorcentajeActividad);
 
 
         return workbook;
@@ -82,25 +92,94 @@ public final class ExcelWritterReportBeca {
      *
      * @param workbook
      * @param wrapperDataReport
+     * @param defPorcentajeActividad
      */
-    private static void createBecaPercentPage(Workbook workbook, WrapperData<ReporteBecaPeriodo> wrapperDataReport) {
+    private static void createBecaPercentPage(Workbook workbook, WrapperData<AlumnoReporteBecaPeriodo> wrapperDataReport,
+                                              DefPorcentajeActividad defPorcentajeActividad) {
 
         Sheet pageBecaPercent = workbook.createSheet("Porcentaje de Becas");
 
+        pageBecaPercent.setColumnWidth(1, 5000);
         pageBecaPercent.setColumnWidth(2, 5000 * 3);
-        createHeaderTitleRow(pageBecaPercent, workbook);
-        createHeaderColumnData(pageBecaPercent, workbook);
-        int row = 6;
-        // TODO: create body report
+        pageBecaPercent.setColumnWidth(3, 3000);
+        pageBecaPercent.setColumnWidth(4, 3000);
+        createHeaderTitleRow(workbook, pageBecaPercent);
+        createHeaderColumnData(workbook, pageBecaPercent, defPorcentajeActividad);
+        createBodyreportData(workbook, pageBecaPercent, wrapperDataReport);
     }
+
+    private static void createBodyreportData(Workbook workbook, Sheet pageBecaPercent,
+                                             WrapperData<AlumnoReporteBecaPeriodo> wrapperDataReport) {
+        pageBecaPercent.createRow(6);
+
+        List<AlumnoReporteBecaPeriodo> listDataReport = wrapperDataReport.getData();
+
+        if (!listDataReport.isEmpty()) {
+            Font fontColorBlack = createFont(workbook, IndexedColors.BLACK, false);
+            CellStyle cellStyleWhite = createCellStyle(workbook, fontColorBlack, IndexedColors.WHITE, false, false);
+
+            int finalNumRow = 7;
+
+
+            listDataReport.forEach(reporteBecaPeriodo -> {
+                Row row = pageBecaPercent.createRow(finalNumRow + reporteBecaPeriodo.getIndex());
+
+                for (ColumnWriteExcel col : ColumnWriteExcel.values()) {
+
+                    try {
+                        addCellData(row, cellStyleWhite, reporteBecaPeriodo, col);
+                    } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
+                        log.error(String.format("Error add property %s from alumno %s. Error %s",
+                                col.getNamePropertyCol(), reporteBecaPeriodo.getMatricula(), e.getMessage()));
+                        log.error(ExceptionUtils.getStackTrace(e));
+
+                    }
+
+                }
+            });
+        }
+
+
+    }
+
+    private static void addCellData(Row row, CellStyle cellStyle, AlumnoReporteBecaPeriodo alumnoReporteBecaPeriodo,
+                                    ColumnWriteExcel col)
+            throws NoSuchFieldException, IllegalAccessException, ClassCastException {
+
+        Cell cell = row.createCell(col.ordinal());
+
+        Field property = alumnoReporteBecaPeriodo.getClass().getDeclaredField(col.getNamePropertyCol());
+        property.setAccessible(true);
+
+        if (!col.isNumber()) {
+            String value = null;
+            if (col.isPercent()) {
+                value = property.get(alumnoReporteBecaPeriodo) + "%";
+            } else if (col.isString()) {
+                value = (String) property.get(alumnoReporteBecaPeriodo);
+            }
+
+            cell.setCellValue(value);
+        } else {
+            // index
+            int index = (Integer) property.get(alumnoReporteBecaPeriodo);
+            cell.setCellValue(index + 1);
+        }
+
+
+        cell.setCellStyle(cellStyle);
+    }
+
 
     /**
      * Crea la cabcecera de los datos del reporte
      *
-     * @param pageBecaPercent
      * @param workbook
+     * @param pageBecaPercent
+     * @param defPorcentajeActividad
      */
-    private static void createHeaderColumnData(Sheet pageBecaPercent, Workbook workbook) {
+    private static void createHeaderColumnData(Workbook workbook, Sheet pageBecaPercent,
+                                               DefPorcentajeActividad defPorcentajeActividad) {
         Font font = createFont(workbook, IndexedColors.BLACK, false);
 
 
@@ -125,29 +204,38 @@ public final class ExcelWritterReportBeca {
         addCellHeaderData(row, "1er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
         addCellHeaderData(row, "2do Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
         addCellHeaderData(row, "3er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCellHeaderData(row, "80%", cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCellHeaderData(row, "10%", cellStyleHeaderYellowNormal, positionRow, positionRow + 1, ++positionCell, pageBecaPercent);
+        String minimoRequerido = defPorcentajeActividad.getPorcentajeBecaTaller().getPorcentajeMinimoRequerido() + "%";
+        String maximoPorcentajeAAlcanzar = defPorcentajeActividad.getPorcentajeBecaTaller().getPorcentajeBecaActividadCumplida() + "%";
+        String porcentajeActividadIncumplida = defPorcentajeActividad.getPorcentajeBecaTaller().getPorcentajeBecaActividadIncumplida() + "%";
+        addCellHeaderData(row, minimoRequerido, cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, maximoPorcentajeAAlcanzar, cellStyleHeaderYellowNormal, positionRow, positionRow + 1, ++positionCell, pageBecaPercent);
 
         Row row3 = pageBecaPercent.createRow(positionRow + 2);
         row3.setHeight((short) 800);
-        addCellHeaderData(row3, "0%", cellStyleHeaderYellowNormal, positionRow + 2, positionRow + 3, positionCell, pageBecaPercent);//10%/0
+        addCellHeaderData(row3, porcentajeActividadIncumplida, cellStyleHeaderYellowNormal, positionRow + 2, positionRow + 3, positionCell, pageBecaPercent);//10%/0
 
         // biblioteca
         addCellHeaderData(row, "1er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
         addCellHeaderData(row, "2do Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
         addCellHeaderData(row, "3er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCellHeaderData(row, "80%", cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCellHeaderData(row, "15%", cellStyleHeaderYellowNormal, positionRow, positionRow + 1, ++positionCell, pageBecaPercent);
-        addCellHeaderData(row3, "0%", cellStyleHeaderYellowNormal, positionRow + 2, positionRow + 3, positionCell, pageBecaPercent);//15%/0
+        minimoRequerido = defPorcentajeActividad.getPorcentajeBecaBiblioteca().getPorcentajeMinimoRequerido() + "%";
+        maximoPorcentajeAAlcanzar = defPorcentajeActividad.getPorcentajeBecaBiblioteca().getPorcentajeBecaActividadCumplida() + "%";
+        porcentajeActividadIncumplida = defPorcentajeActividad.getPorcentajeBecaBiblioteca().getPorcentajeBecaActividadIncumplida() + "%";
+        addCellHeaderData(row, minimoRequerido, cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, maximoPorcentajeAAlcanzar, cellStyleHeaderYellowNormal, positionRow, positionRow + 1, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row3, porcentajeActividadIncumplida, cellStyleHeaderYellowNormal, positionRow + 2, positionRow + 3, positionCell, pageBecaPercent);//15%/0
 
 
         // sala
         addCellHeaderData(row, "1er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
         addCellHeaderData(row, "2do Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
         addCellHeaderData(row, "3er Parcial", cellStyleHeaderYellowRotation90, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCellHeaderData(row, "80%", cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
-        addCellHeaderData(row, "15%", cellStyleHeaderYellowNormal, positionRow, positionRow + 1, ++positionCell, pageBecaPercent);
-        addCellHeaderData(row3, "0%", cellStyleHeaderYellowNormal, positionRow + 2, positionRow + 3, positionCell, pageBecaPercent);//15%/0
+        minimoRequerido = defPorcentajeActividad.getPorcentajeBecaSala().getPorcentajeMinimoRequerido() + "%";
+        maximoPorcentajeAAlcanzar = defPorcentajeActividad.getPorcentajeBecaSala().getPorcentajeBecaActividadCumplida() + "%";
+        porcentajeActividadIncumplida = defPorcentajeActividad.getPorcentajeBecaSala().getPorcentajeBecaActividadIncumplida() + "%";
+        addCellHeaderData(row, minimoRequerido, cellStyleHeaderYellowNormal, positionRow, endPositionRow, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row, maximoPorcentajeAAlcanzar, cellStyleHeaderYellowNormal, positionRow, positionRow + 1, ++positionCell, pageBecaPercent);
+        addCellHeaderData(row3, porcentajeActividadIncumplida, cellStyleHeaderYellowNormal, positionRow + 2, positionRow + 3, positionCell, pageBecaPercent);//15%/0
 
     }
 
@@ -165,7 +253,7 @@ public final class ExcelWritterReportBeca {
      * @param pageBecaPercent
      * @param workbook
      */
-    private static void createHeaderTitleRow(Sheet pageBecaPercent, Workbook workbook) {
+    private static void createHeaderTitleRow(Workbook workbook, Sheet pageBecaPercent) {
 
         Font font = createFont(workbook, IndexedColors.WHITE, true);
         CellStyle cellStyleHeaderGreen = createCellStyle(workbook, font, IndexedColors.GREEN, false, true);

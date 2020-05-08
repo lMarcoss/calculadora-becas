@@ -17,7 +17,7 @@ import edu.calc.becas.mreporte.actividades.asistencia.service.AsistenciaService;
 import edu.calc.becas.mreporte.actividades.percent.activity.model.ReportPercentActivity;
 import edu.calc.becas.mreporte.actividades.percent.activity.service.ReportPercentActivitiesService;
 import edu.calc.becas.mreporte.actividades.percent.beca.dao.ReportPercentBecaDao;
-import edu.calc.becas.mreporte.actividades.percent.beca.model.ReporteBecaPeriodo;
+import edu.calc.becas.mreporte.actividades.percent.beca.model.AlumnoReporteBecaPeriodo;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
@@ -98,78 +98,115 @@ public class ReportPercentBecaServiceImpl implements ReportPercentBecaService {
         ActividadVo actividadAlumno = alumnoActividadService.getActividadByAlumno(alumno.getMatricula(), periodo);
         List<ReportPercentActivity> listPercentByParcial = reportPercentActivitiesService.getPercentActivityAllParcialPeriodo(actividadAlumno, periodo);
 
-        ReporteBecaPeriodo reporteBecaPeriodo = getPercentAllParcial(listPercentByParcial, defPorcentajeActividad);
+        AlumnoReporteBecaPeriodo alumnoReporteBecaPeriodo = getPercentAllParcial(listPercentByParcial, defPorcentajeActividad);
         // set data by alumno
-        reporteBecaPeriodo.setIdActividad(actividadAlumno.getIdActividad());
-        reporteBecaPeriodo.setDescActividad(actividadAlumno.getNombreActividad());
-        reporteBecaPeriodo.setCveGrupo(alumno.getGrupo());
-        reporteBecaPeriodo.setDescGrupo(alumno.getDsGrupo());
-        reporteBecaPeriodo.setCveLicenciatura(alumno.getIdLicenciatura());
-        reporteBecaPeriodo.setDescLicenciatura(alumno.getLicenciatura());
-        reporteBecaPeriodo.setCvePeriodo(periodo.getClave());
-        reporteBecaPeriodo.setDescPeriodo(periodo.getNombre());
-        reporteBecaPeriodo.setNombres(getNombreAlumno(alumno));
-        reporteBecaPeriodo.setMatricula(alumno.getMatricula());
+        alumnoReporteBecaPeriodo.setIdActividad(actividadAlumno.getIdActividad());
+        alumnoReporteBecaPeriodo.setDescActividad(actividadAlumno.getNombreActividad());
+        alumnoReporteBecaPeriodo.setCveGrupo(alumno.getGrupo());
+        alumnoReporteBecaPeriodo.setDescGrupo(alumno.getDsGrupo());
+        alumnoReporteBecaPeriodo.setCveLicenciatura(alumno.getIdLicenciatura());
+        alumnoReporteBecaPeriodo.setDescLicenciatura(alumno.getLicenciatura());
+        alumnoReporteBecaPeriodo.setCvePeriodo(periodo.getClave());
+        alumnoReporteBecaPeriodo.setDescPeriodo(periodo.getNombre());
+        alumnoReporteBecaPeriodo.setNombres(getNombreAlumno(alumno));
+        alumnoReporteBecaPeriodo.setMatricula(alumno.getMatricula());
 
-        this.addPercentBecaByAlumno(reporteBecaPeriodo, userLogin);
+        //definicion
+
+
+        this.addPercentBecaByAlumno(alumnoReporteBecaPeriodo, userLogin);
         return String.format("Se ha calculado correctamnete el porcentaje de beca del alumno %s, parcial %s, periodo %s",
                 alumno.getMatricula(), parcial.getParcial(), periodo.getClave());
     }
 
     @Override
-    public void addPercentBecaByAlumno(ReporteBecaPeriodo reporteBecaPeriodo, UserLogin userLogin) {
-        reportPercentBecaDao.addPercentBecaByAlumno(reporteBecaPeriodo, userLogin);
+    public void addPercentBecaByAlumno(AlumnoReporteBecaPeriodo alumnoReporteBecaPeriodo, UserLogin userLogin) {
+        reportPercentBecaDao.addPercentBecaByAlumno(alumnoReporteBecaPeriodo, userLogin);
     }
 
     @Override
-    public WrapperData<ReporteBecaPeriodo> getAllReportByPeriodo(int page, int pageSize, String cvePeriodo, String palabraClave) {
+    public WrapperData<AlumnoReporteBecaPeriodo> getAllReportByPeriodo(int page, int pageSize, String cvePeriodo, String palabraClave) {
         return reportPercentBecaDao.getAllReportByPeriodo(page, pageSize, cvePeriodo, palabraClave);
     }
 
     @Override
     public InputStreamResource exportDataByPeriodoToXLSX(String cvePeriodo) throws IOException {
-        WrapperData<ReporteBecaPeriodo> dataReportByPeriodo = getAllReportByPeriodo(0, -1, cvePeriodo, null);
-        return ExcelWritterReportBeca.export(dataReportByPeriodo);
+        WrapperData<AlumnoReporteBecaPeriodo> dataReportByPeriodo = getAllReportByPeriodo(0, -1, cvePeriodo, null);
+        DefPorcentajeActividad defPorcentajeActividad = defPorcentajeActividadService.getDefPorcentajeActividades();
+        return ExcelWritterReportBeca.export(dataReportByPeriodo, defPorcentajeActividad);
     }
 
     private String getNombreAlumno(Alumno alumno) {
         return alumno.getNombres() + " " + alumno.getApePaterno() + " " + alumno.getApeMaterno();
     }
 
-    private ReporteBecaPeriodo getPercentAllParcial(List<ReportPercentActivity> listPercentByParcial,
-                                                    DefPorcentajeActividad defPorcentajeActividad) {
-        ReporteBecaPeriodo reporteBecaPeriodo = new ReporteBecaPeriodo();
+    private AlumnoReporteBecaPeriodo getPercentAllParcial(List<ReportPercentActivity> listPercentByParcial,
+                                                          DefPorcentajeActividad defPorcentajeActividad) {
+        AlumnoReporteBecaPeriodo alumnoReporteBecaPeriodo = new AlumnoReporteBecaPeriodo();
         listPercentByParcial.forEach(becaParcial -> {
             if (becaParcial.getParcial() == 1) {
 
-                reporteBecaPeriodo.setPorcentajeBecaBibliotecaP1(getPorcentajeBiblioteca(defPorcentajeActividad, becaParcial));
-                reporteBecaPeriodo.setPorcentajeBecaSalaComputoP1(getPorcentajeSalaComputo(defPorcentajeActividad, becaParcial));
-                reporteBecaPeriodo.setPorcentajeBecaTallerCLubP1(getPorcentajeTalleClub(defPorcentajeActividad, becaParcial));
+                alumnoReporteBecaPeriodo.setPorcentajeBecaTallerCLubP1(becaParcial.getPorcentajeActividad());
+                alumnoReporteBecaPeriodo.setPorcentajeBecaBibliotecaP1(becaParcial.getPorcentajeBiblioteca());
+                alumnoReporteBecaPeriodo.setPorcentajeBecaSalaComputoP1(becaParcial.getPorcentajeSala());
 
             } else if (becaParcial.getParcial() == 2) {
-                reporteBecaPeriodo.setPorcentajeBecaBibliotecaP2(getPorcentajeBiblioteca(defPorcentajeActividad, becaParcial));
-                reporteBecaPeriodo.setPorcentajeBecaSalaComputoP2(getPorcentajeSalaComputo(defPorcentajeActividad, becaParcial));
-                reporteBecaPeriodo.setPorcentajeBecaTallerCLubP2(getPorcentajeTalleClub(defPorcentajeActividad, becaParcial));
+                alumnoReporteBecaPeriodo.setPorcentajeBecaTallerCLubP2(becaParcial.getPorcentajeActividad());
+                alumnoReporteBecaPeriodo.setPorcentajeBecaBibliotecaP2(becaParcial.getPorcentajeBiblioteca());
+                alumnoReporteBecaPeriodo.setPorcentajeBecaSalaComputoP2(becaParcial.getPorcentajeSala());
             } else if (becaParcial.getParcial() == 3) {
-                reporteBecaPeriodo.setPorcentajeBecaBibliotecaP3(getPorcentajeBiblioteca(defPorcentajeActividad, becaParcial));
-                reporteBecaPeriodo.setPorcentajeBecaSalaComputoP3(getPorcentajeSalaComputo(defPorcentajeActividad, becaParcial));
-                reporteBecaPeriodo.setPorcentajeBecaTallerCLubP3(getPorcentajeTalleClub(defPorcentajeActividad, becaParcial));
+                alumnoReporteBecaPeriodo.setPorcentajeBecaTallerCLubP3(becaParcial.getPorcentajeActividad());
+                alumnoReporteBecaPeriodo.setPorcentajeBecaBibliotecaP3(becaParcial.getPorcentajeBiblioteca());
+                alumnoReporteBecaPeriodo.setPorcentajeBecaSalaComputoP3(becaParcial.getPorcentajeSala());
             }
-            reporteBecaPeriodo.setIdActividad(becaParcial.getIdActividad());
+            // calcula promedio
+            int promedioTaller = calculaPorcentajePromedioParciales(
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaTallerCLubP1(),
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaTallerCLubP2(),
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaTallerCLubP3());
+
+            int promedioBiblioteca = calculaPorcentajePromedioParciales(
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaBibliotecaP1(),
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaBibliotecaP2(),
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaBibliotecaP3());
+
+            int promedioSala = calculaPorcentajePromedioParciales(
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaBibliotecaP1(),
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaBibliotecaP2(),
+                    alumnoReporteBecaPeriodo.getPorcentajeBecaBibliotecaP3());
+
+
+            //promedios alcanzados
+            alumnoReporteBecaPeriodo.setPorcentajePromedioTallerClub(promedioTaller);
+            alumnoReporteBecaPeriodo.setPorcentajePromedioBiblioteca(promedioBiblioteca);
+            alumnoReporteBecaPeriodo.setPorcentajePromedioSala(promedioSala);
+
+            alumnoReporteBecaPeriodo.setPorcentajeLogradoTalleClub(getPorcentajeTalleClub(defPorcentajeActividad, promedioTaller));
+            alumnoReporteBecaPeriodo.setPorcentajeLogradoBilioteca(getPorcentajeBiblioteca(defPorcentajeActividad,promedioBiblioteca));
+            alumnoReporteBecaPeriodo.setPorcentajeLogradoSala(getPorcentajeSalaComputo(defPorcentajeActividad,promedioSala));
+
+            alumnoReporteBecaPeriodo.setIdActividad(becaParcial.getIdActividad());
         });
-        return reporteBecaPeriodo;
+        return alumnoReporteBecaPeriodo;
     }
 
-    private int getPorcentajeTalleClub(DefPorcentajeActividad defPorcentajeActividad, ReportPercentActivity becaParcial) {
-        return defPorcentajeActividad.getPorcentajeBecaTaller().calculaPorcentajeBecaPorPorcentajeActividad(becaParcial.getPorcentajeActividad());
+    private int calculaPorcentajePromedioParciales(int percentP1, int percentP2, int percentP3) {
+        try {
+            return (percentP1 + percentP2 + percentP3) / 3;
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
-    private int getPorcentajeSalaComputo(DefPorcentajeActividad defPorcentajeActividad, ReportPercentActivity becaParcial) {
-        return defPorcentajeActividad.getPorcentajeBecaSala().calculaPorcentajeBecaPorPorcentajeActividad(becaParcial.getPorcentajeSala());
+    private int getPorcentajeTalleClub(DefPorcentajeActividad defPorcentajeActividad, int promedioParcial) {
+        return defPorcentajeActividad.getPorcentajeBecaTaller().calculaPorcentajeBecaPorPorcentajeActividad(promedioParcial);
     }
 
-    private int getPorcentajeBiblioteca(DefPorcentajeActividad defPorcentajeActividad, ReportPercentActivity becaParcial) {
-        return defPorcentajeActividad.getPorcentajeBecaBiblioteca().calculaPorcentajeBecaPorPorcentajeActividad(
-                becaParcial.getPorcentajeBiblioteca());
+    private int getPorcentajeSalaComputo(DefPorcentajeActividad defPorcentajeActividad, int promedioParcial) {
+        return defPorcentajeActividad.getPorcentajeBecaSala().calculaPorcentajeBecaPorPorcentajeActividad(promedioParcial);
+    }
+
+    private int getPorcentajeBiblioteca(DefPorcentajeActividad defPorcentajeActividad, int promedioParcial) {
+        return defPorcentajeActividad.getPorcentajeBecaBiblioteca().calculaPorcentajeBecaPorPorcentajeActividad(promedioParcial);
     }
 }

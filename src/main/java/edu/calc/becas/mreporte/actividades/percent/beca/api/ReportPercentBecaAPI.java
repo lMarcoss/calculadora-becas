@@ -2,7 +2,7 @@ package edu.calc.becas.mreporte.actividades.percent.beca.api;
 
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
-import edu.calc.becas.mreporte.actividades.percent.beca.model.ReporteBecaPeriodo;
+import edu.calc.becas.mreporte.actividades.percent.beca.model.AlumnoReporteBecaPeriodo;
 import edu.calc.becas.mreporte.actividades.percent.beca.service.ReportPercentBecaService;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mvc.config.security.user.UserRequestService;
@@ -48,7 +48,7 @@ public class ReportPercentBecaAPI {
 
     @GetMapping("/detalle/periodo/{cve-periodo}")
     @ApiOperation(value = "Obtiene la propuesta de beca-colegiatura del periodo cve-periodo")
-    public WrapperData<ReporteBecaPeriodo> getAll(
+    public WrapperData<AlumnoReporteBecaPeriodo> getAll(
             @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
             @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
 
@@ -74,7 +74,7 @@ public class ReportPercentBecaAPI {
             @ApiParam(value = "Clave Periodo a recuperar", required = true) @PathVariable("cve-periodo") String cvePeriodo
     ) throws IOException {
 
-        String filename = "PROPUESTA DE BECA COLEGIATURA " + cvePeriodo + ".xls";
+        String filename = "PROPUESTA DE BECA COLEGIATURA " + cvePeriodo + ".xlsx";
 
         InputStreamResource inputStreamResource = reportPercentBecaService.exportDataByPeriodoToXLSX(cvePeriodo);
         HttpHeaders headers = new HttpHeaders();
