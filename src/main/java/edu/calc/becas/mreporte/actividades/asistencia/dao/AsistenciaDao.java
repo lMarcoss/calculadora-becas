@@ -7,7 +7,6 @@ import edu.calc.becas.mreporte.actividades.asistencia.model.FechaAsistencia;
 import edu.calc.becas.mreporte.actividades.asistencia.model.PaseAsistencia;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 
-import java.util.Date;
 import java.util.List;
 
 public interface AsistenciaDao {
@@ -16,7 +15,7 @@ public interface AsistenciaDao {
                                                            Parcial parcialActual,
                                                            Parcial parcialAnterior) throws GenericException;
 
-    List<PaseAsistencia> addPresenceByDate(List<PaseAsistencia> asistencias, Usuario usuario);
+    List<PaseAsistencia> addPresenceByDate(List<PaseAsistencia> asistencias, Usuario usuario, Parcial parcialActual, Parcial parcialAnterior);
 
     int countPresenceByActivityAlumno(Integer idActividadAlumno, String fechaInicio, String fechaFin);
 }

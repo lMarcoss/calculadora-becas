@@ -15,6 +15,8 @@ import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mconfiguracion.parciales.service.ParcialService;
+import edu.calc.becas.mseguridad.login.model.UserLogin;
+import edu.calc.becas.mvc.config.security.user.UserRequestService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -26,6 +28,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,21 +53,21 @@ public class ActividadesAPI {
     private final ActividadesService actividadesService;
 
     private CargaAlumnosPeriodosService cargaAlumnosPeriodosService;
-
     private final CicloEscolarService cicloEscolarService;
-
     private final ParcialService parcialService;
+    private final UserRequestService userRequestService;
 
     @Value("${location.file}")
     String locationFile;
 
     @Autowired
     public ActividadesAPI(ActividadesService actividadesService, CargaAlumnosPeriodosService cargaAlumnosPeriodosService,
-                          CicloEscolarService cicloEscolarService, ParcialService parcialService) {
+                          CicloEscolarService cicloEscolarService, ParcialService parcialService, UserRequestService userRequestService) {
         this.actividadesService = actividadesService;
         this.cicloEscolarService = cicloEscolarService;
         this.cargaAlumnosPeriodosService = cargaAlumnosPeriodosService;
         this.parcialService = parcialService;
+        this.userRequestService = userRequestService;
     }
 
 
@@ -108,14 +111,16 @@ public class ActividadesAPI {
             @RequestParam(value = "ciclo", defaultValue = DEFAULT_ESTATUS, required = false) String idCiclo,
 
             @ApiParam(value = "Encargado de la actividad", defaultValue = ALL_ITEMS)
-            @RequestParam(value = "username", defaultValue = ALL_ITEMS, required = false) String username) {
+            @RequestParam(value = "username", defaultValue = ALL_ITEMS, required = false) String username,
+            HttpServletRequest httpServlet) {
 
+        UserLogin userLogin = userRequestService.getUserLogin(httpServlet);
 
         if (pageSize.equalsIgnoreCase(ALL_ITEMS)) {
             pageSize = ITEMS_FOR_PAGE;
         }
 
-        return actividadesService.getAllDetalle(Integer.parseInt(page), Integer.parseInt(pageSize), idActividad, idCiclo, status, username);
+        return actividadesService.getAllDetalle(Integer.parseInt(page), Integer.parseInt(pageSize), idActividad, idCiclo, status, username, userLogin);
     }
 
     @PutMapping

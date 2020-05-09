@@ -1,5 +1,6 @@
 package edu.calc.becas.mseguridad.login.model;
 
+import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mseguridad.menu.model.Menu;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import io.swagger.annotations.ApiModel;
@@ -53,6 +54,9 @@ public class UserLogin implements Serializable {
     private boolean esAlumno;
 
     @ApiModelProperty("Lista de menús del usuario")
-    List<Menu> menu;
+    private List<Menu> menu;
+
+    @ApiModelProperty("Periodo actual")
+    private CicloEscolarVo periodoActual;
 
 }

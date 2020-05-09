@@ -46,13 +46,7 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
         List<AlumnoAsistenciaSala> alumnoAsistenciaSalas = jdbcTemplate.query(QueriesAsistenciaSala.GET_ALUMNOS_BY_USER_AND_SCHEDULE,
                 new Object[]{usuario.getIdUsuario(), idHorario}, ((rs, i) -> mapperAlumnos(rs)));
 
-        Date today;
-        try {
-            today = UtilDate.getDateToday();
-        } catch (Exception e) {
-            log.error(ExceptionUtils.getStackTrace(e));
-            throw new GenericException("Error al convertir fecha " + e.getMessage());
-        }
+        Date today = defineDateToday();
 
         alumnoAsistenciaSalas.forEach(alumnoAsistenciaSala -> {
             List<FechaAsistencia> asistencias = new ArrayList<>();
@@ -66,7 +60,7 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
                 fechaAsistencia.setDia(fecha.getDia());
                 fechaAsistencia.setFechaAsistencia(fecha.getFechaAsistencia());
 
-                boolean editFecha = validateDatePresenceByParcial(parcialActual, fecha, parcialAnterior, usuario, today);
+                boolean editFecha = validateDatePresenceByParcial(parcialActual, fecha.getFechaAsistencia(), parcialAnterior, usuario, today);
 
                 fecha.setEdit(editFecha);
 
@@ -102,10 +96,19 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
         return alumnoAsistenciaSalas;
     }
 
-    private boolean validateDatePresenceByParcial(Parcial parcialActual, FechaAsistencia fecha,
+    private Date defineDateToday() throws GenericException {
+        try {
+            return UtilDate.getDateToday();
+        } catch (Exception e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+            throw new GenericException("Error al obtener fecha de hoy " + e.getMessage());
+        }
+    }
+
+    private boolean validateDatePresenceByParcial(Parcial parcialActual, String fecha,
                                                   Parcial parcialAnterior, Usuario usuario, Date today) {
         try {
-            Date fechaAsistencia = UtilDate.convertToDate(fecha.getFechaAsistencia(), PATTERN_DIAG);
+            Date fechaAsistencia = UtilDate.convertToDate(fecha, PATTERN_DIAG);
             Date fechaInicio = UtilDate.convertToDate(parcialActual.getFechaInicio(), PATTERN_DIAG);
             Date fechaFin = UtilDate.convertToDate(parcialActual.getFechaFin(), PATTERN_DIAG);
 
@@ -142,31 +145,40 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
     }
 
     @Override
-    public List<PaseAsistencia> addPresenceByDate(List<PaseAsistencia> asistencias, Usuario usuario) {
-
+    public List<PaseAsistencia> addPresenceByDate(List<PaseAsistencia> asistencias, Usuario usuario, Parcial parcialActual, Parcial parcialAnterior) {
         asistencias.forEach((asistencia) -> {
-            if (asistencia.getAsistencia() != null) {
-                try {
-                    this.jdbcTemplate.update(QueriesAsistenciaSala.QRY_ADD_PRESENCE, asistencia.getIdActividadAlumno(),
-                            asistencia.getAsistencia().equalsIgnoreCase("true") ? pAsistencia : pFalta,
-                            asistencia.getFechaAsistencia(), usuario.getUsername());
-                    asistencia.setAdded(true);
-                } catch (Exception e) {
-                    log.error(e.getMessage());
-                    try {
-                        this.jdbcTemplate.update(QueriesAsistenciaSala.QRY_UPDATE_PRESENCE,
-                                asistencia.getAsistencia().equalsIgnoreCase("true") ? pAsistencia : pFalta,
-                                usuario.getUsername(),
-                                asistencia.getIdActividadAlumno(), asistencia.getFechaAsistencia());
-                        asistencia.setUpdated(true);
-                    } catch (Exception er) {
-                        log.error(er.getMessage());
-                    }
-                }
-            } else {
-                asistencia.setMessageError("asistencia null");
-            }
+            try {
+                boolean editFecha = validateDatePresenceByParcial(parcialActual, asistencia.getFechaAsistencia(), parcialAnterior, usuario, defineDateToday());
 
+                if (editFecha) {
+                    if (asistencia.getAsistencia() != null) {
+                        try {
+                            this.jdbcTemplate.update(QueriesAsistenciaSala.QRY_ADD_PRESENCE, asistencia.getIdActividadAlumno(),
+                                    asistencia.getAsistencia().equalsIgnoreCase("true") ? pAsistencia : pFalta,
+                                    asistencia.getFechaAsistencia(), usuario.getUsername());
+                            asistencia.setAdded(true);
+                        } catch (Exception e) {
+                            log.error(e.getMessage());
+                            try {
+                                this.jdbcTemplate.update(QueriesAsistenciaSala.QRY_UPDATE_PRESENCE,
+                                        asistencia.getAsistencia().equalsIgnoreCase("true") ? pAsistencia : pFalta,
+                                        usuario.getUsername(),
+                                        asistencia.getIdActividadAlumno(), asistencia.getFechaAsistencia());
+                                asistencia.setUpdated(true);
+                            } catch (Exception er) {
+                                log.error(er.getMessage());
+                            }
+                        }
+                    } else {
+                        asistencia.setMessageError("asistencia null");
+                    }
+                } else {
+                    asistencia.setMessageError("El periodo de reporte para esta asistencia ha finalizado");
+                }
+
+            } catch (GenericException e) {
+                e.printStackTrace();
+            }
         });
 
         return asistencias;

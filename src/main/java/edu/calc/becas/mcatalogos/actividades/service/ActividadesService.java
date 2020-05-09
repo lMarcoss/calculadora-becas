@@ -6,12 +6,13 @@ import edu.calc.becas.common.service.CrudGenericService;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.actividades.model.DetalleActividadVo;
+import edu.calc.becas.mseguridad.login.model.UserLogin;
 
 import java.util.List;
 
 public interface ActividadesService extends CrudGenericService<ActividadVo> {
 
-    WrapperData<DetalleActividadVo> getAllDetalle(int page, int pageSize, String idActividad, String ciclo, String status, String username);
+    WrapperData<DetalleActividadVo> getAllDetalle(int page, int pageSize, String idActividad, String ciclo, String status, String username, UserLogin userLogin);
 
     List<LabelValueData> getActividades();
 

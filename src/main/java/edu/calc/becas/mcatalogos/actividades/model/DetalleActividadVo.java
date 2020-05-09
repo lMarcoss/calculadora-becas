@@ -52,7 +52,7 @@ public class DetalleActividadVo extends CommonData {
     @ApiModelProperty("Alumnos relacionados a la actividad")
     private List<AlumnoActividad> alumnos;
 
-  @ApiModelProperty("Parcial actual")
+    @ApiModelProperty("Parcial actual")
     private Parcial parcial;
 
     public DetalleActividadVo() {

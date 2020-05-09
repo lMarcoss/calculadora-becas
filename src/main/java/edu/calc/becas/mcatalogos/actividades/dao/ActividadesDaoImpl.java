@@ -93,7 +93,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
 
     @Override
-    public WrapperData getAllDetalle(int page, int pageSize, String idActividad, String ciclo, String status, Usuario usuario) {
+    public WrapperData<DetalleActividadVo> getAllDetalle(int page, int pageSize, String idActividad, String ciclo, String status, Usuario usuario) {
 
         boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
         boolean byActividad = !idActividad.equalsIgnoreCase(ALL_ITEMS);
@@ -203,7 +203,6 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
         DetalleActividadVo detalle = new DetalleActividadVo(rs.getString("ESTATUS"));
 
         detalle.setIdActividad(rs.getInt("ID_ACTIVIDAD"));
-        detalle.setNombreActividad(rs.getString("NOMBRE_ACTIVIDAD"));
 
         detalle.setIdDetalleActividad(rs.getInt("ID_HORARIO_ACTIVIDAD"));
         hora.setIdHora("");

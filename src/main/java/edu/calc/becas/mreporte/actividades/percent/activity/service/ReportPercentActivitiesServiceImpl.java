@@ -126,7 +126,7 @@ public class ReportPercentActivitiesServiceImpl implements ReportPercentActiviti
     @Override
     public String calculatePercentActivityByPeriodo(UserLogin userLogin) throws GenericException {
         CicloEscolarVo periodoActual = cicloEscolarService.getCicloEscolarActual();
-        WrapperData<DetalleActividadVo> schedulerActivities = actividadesService.getAllDetalle(0, Integer.parseInt(ITEMS_FOR_PAGE), ALL_ITEMS, periodoActual.getClave(), ESTATUS_ACTIVE, ALL_ITEMS);
+        WrapperData<DetalleActividadVo> schedulerActivities = actividadesService.getAllDetalle(0, Integer.parseInt(ITEMS_FOR_PAGE), ALL_ITEMS, periodoActual.getClave(), ESTATUS_ACTIVE, ALL_ITEMS, userLogin);
         List<Parcial> parciales = parcialService.getAllByPeriodo(periodoActual.getClave());
         if (schedulerActivities.getData().size() > 0 && parciales.size() > 0) {
             schedulerActivities.getData().forEach(detalleActividadVo -> {

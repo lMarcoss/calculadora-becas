@@ -53,8 +53,12 @@ public class AsistenciaServiceImpl implements AsistenciaService {
     }
 
     @Override
-    public List<PaseAsistencia> addPresenceByDate(List<PaseAsistencia> asistencias, Usuario usuario) throws GenericException {
-        return asistenciaDao.addPresenceByDate(asistencias, usuario);
+    public List<PaseAsistencia> addPresenceByDate(List<PaseAsistencia> asistencias, Usuario usuarioRequest) throws GenericException {
+        Parcial parcialActual = parcialService.getParcialActual();
+        Parcial parcialAnterior = parcialService.getParcialAnterior(parcialActual);
+        Usuario usuario = usuarioService.getByUsername(usuarioRequest.getUsername());
+        addDateToDateEndParcial(parcialActual, usuario);
+        return asistenciaDao.addPresenceByDate(asistencias, usuario, parcialActual, parcialAnterior);
     }
 
     @Override
