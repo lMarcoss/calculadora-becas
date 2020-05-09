@@ -137,10 +137,21 @@ public final class ExcelWritterReportBeca {
         pageBecaPercent.createRow(6);
 
         List<AlumnoReporteBecaPeriodo> listDataReport = wrapperDataReport.getData();
+        Font fontColorBlack = createFont(workbook, IndexedColors.BLACK, false);
+        CellStyle cellStyleWhite = createCellStyle(workbook, fontColorBlack, IndexedColors.WHITE, false, false);
 
-        if (!listDataReport.isEmpty()) {
-            Font fontColorBlack = createFont(workbook, IndexedColors.BLACK, false);
-            CellStyle cellStyleWhite = createCellStyle(workbook, fontColorBlack, IndexedColors.WHITE, false, false);
+        if (listDataReport.isEmpty()) {
+            Row row = pageBecaPercent.createRow(7);
+            AlumnoReporteBecaPeriodo alumnoReporteBecaPeriodo = new AlumnoReporteBecaPeriodo();
+            alumnoReporteBecaPeriodo.setNombres("LA LISTA DE PORCENTAJES EST\u00c1 VAC\u00cdA DEL PERIODO SELECCIONADO" );
+            try {
+                addCellData(row, cellStyleWhite, alumnoReporteBecaPeriodo, ColumnWriteExcel.NOMBRES);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+
+
 
             int finalNumRow = 7;
 
