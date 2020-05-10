@@ -100,7 +100,7 @@ public class ReportPercentActivitiesAPI {
     }
 
 
-    @PostMapping("/calcula-porcentaje-actividad/periodo")
+    @PostMapping("/calcula-porcentaje-actividad/periodo-actual")
     @ApiOperation(value = "Calcula porcentaje de actividad extra-escolar de todos los parciales del periodo en curso")
     public String calculatePercentActivityByAllParcialPeriodo(HttpServletRequest httpServletRequest) throws GenericException {
         UserLogin userLogin = userRequestService.getUserLogin(httpServletRequest);

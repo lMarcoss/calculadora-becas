@@ -56,8 +56,8 @@ public class ParcialAPI {
         return parcialWrapperData;
     }
 
-    @GetMapping("/carga-horas-biblioteca")
-    @ApiOperation("Obtiene el listado de parciales disponibles para carga de horas de biblioteca")
+    @GetMapping("/activos/reporte-actividades")
+    @ApiOperation("Obtiene el listado de parciales activos para reporte de actividades")
     public List<Parcial> getParcialesPeriodoActualCargaHorasBiblioteca(HttpServletRequest httpServletRequest) throws GenericException {
         UserLogin userLogin = userRequestService.getUserLogin(httpServletRequest);
 
