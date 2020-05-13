@@ -2,14 +2,14 @@
 Servicios para administración de porcentaje de becas UNSIS
 
 ## Documentación en Swagger
-* http://localhost:8080/calc-becas/docs/swagger-ui.html#/
+* SERVER:PORT/calc-becas/docs/swagger-ui.html#/
 
-## Demo
-* https://app-becas.herokuapp.com/calc-becas/docs/swagger-ui.html#/
 
-## run
-mvn spring-boot:run
+## Compile and run
+1. set environment
+```export PATH_FILES_UPLOAD_UNSIS=/Users/lmarcoss/workspace-leo/servicio-social/file-dev```
+2. exceute sh to build and deploy app
+```./execute-docker.sh```
 
 ## Libraries
 * Lombok
-

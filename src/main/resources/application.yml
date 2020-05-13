@@ -12,12 +12,13 @@ key:
   encode:
     crypto: $#u1!N51*5M412&
 location:
-  file: ${PATH_FILE_DEV_CALC_UNSIS:/Users/vampiro/workspace-leo/servicio-social/file-dev/}
+  file: ${PATH_FILES_UPLOAD:/Users/lmarcoss/workspace-leo/servicio-social/file-dev/}
 
 prop:
   sistema:
     horarios:
       url: https://json-horarios.herokuapp.com/horarios/api
+      #url: http://127.0.0.1:6061/horarios/api
       api:
         carreras:
           vigentes: /carreras/vigentes
