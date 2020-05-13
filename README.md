@@ -7,7 +7,7 @@ Servicios para administración de porcentaje de becas UNSIS
 
 ## Compile and run
 1. set environment
-```export PATH_FILES_UPLOAD_UNSIS=/Users/lmarcoss/workspace-leo/servicio-social/file-dev```
+```export PATH_FILES_UPLOAD_UNSIS=/opt/unsis-app-becas-upload```
 2. exceute sh to build and deploy app
 ```./execute-docker.sh```
 
