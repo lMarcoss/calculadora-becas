@@ -28,7 +28,7 @@ import static edu.calc.becas.common.utils.Constant.*;
  */
 @RestController
 @RequestMapping("/reporte-becas")
-@Api(tags = "API Reporte Porcentaje de Becas", description = "Servicios para administración de porcentajes de becas")
+@Api(description = "Servicios para administración de porcentajes de becas")
 public class ReportPercentBecaAPI {
 
     private UserRequestService userRequestService;

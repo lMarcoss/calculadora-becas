@@ -47,7 +47,7 @@ import static edu.calc.becas.utils.ExtensionFile.XLS_EXTENSION;
 
 @RestController
 @RequestMapping("/actividades")
-@Api(tags = "API Actividades",description = "Servicios para administración de Actividades Extracurriculares")
+@Api(description = "Servicios para administración de Actividades Extracurriculares")
 @Slf4j
 public class ActividadesAPI {
     private final ActividadesService actividadesService;

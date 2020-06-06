@@ -1,5 +1,6 @@
 package edu.calc.becas.mcatalogos.licenciaturas.service;
 
+import edu.calc.becas.cache.DataScheduleSystem;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mcatalogos.RestTemplateService;
@@ -17,6 +18,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static edu.calc.becas.cache.DataScheduleSystem.C_LICENCIATURA;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -40,20 +43,15 @@ public class LicenciaturaServiceImpl extends RestTemplateService implements Lice
     }
 
     public WrapperData getAll() throws GenericException {
-        // obtiene carreras vigentes del sistema de horarios
-        String path = urlSistemaHorarios + pathCarrerasVigentes;
+
 
         WrapperData<Licenciatura> wrapperData = new WrapperData<>();
 
 
         try {
 
-            HttpEntity entity = new HttpEntity(headers);
-            HttpEntity<LicenciaturaDtoSHorario[]> response = restTemplate.exchange(path, HttpMethod.GET, entity, LicenciaturaDtoSHorario[].class);
+            List<Licenciatura> licenciaturas = getLicenciaturasFromScheduledSystem();
 
-            List<LicenciaturaDtoSHorario> licenciaturasDto = Arrays.asList(response.getBody());
-
-            List<Licenciatura> licenciaturas = convertListDtoLicenciaturasToLicenciatura(licenciaturasDto);
             wrapperData.setPage(0);
             wrapperData.setPageSize(licenciaturas.size());
             wrapperData.setLengthData(licenciaturas.size());
@@ -64,6 +62,14 @@ public class LicenciaturaServiceImpl extends RestTemplateService implements Lice
             throw new GenericException(e, messageApplicationProperty.getErrorObtenerLicencuaturasSistemaHorario());
         }
 
+    }
+
+    private List<Licenciatura> getLicenciaturasFromScheduledSystem() {
+
+        if (DataScheduleSystem.C_CONSTANT_DATA.get(C_LICENCIATURA) != null) {
+            return (List<Licenciatura>) DataScheduleSystem.C_CONSTANT_DATA.get(C_LICENCIATURA);
+        }
+        return getAllFromScheduledSystem();
     }
 
     @Override
@@ -80,6 +86,20 @@ public class LicenciaturaServiceImpl extends RestTemplateService implements Lice
             log.error(ExceptionUtils.getStackTrace(e));
             throw new GenericException(e, messageApplicationProperty.getErrorObtenerDetalleLicencuaturaSistemaHorario());
         }
+    }
+
+    @Override
+    public List<Licenciatura> getAllFromScheduledSystem() {
+        // obtiene carreras vigentes del sistema de horarios
+        String path = urlSistemaHorarios + pathCarrerasVigentes;
+        HttpEntity entity = new HttpEntity(headers);
+        HttpEntity<LicenciaturaDtoSHorario[]> response = restTemplate.exchange(path, HttpMethod.GET, entity, LicenciaturaDtoSHorario[].class);
+
+        List<LicenciaturaDtoSHorario> licenciaturasDto = Arrays.asList(response.getBody());
+
+        List<Licenciatura> licenciaturas = convertListDtoLicenciaturasToLicenciatura(licenciaturasDto);
+        DataScheduleSystem.C_CONSTANT_DATA.put(C_LICENCIATURA, licenciaturas);
+        return licenciaturas;
     }
 
     private List<Licenciatura> convertListDtoLicenciaturasToLicenciatura(List<LicenciaturaDtoSHorario> licenciaturasDto) {

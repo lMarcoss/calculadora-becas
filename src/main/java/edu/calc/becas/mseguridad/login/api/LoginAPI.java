@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
-@Api(tags = "API Login", description = "Servicios de autenticación")
+@Api(tags = "login-api", description = "Servicios de autenticación")
 public class LoginAPI {
 
     private final LoginService loginService;

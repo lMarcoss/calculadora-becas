@@ -1,5 +1,6 @@
 package edu.calc.becas.mconfiguracion.cicloescolar.service;
 
+import edu.calc.becas.cache.DataScheduleSystem;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mcatalogos.RestTemplateService;
@@ -17,6 +18,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static edu.calc.becas.cache.DataScheduleSystem.C_CICLO_ESCOLAR;
 
 @Service
 @Slf4j
@@ -40,43 +43,39 @@ public class CicloEscolarServiceImpl extends RestTemplateService implements Cicl
     @Override
     public CicloEscolarVo getCicloEscolarActual() throws GenericException {
 
-        String path = urlSistemaHorarios + pathPeriodoActual;
+        if (DataScheduleSystem.C_CONSTANT_DATA.get(C_CICLO_ESCOLAR) != null) {
+            return (CicloEscolarVo) DataScheduleSystem.C_CONSTANT_DATA.get(C_CICLO_ESCOLAR);
+        }
+
+        return getCicloEscolarActualFromScheduledSystem();
+
+    }
+
+    @Override
+    public CicloEscolarVo getCicloEscolarActualFromScheduledSystem() throws GenericException {
         try {
+
+
+            String path = urlSistemaHorarios + pathPeriodoActual;
             HttpEntity entity = new HttpEntity(headers);
             HttpEntity<PeriodoDtoSHorario> response = restTemplate.exchange(path, HttpMethod.GET, entity, PeriodoDtoSHorario.class);
 
             PeriodoDtoSHorario periodoDtoSHorario = response.getBody();
 
-            return convertPeriodoDtoToCicloEscolar(periodoDtoSHorario);
+            CicloEscolarVo cicloEscolarVo = convertPeriodoDtoToCicloEscolar(periodoDtoSHorario);
+            DataScheduleSystem.C_CONSTANT_DATA.put(C_CICLO_ESCOLAR, cicloEscolarVo);
+            return cicloEscolarVo;
+
+
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
             throw new GenericException(e, messageApplicationProperty.getErrorObtenerPeriodoActual());
         }
-
     }
 
     @Override
     public WrapperData getAll() throws GenericException {
         return cicloEscolarDao.getAll();
-        /*String path = urlSistemaHorarios + pathPeriodoLista;
-        try {
-            HttpEntity entity = new HttpEntity(headers);
-            HttpEntity<PeriodoDtoSHorario[]> response = restTemplate.exchange(path, HttpMethod.GET, entity, PeriodoDtoSHorario[].class);
-
-            List<PeriodoDtoSHorario> periodosDto = Arrays.asList(response.getBody());
-
-
-            WrapperData<CicloEscolarVo> wrapperData = new WrapperData<>();
-            List<CicloEscolarVo> ciclos = convertPeriodosDtoToCicloEscolarList(periodosDto);
-            wrapperData.setPage(0);
-            wrapperData.setPageSize(ciclos.size());
-            wrapperData.setLengthData(ciclos.size());
-            wrapperData.setData(ciclos);
-            return wrapperData;
-        } catch (Exception e) {
-            log.error(ExceptionUtils.getStackTrace(e));
-            throw new GenericException(e, messageApplicationProperty.getErrorObtenerPeriodoActual());
-        }*/
     }
 
     private List<CicloEscolarVo> convertPeriodosDtoToCicloEscolarList(List<PeriodoDtoSHorario> periodosDto) {

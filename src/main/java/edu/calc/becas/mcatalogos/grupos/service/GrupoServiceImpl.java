@@ -1,5 +1,6 @@
 package edu.calc.becas.mcatalogos.grupos.service;
 
+import edu.calc.becas.cache.DataScheduleSystem;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mcatalogos.RestTemplateService;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static edu.calc.becas.cache.DataScheduleSystem.C_GRUPOS;
 import static edu.calc.becas.common.utils.Constant.LICENCIATURA_DEFAULT;
 
 /**
@@ -50,16 +52,13 @@ public class GrupoServiceImpl extends RestTemplateService implements GrupoServic
     @Override
     public WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String licenciatura) throws GenericException {
         CicloEscolarVo cicloEscolarVo = cicloEscolarService.getCicloEscolarActual();
-        String path = urlSistemaHorarios + pathGrupos + "?periodo=" + cicloEscolarVo.getClave();
-        try {
-            HttpEntity entity = new HttpEntity(headers);
-            HttpEntity<GrupoDtoSHorario[]> response = restTemplate.exchange(path, HttpMethod.GET, entity, GrupoDtoSHorario[].class);
 
-            List<GrupoDtoSHorario> grupoDtoSHorarios = Arrays.asList(response.getBody());
+        try {
 
 
             WrapperData<Grupo> wrapperData = new WrapperData<>();
-            List<Grupo> grupos = convertGruposDtoToGrupoList(grupoDtoSHorarios);
+
+            List<Grupo> grupos = getGrupos(cicloEscolarVo);
 
 
             if (!licenciatura.equalsIgnoreCase(LICENCIATURA_DEFAULT)) {
@@ -82,6 +81,25 @@ public class GrupoServiceImpl extends RestTemplateService implements GrupoServic
             log.error(ExceptionUtils.getStackTrace(e));
             throw new GenericException(e, messageApplicationProperty.getErrorObtenerGrupos());
         }
+    }
+
+    @Override
+    public List<Grupo> getAllAllFromScheduledSystem(CicloEscolarVo cicloEscolarVo) {
+        String path = urlSistemaHorarios + pathGrupos + "?periodo=" + cicloEscolarVo.getClave();
+        HttpEntity entity = new HttpEntity(headers);
+        HttpEntity<GrupoDtoSHorario[]> response = restTemplate.exchange(path, HttpMethod.GET, entity, GrupoDtoSHorario[].class);
+        List<GrupoDtoSHorario> grupoDtoSHorarios = Arrays.asList(response.getBody());
+        List<Grupo> grupos = convertGruposDtoToGrupoList(grupoDtoSHorarios);
+        DataScheduleSystem.C_CONSTANT_DATA.put(C_GRUPOS, grupos);
+        return grupos;
+    }
+
+    private List<Grupo> getGrupos(CicloEscolarVo cicloEscolarVo) {
+        if (DataScheduleSystem.C_CONSTANT_DATA.get(C_GRUPOS) != null) {
+            return (List<Grupo>) DataScheduleSystem.C_CONSTANT_DATA.get(C_GRUPOS);
+        }
+
+        return getAllAllFromScheduledSystem(cicloEscolarVo);
     }
 
     private void addNameCareerByGroup(List<Grupo> grupos, List<Licenciatura> licenciaturas) {
