@@ -5,6 +5,7 @@ import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mreporte.actividades.asistencia.model.AlumnoAsistenciaSala;
 import edu.calc.becas.mreporte.actividades.asistencia.model.FechaAsistencia;
 import edu.calc.becas.mreporte.actividades.asistencia.model.PaseAsistencia;
+import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 
 import java.util.List;

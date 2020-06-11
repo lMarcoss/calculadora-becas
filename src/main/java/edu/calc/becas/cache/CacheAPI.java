@@ -41,6 +41,6 @@ public class CacheAPI {
         CicloEscolarVo cicloEscolarVo = cicloEscolarService.getCicloEscolarActualFromScheduledSystem();
         licenciaturaService.getAllFromScheduledSystem();
         grupoService.getAllAllFromScheduledSystem(cicloEscolarVo);
-        return "Recarga de datos exitoso";
+        return "¡Recarga de datos terminado!";
     }
 }

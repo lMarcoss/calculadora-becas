@@ -70,7 +70,7 @@ public class AsistenciaAPI {
 
 
         List<FechaAsistencia> fechas = this.getFechas(fechaInicio, fechaFin);
-        List<AlumnoAsistenciaSala> alumnos = asistenciaService.getAlumnosByScheduleAndUser(userLogin.getUsername(), idHorario, fechas);
+        List<AlumnoAsistenciaSala> alumnos = asistenciaService.getAlumnosByScheduleAndUser(userLogin, idHorario, fechas);
         asistenciaAlumno.setAlumnos(alumnos);
         asistenciaAlumno.setFechas(fechas);
 

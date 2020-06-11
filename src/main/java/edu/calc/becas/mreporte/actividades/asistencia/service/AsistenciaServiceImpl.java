@@ -7,6 +7,7 @@ import edu.calc.becas.mreporte.actividades.asistencia.model.AlumnoAsistenciaSala
 import edu.calc.becas.mreporte.actividades.asistencia.dao.AsistenciaDao;
 import edu.calc.becas.mreporte.actividades.asistencia.model.FechaAsistencia;
 import edu.calc.becas.mreporte.actividades.asistencia.model.PaseAsistencia;
+import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mseguridad.usuarios.service.UsuarioService;
 import edu.calc.becas.utils.UtilDate;
@@ -32,12 +33,12 @@ public class AsistenciaServiceImpl implements AsistenciaService {
     }
 
     @Override
-    public List<AlumnoAsistenciaSala> getAlumnosByScheduleAndUser(String username, String idHorario, List<FechaAsistencia> fechasAsistencia) throws GenericException {
+    public List<AlumnoAsistenciaSala> getAlumnosByScheduleAndUser(UserLogin userLogin, String idHorario, List<FechaAsistencia> fechasAsistencia) throws GenericException {
         Parcial parcialActual = parcialService.getParcialActual();
         Parcial parcialAnterior = parcialService.getParcialAnterior(parcialActual);
-        Usuario usuario = usuarioService.getByUsername(username);
+        Usuario usuario = usuarioService.getByUsername(userLogin.getUsername());
         addDateToDateEndParcial(parcialActual, usuario);
-        return asistenciaDao.getAlumnosByScheduleAndUser(usuario, idHorario, fechasAsistencia, parcialActual, parcialAnterior);
+        return asistenciaDao.getAlumnosByScheduleAndUser(usuario,idHorario, fechasAsistencia, parcialActual, parcialAnterior);
     }
 
     private void addDateToDateEndParcial(Parcial parcialActual, Usuario usuario) {

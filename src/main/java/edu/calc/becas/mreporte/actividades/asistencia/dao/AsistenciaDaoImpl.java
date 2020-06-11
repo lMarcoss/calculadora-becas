@@ -7,6 +7,7 @@ import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mreporte.actividades.asistencia.model.AlumnoAsistenciaSala;
 import edu.calc.becas.mreporte.actividades.asistencia.model.FechaAsistencia;
 import edu.calc.becas.mreporte.actividades.asistencia.model.PaseAsistencia;
+import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import edu.calc.becas.utils.UtilDate;
@@ -44,7 +45,7 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
                                                                   Parcial parcialActual, Parcial parcialAnterior) throws GenericException {
 
         List<AlumnoAsistenciaSala> alumnoAsistenciaSalas = jdbcTemplate.query(QueriesAsistenciaSala.GET_ALUMNOS_BY_USER_AND_SCHEDULE,
-                new Object[]{usuario.getIdUsuario(), idHorario}, ((rs, i) -> mapperAlumnos(rs)));
+                new Object[]{idHorario}, ((rs, i) -> mapperAlumnos(rs)));
 
         Date today = defineDateToday();
 
