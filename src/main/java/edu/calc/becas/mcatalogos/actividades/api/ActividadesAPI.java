@@ -107,8 +107,8 @@ public class ActividadesAPI {
             @ApiParam(value = "Identificador de la actividad a recuperar el detalle", defaultValue = ALL_ITEMS)
             @RequestParam(value = "actividad", defaultValue = ALL_ITEMS, required = false) String idActividad,
 
-            @ApiParam(value = "Identificador del ciclo escolar asociado a la actividad", defaultValue = DEFAULT_ESTATUS)
-            @RequestParam(value = "ciclo", defaultValue = DEFAULT_ESTATUS, required = false) String idCiclo,
+            @ApiParam(value = "Identificador del ciclo escolar asociado a la actividad", defaultValue = ALL_ITEMS)
+            @RequestParam(value = "ciclo", defaultValue = ALL_ITEMS, required = false) String idCiclo,
 
             @ApiParam(value = "Encargado de la actividad", defaultValue = ALL_ITEMS)
             @RequestParam(value = "username", defaultValue = ALL_ITEMS, required = false) String username,

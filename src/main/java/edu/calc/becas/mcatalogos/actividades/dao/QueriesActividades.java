@@ -37,6 +37,7 @@ final class QueriesActividades {
     static final String QRY_CONDITION_ID_ACTIVIDAD = "\nAND A.ID_ACTIVIDAD = ?";
 
     static final String QRY_CONDITION_ID_USUARIO = "\nAND US.ID_USUARIO = ?";
+    static final String QRY_CONDITION_CVE_PERIODO = "\nAND DA.CVE_PERIODO = ?";
 
     static final String QRY_LIST_ACTIVIDAD = "SELECT ID_ACTIVIDAD, NOMBRE_ACTIVIDAD FROM ACTIVIDADES  WHERE OBLIGATORIO = 'N'";
 

@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 import static edu.calc.becas.utils.UtilDate.PATTERN_DIAG;
+import static edu.calc.becas.utils.UtilDate.isDateBetween;
 
 @Slf4j
 @Repository
@@ -138,11 +139,6 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
             log.error(ExceptionUtils.getStackTrace(e));
         }
         return false;
-    }
-
-    private boolean isDateBetween(Date fechaInicio, Date fechaFin, Date fechaAsistencia) {
-        return fechaAsistencia.equals(fechaInicio) || fechaAsistencia.equals(fechaFin)
-                || (fechaAsistencia.after(fechaInicio) && fechaAsistencia.before(fechaFin));
     }
 
     @Override

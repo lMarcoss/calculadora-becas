@@ -81,4 +81,9 @@ public final class UtilDate {
         String dateToday = formatter.format(date);
         return convertToDate(dateToday, PATTERN_DIAG);
     }
+
+    public static boolean isDateBetween(Date fechaInicio, Date fechaFin, Date fechaAsistencia) {
+        return fechaAsistencia.equals(fechaInicio) || fechaAsistencia.equals(fechaFin)
+                || (fechaAsistencia.after(fechaInicio) && fechaAsistencia.before(fechaFin));
+    }
 }

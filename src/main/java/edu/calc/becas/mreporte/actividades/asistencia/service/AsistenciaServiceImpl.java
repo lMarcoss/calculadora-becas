@@ -38,16 +38,26 @@ public class AsistenciaServiceImpl implements AsistenciaService {
         Parcial parcialAnterior = parcialService.getParcialAnterior(parcialActual);
         Usuario usuario = usuarioService.getByUsername(userLogin.getUsername());
         addDateToDateEndParcial(parcialActual, usuario);
-        return asistenciaDao.getAlumnosByScheduleAndUser(usuario,idHorario, fechasAsistencia, parcialActual, parcialAnterior);
+        return asistenciaDao.getAlumnosByScheduleAndUser(usuario, idHorario, fechasAsistencia, parcialActual, parcialAnterior);
     }
 
     private void addDateToDateEndParcial(Parcial parcialActual, Usuario usuario) {
 
         try {
+            Date dateToday = UtilDate.getDateToday();
+
+
             Date date = UtilDate.convertToDate(parcialActual.getFechaFin(), UtilDate.PATTERN_DIAG);
             Date dateEnd = UtilDate.getDateSumDay(date, usuario.getDiasRetrocesoReporte());
-            String dateEndString = UtilDate.convertDateToString(dateEnd, UtilDate.PATTERN_DIAG);
-            parcialActual.setFechaFin(dateEndString);
+
+
+            Date fechaInicio = UtilDate.convertToDate(parcialActual.getFechaInicio(), UtilDate.PATTERN_DIAG);
+            if (!UtilDate.isDateBetween(fechaInicio, date, dateToday)) {
+                String dateEndString = UtilDate.convertDateToString(dateEnd, UtilDate.PATTERN_DIAG);
+                parcialActual.setFechaFin(dateEndString);
+            }
+
+
         } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
         }

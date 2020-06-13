@@ -98,6 +98,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
         boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
         boolean byActividad = !idActividad.equalsIgnoreCase(ALL_ITEMS);
         boolean byUser = !usuario.getUsername().equalsIgnoreCase(ALL_ITEMS);
+        boolean byPeriodo = !ciclo.equalsIgnoreCase(ALL_ITEMS);
 
 
         String queryGetALl = addConditionFilterByStatus(status, QRY_DETALLE_ACTIVIDADES, QRY_CONDITION_ESTATUS_HORARIO_ACTIVIDADES);
@@ -111,6 +112,11 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
         if (byUser) {
             queryGetALl = queryGetALl.concat(QRY_CONDITION_ID_USUARIO.replace("?", "'" + usuario.getIdUsuario() + "'"));
             queryCountItem = queryCountItem.concat(QRY_CONDITION_ID_USUARIO.replace("?", "'" + usuario.getIdUsuario() + "'"));
+        }
+
+        if (byPeriodo) {
+            queryGetALl = queryGetALl.concat(QRY_CONDITION_CVE_PERIODO.replace("?", "'" + ciclo + "'"));
+            queryCountItem = queryCountItem.concat(QRY_CONDITION_CVE_PERIODO.replace("?", "'" + ciclo + "'"));
         }
 
         queryGetALl = queryGetALl.concat(QRY_ORDER_BY);
