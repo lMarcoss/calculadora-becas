@@ -89,11 +89,14 @@ public class ReportPercentActivitiesServiceImpl implements ReportPercentActiviti
 
         if (listActivitiesAlumnos.size() > 0) {
             int totalAsistencias;
-            if (listActivitiesAlumnos.get(0).getIdActividadAlumno() == 2) {
+            if (listActivitiesAlumnos.get(0).getActividad().getIdActividad() == 2) {
+                // asistencias a sala
                 totalAsistencias = parcial.getTotalAsistenciaSala();
-            } else if (listActivitiesAlumnos.get(0).getIdActividadAlumno() == 1) {
+            } else if (listActivitiesAlumnos.get(0).getActividad().getIdActividad() == 1) {
+                // asistencias a biblioteca
                 return "Las actividades de biblioteca no pueden calcularse en este servicio";
             } else {
+                // asistencia a actividades extra-curriculares
                 totalAsistencias = parcial.getTotalAsistenciaActividadExtraEscolar();
             }
 
@@ -108,9 +111,15 @@ public class ReportPercentActivitiesServiceImpl implements ReportPercentActiviti
 
                 BigDecimal percent = multiplica.divide(asistenciaPorParcial, 0, ROUND_HALF_UP);
 
-                if (actividad.getIdActividadAlumno() == 2) {
+                // actividad extraescola del alumno
+                ActividadVo actividadExtraEscolar= alumnoActividadDao.getActividadByAlumno(actividad.getMatricula(), cicloEscolarVo);
+                actividad.setIdActividadAlumno(actividadExtraEscolar.getIdActividadAlumno());
+
+                if (actividad.getActividad().getIdActividad() == 2) {
+                    // sala
                     addPercentActivitySala(percent, actividad.getIdActividadAlumno(), userLogin, parcial);
                 } else {
+                    // extra-curricular
                     addPercentActivity(percent, actividad.getIdActividadAlumno(), userLogin, parcial);
                 }
 

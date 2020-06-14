@@ -83,6 +83,7 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
                 alumnoReporteBecaPeriodo.getDescGrupo(),
                 alumnoReporteBecaPeriodo.getCveLicenciatura(),
                 alumnoReporteBecaPeriodo.getDescLicenciatura(),
+                alumnoReporteBecaPeriodo.getDescPeriodo(),
                 alumnoReporteBecaPeriodo.getIdActividad(),
                 alumnoReporteBecaPeriodo.getDescActividad(),
                 alumnoReporteBecaPeriodo.getPorcentajeBecaTallerCLubP1(),

@@ -9,16 +9,22 @@ package edu.calc.becas.malumnos.actividades.dao;
 final class QueriesActividadAlumno {
     static final String QRY_GET_ACTIVIDAD_BY_ALUMNO =
             "SELECT AA.ID_ACTIVIDAD_ALUMNO, A.NOMBRE_ACTIVIDAD, A.ID_ACTIVIDAD\n" +
-                    "FROM ALUMNOS AL, ALUMNOS_DAT_PERIODO ADP, ACTIVIDAD_ALUMNO AA, HORARIO_ACTIVIDAD HA, ACTIVIDADES A\n" +
+                    "FROM ALUMNOS AL,\n" +
+                    "     ALUMNOS_DAT_PERIODO ADP,\n" +
+                    "     ACTIVIDAD_ALUMNO AA,\n" +
+                    "     HORARIO_ACTIVIDAD HA,\n" +
+                    "     ACTIVIDADES A\n" +
                     "WHERE AL.MATRICULA = ?\n" +
-                    "  AND AL.ESTATUS = 'S'\n" +
-                    "  AND HA.ESTATUS = 'S'\n" +
-                    "  AND A.ESTATUS = 'S'\n" +
-                    "  AND A.TIPO_ACTIVIDAD = 'EX'\n" +
                     "  AND AL.MATRICULA = ADP.MATRICULA\n" +
-                    "  AND ADP.ID_ALUMNOP = (SELECT MAX(AD.ID_ALUMNOP) FROM ALUMNOS_DAT_PERIODO AD WHERE AD.MATRICULA = ADP.MATRICULA)\n" +
-                    "  AND HA.ID_HORARIO_ACTIVIDAD = AA.ID_HORARIO_ACTIVIDAD\n" +
+                    "  AND ADP.ESTATUS = 'S'\n" +
+                    "  AND AL.ESTATUS = 'S'\n" +
+                    "  AND ADP.ID_ALUMNOP = AA.ID_ALUMNO_P\n" +
+                    "  AND AA.ID_HORARIO_ACTIVIDAD = HA.ID_HORARIO_ACTIVIDAD\n" +
+                    "  AND HA.ESTATUS = 'S'\n" +
+                    "  AND HA.CVE_PERIODO = ADP.CVE_PERIODO\n" +
                     "  AND HA.ID_ACTIVIDAD = A.ID_ACTIVIDAD\n" +
+                    "  AND A.TIPO_ACTIVIDAD = 'EX'\n" +
+                    "  AND A.ESTATUS = 'S'\n" +
                     "  AND ADP.CVE_PERIODO = ?";
 
     static final String QRY_GET_ALL_ACTIVIDADES_ALUMNOS = "SELECT\n" +
@@ -43,8 +49,13 @@ final class QueriesActividadAlumno {
   static final String QRY_CONDITION_ID_USER =" and AC.ID_USUARIO = ?";
 
   static final String QRY_ID_ACTIVIDAD_ALUMNO_BY_HORARIO =
-          "SELECT AA.ID_ACTIVIDAD_ALUMNO, HA.ID_ACTIVIDAD\n" +
-          "FROM HORARIO_ACTIVIDAD HA, ACTIVIDAD_ALUMNO AA\n" +
-          "WHERE HA.ID_HORARIO_ACTIVIDAD = ? AND HA.ESTATUS = 'S'\n" +
-          "  AND AA.ID_HORARIO_ACTIVIDAD = HA.ID_HORARIO_ACTIVIDAD";
+          "SELECT AA.ID_ACTIVIDAD_ALUMNO, HA.ID_ACTIVIDAD, ADP.MATRICULA\n" +
+                  "FROM HORARIO_ACTIVIDAD HA,\n" +
+                  "     ACTIVIDAD_ALUMNO AA,\n" +
+                  "     ALUMNOS_DAT_PERIODO ADP\n" +
+                  "WHERE HA.ID_HORARIO_ACTIVIDAD = ?\n" +
+                  "  AND HA.ESTATUS = 'S'\n" +
+                  "  AND AA.ID_HORARIO_ACTIVIDAD = HA.ID_HORARIO_ACTIVIDAD\n" +
+                  "  AND ADP.ID_ALUMNOP = AA.ID_ALUMNO_P\n" +
+                  "  AND ADP.ESTATUS = 'S'";
 }

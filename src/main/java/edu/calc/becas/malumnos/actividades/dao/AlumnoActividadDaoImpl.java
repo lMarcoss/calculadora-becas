@@ -79,6 +79,7 @@ public class AlumnoActividadDaoImpl extends BaseDao implements AlumnoActividadDa
     private ActividadAlumno mapperActividadAlumnoOneColumn(ResultSet rs) throws SQLException {
         ActividadAlumno actividadAlumno = new ActividadAlumno();
         actividadAlumno.setIdActividadAlumno(rs.getInt("ID_ACTIVIDAD_ALUMNO"));
+        actividadAlumno.setMatricula(rs.getString("MATRICULA"));
 
         ActividadVo actividadVo = new ActividadVo();
         actividadVo.setIdActividad(rs.getInt("ID_ACTIVIDAD"));

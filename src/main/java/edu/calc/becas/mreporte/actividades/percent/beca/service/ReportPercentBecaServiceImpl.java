@@ -19,6 +19,7 @@ import edu.calc.becas.mreporte.actividades.percent.activity.service.ReportPercen
 import edu.calc.becas.mreporte.actividades.percent.beca.dao.ReportPercentBecaDao;
 import edu.calc.becas.mreporte.actividades.percent.beca.model.AlumnoReporteBecaPeriodo;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,7 @@ import static edu.calc.becas.common.utils.Constant.*;
  * Date: 01/05/20
  */
 @Service
+@Slf4j
 public class ReportPercentBecaServiceImpl implements ReportPercentBecaService {
 
     private ReportPercentBecaDao reportPercentBecaDao;
@@ -76,13 +78,19 @@ public class ReportPercentBecaServiceImpl implements ReportPercentBecaService {
 
         alumnos.forEach(
                 alumno -> parcials.forEach(
-                        parcial -> calculaPorcentajeBecaDelAlumnoPorParcialYPeriodo(
-                                alumno,
-                                parcial,
-                                cicloEscolarVo,
-                                defPorcentajeActividad,
-                                userLogin
-                        )
+                        parcial -> {
+                            try{
+                                calculaPorcentajeBecaDelAlumnoPorParcialYPeriodo(
+                                        alumno,
+                                        parcial,
+                                        cicloEscolarVo,
+                                        defPorcentajeActividad,
+                                        userLogin
+                                );
+                            }catch (Exception e){
+                                log.error(e.getMessage());
+                            }
+                        }
                 )
         );
         return String.format(

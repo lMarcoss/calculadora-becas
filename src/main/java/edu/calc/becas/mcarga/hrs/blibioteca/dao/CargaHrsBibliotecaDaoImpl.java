@@ -51,16 +51,16 @@ public class CargaHrsBibliotecaDaoImpl extends BaseDao implements CargaHrsDao {
                 int percentLibraryTime = calculatePercentHoursLibrary(alumno, parcial);
                 // obtiene la actividad del alumno
                 ActividadVo actividadVo = alumnoActividadDao.getActividadByAlumno(alumno.getMatricula(), cicloEscolarActual);
-
+                int updated = 0;
                 if (reportPercentActivitiesDao.actividadAlumnoExists(actividadVo, parcial)) {
-                    jdbcTemplate.update(QRY_UPDATE_PERCENT_BIBLIOTECA,
+                    updated = jdbcTemplate.update(QRY_UPDATE_PERCENT_BIBLIOTECA,
                             new Object[]{
                                     percentLibraryTime,
                                     actividadVo.getIdActividadAlumno(),
                                     parcial.getIdParcial()
                             });
                 } else {
-                    jdbcTemplate.update(QRY_INSERT_PERCENT_BIBLIOTECA,
+                    updated = jdbcTemplate.update(QRY_INSERT_PERCENT_BIBLIOTECA,
                             actividadVo.getIdActividadAlumno(),
                             percentLibraryTime,
                             parcial.getIdParcial(),
@@ -69,8 +69,10 @@ public class CargaHrsBibliotecaDaoImpl extends BaseDao implements CargaHrsDao {
                             alumno.getAgregadoPor()
                     );
                 }
+                if(updated != 0){
+                    count++;
+                }
 
-                count++;
             } catch (Exception e) {
                 LOG.error(e.getMessage());
             }
