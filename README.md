@@ -8,7 +8,9 @@ Servicios para administración de porcentaje de becas UNSIS
 ## Compile and run
 1. set environment
 ```export PATH_FILES_UPLOAD_UNSIS=/opt/unsis-app-becas-upload```
-2. exceute sh to build and deploy app
+2. Asegurar que la variable tiene el valor asignado
+```echo $PATH_FILES_UPLOAD_UNSIS```
+3. exceute sh to build and deploy app
 ```./execute-docker.sh```
 
 ## Libraries
