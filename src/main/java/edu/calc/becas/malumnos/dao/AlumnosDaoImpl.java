@@ -83,8 +83,18 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
                         object.getCicloEscolar());
             }
 
+          int valueAlumnoActividad = this.jdbcTemplate.queryForObject(QRY_EXISTE_ALUMNO_ACTIVIDAD,
+            new Object[]{
+              object.getMatricula()}, Integer.class);
+
+          if (valueAlumnoActividad == 0) {
             this.jdbcTemplate.update(QRY_ADD_ALUMNO_ACTIVIDAD, object.getIdDetalleActividad(),
-                    object.getMatricula());
+              object.getMatricula());
+          }else{
+            this.jdbcTemplate.update(QRY_UPD_ALUMNO_ACTIVIDAD, object.getIdDetalleActividad(),
+              object.getMatricula());
+          }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

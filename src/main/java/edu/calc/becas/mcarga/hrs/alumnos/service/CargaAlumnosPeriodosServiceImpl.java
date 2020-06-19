@@ -5,6 +5,7 @@ import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.mcarga.hrs.ProcessRow;
 import edu.calc.becas.mcarga.hrs.alumnos.dao.CargaAlumnosPeriodosDao;
+import edu.calc.becas.mcarga.hrs.alumnos.model.ProcessAlumnos;
 import edu.calc.becas.mcarga.hrs.read.files.model.RowFile;
 import edu.calc.becas.mcatalogos.actividades.dao.ActividadesDaoImpl;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
@@ -66,7 +67,7 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
 
 
   @Override
-  public int processData(Workbook pages, CommonData commonData, Parcial parcialActual, CicloEscolarVo cicloEscolarActual, Licenciatura licenciatura) throws GenericException {
+  public ProcessAlumnos processData(Workbook pages, CommonData commonData, Parcial parcialActual, CicloEscolarVo cicloEscolarActual, Licenciatura licenciatura, String grupo) throws GenericException {
 
     List<RowFile> rows = readRowsAlumnos(pages);
 
@@ -79,28 +80,26 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
     for (RowFile row : rows) {
       if(rowIni!=0){
         Alumno alumno = new Alumno();
-        //ActividadVo actividadVo = new ActividadVo("S");
-        //actividadVo.setIdActividad(idActividadBiblioteca);
-        //alumno.setActividad(actividadVo);
 
         for (int i = 0; (i < row.getCells().size() && i <= posEndCell); i++) {
-
-          if (i == posGrupo){
-            String a = row.getCells().get(i).getValue();
-
-            String[] sentences = a.split("-");
-            String lic = sentences[0];
-            String grupo = sentences[1];
-            alumno.setGrupo(grupo);
-
-            alumno.setIdLicenciatura(lic);
-
-
-            Licenciatura james = licen.stream()
-              .filter(customer -> lic.equals(customer.getCveLicenciatura()))
-              .findAny()
-              .orElse(null);
-            alumno.setLicenciatura(james.getNombreLicenciatura());
+          if (i == posGrupo) {
+            if (licenciatura.getCveLicenciatura().equals("All")){
+              String a = row.getCells().get(i).getValue();
+              String[] sentences = a.split("-");
+              String lic = sentences[0];
+              String gru = sentences[1];
+              alumno.setGrupo(gru);
+              alumno.setIdLicenciatura(lic);
+              Licenciatura james = licen.stream()
+                .filter(customer -> lic.equals(customer.getCveLicenciatura()))
+                .findAny()
+                .orElse(null);
+              alumno.setLicenciatura(james.getNombreLicenciatura());
+            }else{
+              alumno.setGrupo(grupo);
+              alumno.setIdLicenciatura(licenciatura.getCveLicenciatura());
+              alumno.setLicenciatura(licenciatura.getNombreLicenciatura());
+            }
           }
           if (i == posMatricula){
             alumno.setMatricula(row.getCells().get(i).getValue());
@@ -125,8 +124,9 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
         // datos de auditoria
         alumno.setActualizadoPor(commonData.getActualizadoPor());
         alumno.setAgregadoPor(commonData.getAgregadoPor());
-
-        alumnos.add(alumno);
+        if(!alumno.getMatricula().equals("MATRICULA")){
+          alumnos.add(alumno);
+        }
       }
       rowIni++;
 

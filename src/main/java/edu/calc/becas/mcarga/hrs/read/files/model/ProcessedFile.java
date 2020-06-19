@@ -1,10 +1,13 @@
 package edu.calc.becas.mcarga.hrs.read.files.model;
 
+import edu.calc.becas.malumnos.model.Alumno;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -25,5 +28,8 @@ public class ProcessedFile {
     private String file;
     @ApiModelProperty("Mensaje")
     private String message;
+    @ApiModelProperty("Registros con Error")
+    private List<Alumno> registrosError;
+
 
 }

@@ -4,6 +4,7 @@ package edu.calc.becas.mcarga.hrs.alumnos.api;
 import edu.calc.becas.common.model.CommonData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mcarga.hrs.UploadFileAPI;
+import edu.calc.becas.mcarga.hrs.alumnos.model.ProcessAlumnos;
 import edu.calc.becas.mcarga.hrs.alumnos.service.CargaAlumnosPeriodosService;
 import edu.calc.becas.mcarga.hrs.read.files.ReadFile;
 import edu.calc.becas.mcarga.hrs.read.files.model.ProcessedFile;
@@ -64,7 +65,8 @@ public class UploadFileAlumnoAPI extends UploadFileAPI {
   @ApiOperation(value = "Carga de archivo")
   public ProcessedFile uploadFactura(@RequestParam("file") MultipartFile file,
                                      @RequestParam("nombreLicenciatura") String nombreLicenciatura,
-                                     @RequestParam("cveLicenciatura") String cveLicenciatura
+                                     @RequestParam("cveLicenciatura") String cveLicenciatura,
+                                     @RequestParam("cveGrupo") String grupoFilterSelected
                                      ) throws GenericException {
     String pathfile = saveFile(file);
     Workbook pages = ReadFile.pages(pathfile);
@@ -78,13 +80,13 @@ public class UploadFileAlumnoAPI extends UploadFileAPI {
     lic.setCveLicenciatura(cveLicenciatura);
     lic.setNombreLicenciatura(nombreLicenciatura);
 
-    int resultProcessed = cargaAlumnosPeriodosService.processData(pages, commonData, parcialActual, cicloEscolarActual, lic);
-    //int resultProcessed = cargaAlumnosPeriodosService.processDataPorcentajes(pages, commonData, parcialActual, cicloEscolarActual, lic);
+    ProcessAlumnos resultProcessed = cargaAlumnosPeriodosService.processData(pages, commonData, parcialActual, cicloEscolarActual, lic, grupoFilterSelected);
     return ProcessedFile.builder()
       .error(false)
       .file(pathfile)
-      .message(String.format(MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER, resultProcessed))
+      .message(String.format(MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER, resultProcessed.getProcessSuccess()))
       .idFile(1)
+      .registrosError(resultProcessed.getAlumno())
       .build();
 
   }

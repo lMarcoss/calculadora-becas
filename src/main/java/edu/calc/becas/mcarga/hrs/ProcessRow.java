@@ -63,9 +63,8 @@ public class ProcessRow {
       LOG.info("PAGE:  " + sheet.getSheetName());
       int rowNum =0;
       for (Row row : sheet) {
-
         LOG.info("NUMBERS rows: " + sheet.getLastRowNum());
-        if(sheet.getLastRowNum()>3){
+        if(sheet.getLastRowNum() > 3){
         if(rowNum!=0){
           RowFile rowFile = new RowFile();
 
