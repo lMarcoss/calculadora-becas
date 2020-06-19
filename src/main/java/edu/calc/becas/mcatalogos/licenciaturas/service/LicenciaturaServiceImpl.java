@@ -73,9 +73,9 @@ public class LicenciaturaServiceImpl extends RestTemplateService implements Lice
     }
 
     @Override
-    public Licenciatura getDetailByClave() throws GenericException {
+    public Licenciatura getDetailByClave(String cveCarrera) throws GenericException {
         // obtiene detalle de carrera
-        String path = urlSistemaHorarios + pathDetalleCarrera;
+        String path = urlSistemaHorarios + pathDetalleCarrera + "/clave="+cveCarrera;
         try {
             HttpEntity entity = new HttpEntity(headers);
             HttpEntity<LicenciaturaDtoSHorario> response = restTemplate.exchange(path, HttpMethod.GET, entity, LicenciaturaDtoSHorario.class);

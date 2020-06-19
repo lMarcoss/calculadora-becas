@@ -46,6 +46,9 @@ public class Usuario extends CommonData implements Serializable {
     private String commonVal01;
     private String commonVal02;
     private String commonVal03;
+    private String commonVal04;
+    private String commonVal05;
+    private String commonVal06;
 
     public Usuario(String estatus) {
         super(estatus);

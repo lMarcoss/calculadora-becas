@@ -27,4 +27,8 @@ public class Licenciatura implements Serializable {
     @ApiModelProperty(notes = "Indica si es vigente la licenciatura", required = true)
     private boolean vigente;
 
+  public Licenciatura(String cveLicenciatura, String nombreLicenciatura) {
+    this.cveLicenciatura = cveLicenciatura;
+    this.nombreLicenciatura = nombreLicenciatura;
+  }
 }

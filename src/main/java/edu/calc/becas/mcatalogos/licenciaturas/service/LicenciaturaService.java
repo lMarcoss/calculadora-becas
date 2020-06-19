@@ -15,7 +15,7 @@ import java.util.List;
 public interface LicenciaturaService {
     WrapperData getAll() throws GenericException;
 
-    Licenciatura getDetailByClave() throws GenericException;
+    Licenciatura getDetailByClave(String cveCarrera) throws GenericException;
 
     List<Licenciatura> getAllFromScheduledSystem();
 }

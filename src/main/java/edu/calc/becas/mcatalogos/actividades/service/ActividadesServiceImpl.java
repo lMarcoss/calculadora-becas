@@ -16,6 +16,7 @@ import java.util.List;
 
 import static edu.calc.becas.common.utils.Constant.ALL_ITEMS;
 import static edu.calc.becas.utils.Rol.ROL_ADMINISTRADOR;
+import static edu.calc.becas.utils.Rol.ROL_ALUMNO;
 
 @Service
 public class ActividadesServiceImpl implements ActividadesService {
@@ -48,7 +49,7 @@ public class ActividadesServiceImpl implements ActividadesService {
     public WrapperData<DetalleActividadVo> getAllDetalle(int page, int pageSize, String idActividad, String ciclo, String status, String username, UserLogin userLogin) {
         Usuario usuario;
         if (username.equalsIgnoreCase(ALL_ITEMS)) {
-            if (userLogin.getRol().equalsIgnoreCase(ROL_ADMINISTRADOR)) {
+            if (userLogin.getRol().equalsIgnoreCase(ROL_ADMINISTRADOR) || userLogin.getRol().equalsIgnoreCase(ROL_ALUMNO)) {
                 usuario = new Usuario();
                 usuario.setUsername(ALL_ITEMS);
             } else {

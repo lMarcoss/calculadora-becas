@@ -37,7 +37,12 @@ public class CargaAlumnosPeriodosDaoImpl extends BaseDao implements CargaAlumnos
             }
 
         }
+
+
         for (Alumno alumno : alumnos) {
+          if(!licenciatura.equals("All")){
+            licenciatura = new Licenciatura(alumno.getIdLicenciatura(),alumno.getLicenciatura());
+          }
             try {
                 this.jdbcTemplate.update(QRY_ADD_ALUMNO_PERIODO, createObjectPeriodo(alumno,
                         cicloEscolarActual,
@@ -46,7 +51,6 @@ public class CargaAlumnosPeriodosDaoImpl extends BaseDao implements CargaAlumnos
             } catch (Exception e) {
                 log.error(ExceptionUtils.getStackTrace(e));
             }
-
         }
         return count;
     }

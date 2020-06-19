@@ -9,6 +9,7 @@ import edu.calc.becas.mcarga.hrs.read.files.model.RowFile;
 import edu.calc.becas.mcatalogos.actividades.dao.ActividadesDaoImpl;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
+import edu.calc.becas.mcatalogos.licenciaturas.service.LicenciaturaService;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mreporte.actividades.percent.activity.model.ReportPercentActivity;
@@ -31,6 +32,9 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
 
   @Autowired
   ActividadesDaoImpl actividadesDaoImpl;
+
+  @Autowired
+  LicenciaturaService licenciaturaService;
 
   @Value("${prop.carga.hrs.biblioteca.id}")
   private int idActividadBiblioteca;
@@ -68,6 +72,9 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
 
 
     List<Alumno> alumnos = new ArrayList<>();
+    List<Licenciatura> licen = licenciaturaService.getAllFromScheduledSystem();
+
+
     int rowIni = 0;
     for (RowFile row : rows) {
       if(rowIni!=0){
@@ -79,7 +86,21 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
         for (int i = 0; (i < row.getCells().size() && i <= posEndCell); i++) {
 
           if (i == posGrupo){
-            alumno.setGrupo(row.getCells().get(i).getValue());
+            String a = row.getCells().get(i).getValue();
+
+            String[] sentences = a.split("-");
+            String lic = sentences[0];
+            String grupo = sentences[1];
+            alumno.setGrupo(grupo);
+
+            alumno.setIdLicenciatura(lic);
+
+
+            Licenciatura james = licen.stream()
+              .filter(customer -> lic.equals(customer.getCveLicenciatura()))
+              .findAny()
+              .orElse(null);
+            alumno.setLicenciatura(james.getNombreLicenciatura());
           }
           if (i == posMatricula){
             alumno.setMatricula(row.getCells().get(i).getValue());
@@ -158,5 +179,9 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
 
   public static interface CargaAlumnosPeriodosService {
     int processData(Workbook pages, CommonData commonData, Parcial parcialActual, CicloEscolarVo cicloEscolarActual) throws GenericException;
+  }
+
+  public void setLicenciaturaService(LicenciaturaService licenciaturaService) {
+    this.licenciaturaService = licenciaturaService;
   }
 }

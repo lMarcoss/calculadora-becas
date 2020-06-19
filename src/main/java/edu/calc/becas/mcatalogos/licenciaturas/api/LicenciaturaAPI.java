@@ -48,7 +48,7 @@ public class LicenciaturaAPI {
             @ApiParam(value = "clave-licenciatura", required = true) @PathVariable("clave-licenciatura") String claveLicenciatura
     ) throws GenericException {
 
-        return licenciaturaService.getDetailByClave();
+        return licenciaturaService.getDetailByClave(claveLicenciatura);
     }
 
 }
