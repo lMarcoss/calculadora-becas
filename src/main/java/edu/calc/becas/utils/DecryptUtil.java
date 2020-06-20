@@ -10,8 +10,6 @@ import java.util.Arrays;
 import java.util.Base64;
 
 /**
- * @author Marcos Santiago Leonardo
- * Universidad de la Sierra Sur
  * Description: Clase para desencriptar datos
  * Date: 4/29/19
  */
