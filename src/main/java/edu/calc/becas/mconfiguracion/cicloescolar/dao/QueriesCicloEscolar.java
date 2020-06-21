@@ -6,7 +6,7 @@ package edu.calc.becas.mconfiguracion.cicloescolar.dao;
  * Description:
  * Date: 10/03/20
  */
-public final class QueriesCicloEscolar {
+final class QueriesCicloEscolar {
     private QueriesCicloEscolar() {
     }
 

@@ -27,25 +27,34 @@ final class QueriesActividadAlumno {
                     "  AND A.ESTATUS = 'S'\n" +
                     "  AND ADP.CVE_PERIODO = ?";
 
-    static final String QRY_GET_ALL_ACTIVIDADES_ALUMNOS = "SELECT\n" +
-      "       AT.ID_ACTIVIDAD,\n" +
-      "       CAL.ID_ALUMNO_P,\n" +
-      "       AT.NOMBRE_ACTIVIDAD,\n" +
-      "       ALM.MATRICULA,\n" +
-      "       ALM.NOMBRES,\n" +
-      "       ALM.APE_PATERNO,\n" +
-      "       ALM.APE_MATERNO,\n" +
-      "       Concat ( AC.HORA,':',AC.AM_PM) HORARIO, " +
-      "       AL.DESC_GRUPO " +
-      "FROM ALUMNOS ALM, HORARIO_ACTIVIDAD AC, ACTIVIDAD_ALUMNO CAL, ALUMNOS_DAT_PERIODO AL, ACTIVIDADES AT\n" +
-      "WHERE\n" +
-      "AC.ID_HORARIO_ACTIVIDAD = CAL.ID_HORARIO_ACTIVIDAD\n" +
-      "AND CAL.ID_ALUMNO_P = AL.ID_ALUMNOP\n" +
-      "AND AC.ID_ACTIVIDAD = AT.ID_ACTIVIDAD\n" +
-      "AND ALM.MATRICULA = AL.MATRICULA";
+    static final String QRY_GET_ALL_ACTIVIDADES_ALUMNOS =
+            "SELECT AT.ID_ACTIVIDAD,\n" +
+                    "       CAL.ID_ALUMNO_P,\n" +
+                    "       AT.NOMBRE_ACTIVIDAD,\n" +
+                    "       ALM.MATRICULA,\n" +
+                    "       ALM.NOMBRES,\n" +
+                    "       ALM.APE_PATERNO,\n" +
+                    "       ALM.APE_MATERNO,\n" +
+                    "       Concat(AC.HORA, ':', AC.AM_PM) HORARIO,\n" +
+                    "       AL.DESC_GRUPO,\n" +
+                    "       U.USERNAME USERNAME_ENCARGADO,\n" +
+                    "       U.NOMBRES NOMBRE_ENCARGADO,\n" +
+                    "       U.APE_PATERNO AP_PATERNO_ENCARGADO,\n" +
+                    "       U.APE_MATERNO AP_MATERNO_ENCARGADO\n" +
+                    "FROM ALUMNOS ALM,\n" +
+                    "     HORARIO_ACTIVIDAD AC,\n" +
+                    "     ACTIVIDAD_ALUMNO CAL,\n" +
+                    "     ALUMNOS_DAT_PERIODO AL,\n" +
+                    "     ACTIVIDADES AT,\n" +
+                    "     USUARIOS U\n" +
+                    "WHERE AC.ID_HORARIO_ACTIVIDAD = CAL.ID_HORARIO_ACTIVIDAD\n" +
+                    "  AND CAL.ID_ALUMNO_P = AL.ID_ALUMNOP\n" +
+                    "  AND AC.ID_ACTIVIDAD = AT.ID_ACTIVIDAD AND AC.ID_USUARIO = U.ID_USUARIO AND U.ESTATUS = 'S' AND AT.ESTATUS = 'S'\n" +
+                    "  AND ALM.MATRICULA = AL.MATRICULA";
 
 
-  static final String QRY_CONDITION_ID_ACTIVIDAD =" and AT.ID_ACTIVIDAD = ?";
+  static final String QRY_CONDITION_ID_ACTIVIDAD =" and AT.ID_ACTIVIDAD = ?\n";
+  static final String QRY_CONDITION_USERNAME =" AND U.USERNAME = ?\n";
   static final String QRY_CONDITION_ID_USER =" and AC.ID_USUARIO = ?";
 
   static final String QRY_ID_ACTIVIDAD_ALUMNO_BY_HORARIO =

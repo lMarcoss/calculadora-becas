@@ -26,7 +26,7 @@ public class CicloEscolarAPI {
 
     @GetMapping
     @ApiOperation(value = "Obtiene la lista de ciclos escolares")
-    public WrapperData getAll() throws GenericException {
+    public WrapperData<CicloEscolarVo> getAll() throws GenericException {
         return cicloEscolarService.getAll();
     }
 

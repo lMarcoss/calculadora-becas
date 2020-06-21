@@ -2,6 +2,7 @@ package edu.calc.becas.malumnos.actividades.model;
 
 import edu.calc.becas.common.model.CommonData;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
+import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,7 @@ public class ActividadAlumno extends CommonData {
     private String horario;
     private String grupo;
     private ActividadVo actividad;
-
+    private Usuario usuario;
 
     public ActividadAlumno() {
 

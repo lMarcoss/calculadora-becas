@@ -17,7 +17,7 @@ import java.util.List;
 public interface AlumnoActividadDao {
     ActividadVo getActividadByAlumno(String matricula, CicloEscolarVo cicloEscolarActual);
 
-    WrapperData getAllAlumnosByActividad(int page, int pageSize, String idActividad, String idCiclo);
+    WrapperData getAllAlumnosByActividad(int page, int pageSize, String idActividad, String idCiclo, String username);
 
     List<ActividadAlumno> getActivitiesAlumnos(int idHorario);
 }

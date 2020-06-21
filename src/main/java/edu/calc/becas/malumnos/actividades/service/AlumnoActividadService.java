@@ -13,5 +13,5 @@ import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 public interface AlumnoActividadService {
     ActividadVo getActividadByAlumno(String matricula, CicloEscolarVo cicloEscolarActual);
 
-    WrapperData getAllAlumnosByActividad(int page, int pageSize, String idActividad, String idCiclo);
+    WrapperData getAllAlumnosByActividad(int page, int pageSize, String idActividad, String idCiclo, String username);
 }

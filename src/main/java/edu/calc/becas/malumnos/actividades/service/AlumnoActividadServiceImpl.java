@@ -54,9 +54,9 @@ public class AlumnoActividadServiceImpl implements AlumnoActividadService {
     }
 
     @Override
-    public WrapperData getAllAlumnosByActividad(int page, int pageSize, String idActividad, String idCiclo) {
+    public WrapperData getAllAlumnosByActividad(int page, int pageSize, String idActividad, String idCiclo, String username) {
 
-        return alumnoActividadDao.getAllAlumnosByActividad(page, pageSize, idActividad, idCiclo);
+        return alumnoActividadDao.getAllAlumnosByActividad(page, pageSize, idActividad, idCiclo, username);
     }
 
 

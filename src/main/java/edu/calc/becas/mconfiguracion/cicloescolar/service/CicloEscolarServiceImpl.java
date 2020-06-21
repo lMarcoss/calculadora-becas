@@ -74,8 +74,22 @@ public class CicloEscolarServiceImpl extends RestTemplateService implements Cicl
     }
 
     @Override
-    public WrapperData getAll() throws GenericException {
-        return cicloEscolarDao.getAll();
+    public WrapperData<CicloEscolarVo> getAll() throws GenericException {
+        WrapperData<CicloEscolarVo> periodos = cicloEscolarDao.getAll();
+        if (periodos.getData().isEmpty()) {
+            try {
+                CicloEscolarVo cicloEscolarVo = getCicloEscolarActual();
+
+                List<CicloEscolarVo> periodoActual = new ArrayList<>();
+                periodoActual.add(cicloEscolarVo);
+                periodos.setData(periodoActual);
+            } catch (Exception e) {
+                throw new GenericException("No se encontraron datos de periodos");
+            }
+
+
+        }
+        return periodos;
     }
 
     private List<CicloEscolarVo> convertPeriodosDtoToCicloEscolarList(List<PeriodoDtoSHorario> periodosDto) {

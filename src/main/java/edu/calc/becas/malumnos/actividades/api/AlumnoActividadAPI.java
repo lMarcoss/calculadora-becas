@@ -49,8 +49,8 @@ public class AlumnoActividadAPI {
             @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)
             @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,
 
-            @ApiParam(value = "Estatus de los registros a recuperar", defaultValue = DEFAULT_ESTATUS)
-            @RequestParam(value = "status", defaultValue = DEFAULT_ESTATUS, required = false) String status,
+            @ApiParam(value = "Encargado de la actividad a recuperar", defaultValue = ALL_ITEMS)
+            @RequestParam(value = "username", defaultValue = ALL_ITEMS, required = false) String username,
 
             @ApiParam(value = "Identificador de la actividad a recuperar el detalle", defaultValue = ALL_ITEMS)
             @RequestParam(value = "actividad", defaultValue = ALL_ITEMS, required = false) String idActividad,
@@ -62,7 +62,7 @@ public class AlumnoActividadAPI {
         if (pageSize.equalsIgnoreCase(ALL_ITEMS)) {
             pageSize = ITEMS_FOR_PAGE;
         }
-        return alumnoActividadService.getAllAlumnosByActividad(Integer.parseInt(page), Integer.parseInt(pageSize), idActividad, idCiclo);
+        return alumnoActividadService.getAllAlumnosByActividad(Integer.parseInt(page), Integer.parseInt(pageSize), idActividad, idCiclo, username);
     }
 
 

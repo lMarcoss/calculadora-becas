@@ -5,6 +5,7 @@ import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.malumnos.actividades.model.ActividadAlumno;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
+import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -46,12 +47,18 @@ public class AlumnoActividadDaoImpl extends BaseDao implements AlumnoActividadDa
     }
 
     @Override
-    public WrapperData getAllAlumnosByActividad(int page, int pageSize, String idActividad, String idCiclo) {
+    public WrapperData getAllAlumnosByActividad(int page, int pageSize, String idActividad, String idCiclo, String username) {
         boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
         String queryGetAll = QRY_GET_ALL_ACTIVIDADES_ALUMNOS;
         boolean byActividad = !idActividad.equalsIgnoreCase(ALL_ITEMS);
+        boolean byUsername = !username.equalsIgnoreCase(ALL_ITEMS);
+
         if (byActividad) {
             queryGetAll = queryGetAll.concat(QRY_CONDITION_ID_ACTIVIDAD.replace("?", "'" + idActividad + "'"));
+        }
+
+        if (byUsername) {
+            queryGetAll = queryGetAll.concat(QRY_CONDITION_USERNAME.replace("?", "'" + username + "'"));
         }
 
         queryGetAll = addQueryPageable(page, pageSize, queryGetAll);
@@ -106,6 +113,14 @@ public class AlumnoActividadDaoImpl extends BaseDao implements AlumnoActividadDa
         actividadVo.setAMaterno(rs.getString("APE_MATERNO"));
         actividadVo.setHorario(rs.getString("HORARIO"));
         actividadVo.setGrupo(rs.getString("DESC_GRUPO"));
+
+        Usuario usuario = new Usuario();
+        usuario.setUsername(rs.getString("USERNAME_ENCARGADO"));
+        usuario.setNombres(rs.getString("NOMBRE_ENCARGADO"));
+        usuario.setApePaterno(rs.getString("AP_PATERNO_ENCARGADO"));
+        usuario.setApeMaterno(rs.getString("AP_MATERNO_ENCARGADO"));
+
+        actividadVo.setUsuario(usuario);
         return actividadVo;
     }
 }
