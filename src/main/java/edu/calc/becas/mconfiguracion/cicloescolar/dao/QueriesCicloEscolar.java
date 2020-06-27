@@ -10,5 +10,5 @@ final class QueriesCicloEscolar {
     private QueriesCicloEscolar() {
     }
 
-    static final String QRY_GET_ALL = "SELECT DISTINCT CVE_PERIODO, DESC_PERIDODO FROM ALUMNOS_DAT_PERIODO";
+    static final String QRY_GET_ALL = "SELECT DISTINCT CVE_PERIODO, DESC_PERIDODO FROM ALUMNOS_DAT_PERIODO WHERE ESTATUS = 'S'";
 }
