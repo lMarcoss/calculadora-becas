@@ -69,6 +69,7 @@ public class HorarioActividadAPI {
     }
 
     @PostMapping("/actividades/detallehoras")
+    @ApiOperation(value = "Registra un nuevo horario de una actividad extra-escolar")
     public DetalleActividadVo add(@ApiParam(value = "Detalle de horario para una actividad", defaultValue = "0")
                                   @RequestBody DetalleActividadVo detalle,
                                   HttpServletRequest httpServlet) throws Exception {
@@ -92,6 +93,7 @@ public class HorarioActividadAPI {
 
 
     @PutMapping("/actividades/detallehoras")
+    @ApiOperation(value = "Actualiza los datos de un horario de una actividad extra-escolar")
     public DetalleActividadVo modify(@ApiParam(value = "Detalle de hora para una actividad", defaultValue = "0")
                                      @RequestBody DetalleActividadVo detalle, HttpServletRequest httpServlet) throws GenericException {
         UserLogin userLogin = userRequestService.getUserLogin(httpServlet);
