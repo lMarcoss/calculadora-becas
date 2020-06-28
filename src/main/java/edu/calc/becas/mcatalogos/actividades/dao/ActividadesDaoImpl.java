@@ -179,7 +179,10 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
                     detalle.getUsuario().getIdUsuario(),
                     detalle.getEstatus(),
                     detalle.getComentario(),
-                    detalle.getIdDetalleActividad());
+                    detalle.getActualizadoPor(),
+                    detalle.getIdDetalleActividad()
+
+            );
 
             return detalle;
         } catch (DuplicateKeyException e) {
