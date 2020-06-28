@@ -220,16 +220,17 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
         detalle.setIdCicloEscolar(rs.getString("CVE_PERIODO"));
         detalle.setCicloEscolar(rs.getString("DESC_PERIDODO"));
+        detalle.setComentario(rs.getString("COMENTARIO"));
 
         CicloEscolarVo CicloEscolarVo = new CicloEscolarVo ();
         CicloEscolarVo.setClave("");
         CicloEscolarVo cicloEscolarVo = new CicloEscolarVo();
         cicloEscolarVo.setClave(detalle.getIdCicloEscolar());
-      try {
-        detalle.setParcial(parcialDao.getParcialActual(cicloEscolarVo));
-      }catch (Exception e){
-        e.printStackTrace();
-      }
+        try {
+            detalle.setParcial(parcialDao.getParcialActual(cicloEscolarVo));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         List<AlumnoActividad> alumnos = this.jdbcTemplate.query(QRY_AlUMNOS_ACTIVIDAD, new Object[]{detalle.getIdDetalleActividad()},(rsa, rowNum) -> mapperAlumnosActividades(rsa));
         usuario.setIdUsuario(rs.getInt("ID_USUARIO"));
