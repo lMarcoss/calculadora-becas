@@ -15,11 +15,11 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@ApiModel(description = "Entidad con los datos del usuario para inicio de sesión")
+@ApiModel(description = "Entidad con los datos del usuario para inicio de sesi\u00f3n")
 public class DataLogin implements Serializable {
     @ApiModelProperty(value = "correo del usuario", required = true, position = 0)
     private String username;
 
-    @ApiModelProperty(value = "Contraseña del usuario", required = true,position = 1)
+    @ApiModelProperty(value = "Contrase\u00f1a del usuario", required = true,position = 1)
     private String password;
 }

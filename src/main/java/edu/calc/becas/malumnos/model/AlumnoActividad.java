@@ -14,7 +14,7 @@ import lombok.ToString;
 @ApiModel(description = "Entidad con los datos del alumno asociado a la actividad")
 public class AlumnoActividad {
 
-  @ApiModelProperty("Matrícula alumno")
+  @ApiModelProperty("Matr\u00edcula alumno")
   private String matricula;
 
   @ApiModelProperty("Grupo alumno")

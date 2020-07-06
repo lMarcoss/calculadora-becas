@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/menu")
-@Api(description = "Servicios para administración de menú")
+@Api(description = "Servicios para administraci\u00f3n de men\u00fa")
 public class MenuAPI {
 
     private final MenuService menuService;
@@ -25,8 +25,8 @@ public class MenuAPI {
     }
 
     @GetMapping
-    @ApiOperation(value = "Obtiene el listado de menú para un usuario")
-    public List<Menu> getMenu(@ApiParam(value = "Usuario en sesión", defaultValue = "0") @RequestParam(value = "username", defaultValue = "0") String username) throws GenericException {
+    @ApiOperation(value = "Obtiene el listado de men\u00fa para un usuario")
+    public List<Menu> getMenu(@ApiParam(value = "Usuario en sesi\u00f3n", defaultValue = "0") @RequestParam(value = "username", defaultValue = "0") String username) throws GenericException {
         return menuService.getMenu(username);
     }
 }

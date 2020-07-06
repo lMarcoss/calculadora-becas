@@ -9,6 +9,8 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
+ * Propiedades comunes de los objetos de la BD
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra WSur (UNSIS)
  * Description: Common class for properties definition of objects
@@ -20,17 +22,22 @@ import java.io.Serializable;
 public class CommonData implements Serializable {
     @ApiModelProperty(value = "Clave del estatus S/N", required = true)
     private String estatus;
-    @ApiModelProperty("Descripción el estatus (Activo/Inactivo)")
+    @ApiModelProperty("Descripci\u00f3n el estatus (Activo/Inactivo)")
     private String descEstatus;
     @ApiModelProperty("Nombre de usuario creador")
     private String agregadoPor;
-    @ApiModelProperty("Fecha de creación")
+    @ApiModelProperty("Fecha de creaci\u00f3n")
     private String fechaCreacion;
     @ApiModelProperty("Nombre de usuario que edita")
     private String actualizadoPor;
-    @ApiModelProperty("Fecha de actualización")
+    @ApiModelProperty("Fecha de actualizaci\u00f3n")
     private String fechaActualizacion;
 
+    /**
+     * Inicializa el objeto con la propiedad estatus y su descripcion
+     *
+     * @param estatus
+     */
     public CommonData(String estatus) {
         this.estatus = estatus;
         if (this.estatus.equals(Constant.ESTATUS_ACTIVE)) {

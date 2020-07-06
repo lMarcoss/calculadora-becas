@@ -43,7 +43,7 @@ import static edu.calc.becas.utils.ExtensionFile.XLS_EXTENSION;
 
 @RestController
 @RequestMapping("/actividades")
-@Api(description = "Servicios para administración de Actividades Extracurriculares")
+@Api(description = "Servicios para administraci\u00f3n de Actividades Extracurriculares")
 @Slf4j
 public class ActividadesAPI {
     private final ActividadesService actividadesService;
@@ -70,7 +70,7 @@ public class ActividadesAPI {
     @GetMapping
     @ApiOperation(value = "Obtiene el listado de Actividades")
     public WrapperData<ActividadVo> getAll(
-            @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
+            @ApiParam(value = "P\u00e1gina a recuperar", defaultValue = DEFAULT_PAGE)
             @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
             @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)
             @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,

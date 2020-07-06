@@ -34,7 +34,7 @@ import static edu.calc.becas.utils.ExtensionFile.XLS_EXTENSION;
 /**
  * @author Marcos Santiago Leonardos
  * Universidad de la Sierra Sur (UNSIS)
- * Description: api genérico para cargar y guardar archivo
+ * Description: api generico para cargar y guardar archivo
  * Date: 5/4/19
  */
 

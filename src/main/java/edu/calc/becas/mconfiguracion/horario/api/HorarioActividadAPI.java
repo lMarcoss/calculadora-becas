@@ -40,7 +40,7 @@ public class HorarioActividadAPI {
     @GetMapping("/actividades/detalle")
     @ApiOperation(value = "Obtiene el listado de horarios de las actividades")
     public WrapperData getAll(
-            @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
+            @ApiParam(value = "P\u00e1gina a recuperar", defaultValue = DEFAULT_PAGE)
             @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
 
             @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)

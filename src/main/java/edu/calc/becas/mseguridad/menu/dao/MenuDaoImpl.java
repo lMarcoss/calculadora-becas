@@ -28,7 +28,7 @@ public class MenuDaoImpl extends BaseDao implements MenuDao {
     public List<Menu> getMenu(String username) throws GenericException {
         List<Menu> parents = getParents();
         if (parents == null) {
-            throw new GenericException("Menú vacío");
+            throw new GenericException("Men\u00fa vac\u00edo");
         }
         getChild(parents, username);
         parents = parents.stream().filter(parent -> parent.getChilds().size() > 0).collect(Collectors.toList());

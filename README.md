@@ -1,5 +1,5 @@
 # CalculadoraBecasBack
-Servicios para administración de porcentaje de becas UNSIS
+Servicios para administracion de porcentaje de becas UNSIS
 
 ## Documentación en Swagger
 * SERVER:PORT/calc-becas/docs/swagger-ui.html#/

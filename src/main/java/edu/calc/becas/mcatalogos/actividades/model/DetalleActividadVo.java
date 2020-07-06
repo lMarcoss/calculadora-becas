@@ -19,13 +19,13 @@ import java.util.List;
 @ToString
 @ApiModel(value = "DetalleActividad", description = "Entidad con los horarios y detalle de cada acttividad")
 public class DetalleActividadVo extends CommonData {
-    @ApiModelProperty("Identificador único de detalle actividad")
+    @ApiModelProperty("Identificador \u00fanico de detalle actividad")
     private int idDetalleActividad;
 
     @ApiModelProperty("Horario de la actidad")
     private Hora horario;
 
-    @ApiModelProperty("Número de alumnos inscriptos a la actividad")
+    @ApiModelProperty("N\u00famero de alumnos inscriptos a la actividad")
     private int numeroAlumnos;
 
     @ApiModelProperty("Nombre de la actividad")
@@ -37,7 +37,7 @@ public class DetalleActividadVo extends CommonData {
     @ApiModelProperty("Indica el ciclo escolar de la actividad")
     private String cicloEscolar;
 
-    @ApiModelProperty("Identificador único de la actividad")
+    @ApiModelProperty("Identificador \u00fanico de la actividad")
     private int idActividad;
 
     @ApiModelProperty("Comentario")

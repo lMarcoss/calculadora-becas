@@ -11,22 +11,23 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * Envoltura para regresar registros paginados a la vista del usuario
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description: Wrapper for data send to front
  * Date: 3/24/19
  */
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "Envoltura de información paginada de los servicios ${T}")
+@ApiModel(description = "Envoltura de informaci\u00f3n paginada de los servicios ${T}")
 public class WrapperData<T> implements Serializable {
     @ApiModelProperty("Lista de datos recuperados de un total de lengthData")
     private List<T> data;
-    @ApiModelProperty("Página recuperada")
+    @ApiModelProperty("P\u00e1gina recuperada")
     private int page;
-    @ApiModelProperty("Total de páginas")
+    @ApiModelProperty("Total de p\u00e1ginas")
     private int pageSize;
     @ApiModelProperty("Total de registros")
     private int lengthData;

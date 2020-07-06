@@ -27,7 +27,7 @@ import static edu.calc.becas.common.utils.Constant.ESTATUS_ACTIVE;
  */
 @RestController
 @RequestMapping("/parciales")
-@Api(description = "Servicios para administración de parciales")
+@Api(description = "Servicios para administraci\u00f3n de parciales")
 public class ParcialAPI {
 
     private final ParcialService parcialService;

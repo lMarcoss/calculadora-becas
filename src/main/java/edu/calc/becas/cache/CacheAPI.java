@@ -19,7 +19,7 @@ import springfox.documentation.spring.web.json.Json;
  */
 @RestController
 @RequestMapping("/recarga-datos-sistema-horario")
-@Api(description = "Servicios para recargar la información del sistema de horarios")
+@Api(description = "Servicios para recargar la informaci\u00f3n del sistema de horarios")
 public class CacheAPI {
 
     private final CicloEscolarService cicloEscolarService;
@@ -41,6 +41,6 @@ public class CacheAPI {
         CicloEscolarVo cicloEscolarVo = cicloEscolarService.getCicloEscolarActualFromScheduledSystem();
         licenciaturaService.getAllFromScheduledSystem();
         grupoService.getAllAllFromScheduledSystem(cicloEscolarVo);
-        return "¡Recarga de datos terminado!";
+        return "Recarga de datos terminado";
     }
 }

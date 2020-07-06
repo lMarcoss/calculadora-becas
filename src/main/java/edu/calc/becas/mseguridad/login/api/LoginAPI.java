@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Expone Servicios de autenticacion de usuarios
+ */
 @RestController
 @RequestMapping("/login")
-@Api(tags = "login-api", description = "Servicios de autenticación")
+@Api(tags = "login-api", description = "Servicios de autenticaci\u00f3n")
 public class LoginAPI {
 
     private final LoginService loginService;
@@ -32,8 +35,15 @@ public class LoginAPI {
     }
 
 
+    /**
+     * @param user: Autentica al usuario en la aplicacion
+     * @return
+     * @throws InvalidJwtAuthenticationException
+     * @throws ConnectionJdbcException
+     * @throws GenericException
+     */
     @PostMapping
-    @ApiOperation(value = "Inicia sesión en la aplicación")
+    @ApiOperation(value = "Inicia sesi\u00f3n en la aplicaci\u00f3n")
     public UserLogin login(@ApiParam(value = "usuario") @RequestBody DataLogin user) throws InvalidJwtAuthenticationException, ConnectionJdbcException, GenericException {
 
         UserLogin dataUserLogin = new UserLogin();

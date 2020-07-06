@@ -15,7 +15,7 @@ public final class UtilDate {
     /**
      * @param fecha
      * @param daysSum
-     * @return suma días a una fecha
+     * @return suma dias a una fecha
      */
     public static Date getDateSumDay(Date fecha, int daysSum) {
         Calendar c = Calendar.getInstance();

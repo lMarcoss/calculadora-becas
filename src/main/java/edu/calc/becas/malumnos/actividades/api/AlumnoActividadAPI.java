@@ -43,7 +43,7 @@ public class AlumnoActividadAPI {
     @GetMapping("/alumnos/actividades")
     @ApiOperation(value = "Obtiene el listado de detalle de actividades de los alumnos")
     public WrapperData getAll(
-            @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
+            @ApiParam(value = "P\u00e1gina a recuperar", defaultValue = DEFAULT_PAGE)
             @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
 
             @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)

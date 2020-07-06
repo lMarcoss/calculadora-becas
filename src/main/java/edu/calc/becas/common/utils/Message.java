@@ -10,6 +10,6 @@ public final class Message {
     private Message() {
     }
 
-    public static final String MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER = "%s Registros procesados con éxito";
-    public static final String MESSAGE_ROW_PROCESSED_ROOM_COMPUTER = "%s Registro procesado con éxito";
+    public static final String MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER = "%s Registros procesados con \u00e9xito";
+    public static final String MESSAGE_ROW_PROCESSED_ROOM_COMPUTER = "%s Registro procesado con \u00e9xito";
 }

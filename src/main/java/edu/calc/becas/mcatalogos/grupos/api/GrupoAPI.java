@@ -22,7 +22,7 @@ import static edu.calc.becas.common.utils.Constant.*;
  */
 @RestController
 @RequestMapping("/grupos")
-@Api(description = "Servicios para administración de grupos")
+@Api(description = "Servicios para administraci\u00f3n de grupos")
 public class GrupoAPI {
 
     private final GrupoService grupoService;
@@ -35,7 +35,7 @@ public class GrupoAPI {
     @GetMapping
     @ApiOperation(value = "Obtiene el listado de grupos")
     public WrapperData getAll(
-            @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE) @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
+            @ApiParam(value = "P\u00e1gina a recuperar", defaultValue = DEFAULT_PAGE) @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
             @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS) @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,
             @ApiParam(value = "Estatus de los registros a recuperar", defaultValue = DEFAULT_ESTATUS) @RequestParam(value = "status", defaultValue = DEFAULT_ESTATUS, required = false) String status,
             @ApiParam(value = "Licenciatura de los registros a recuperar", defaultValue = LICENCIATURA_DEFAULT) @RequestParam(value = "licenciatura", defaultValue = LICENCIATURA_DEFAULT, required = false) String licenciatura

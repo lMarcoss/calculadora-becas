@@ -20,10 +20,10 @@ import java.io.Serializable;
 @Getter
 @ApiModel(description = "Entidad con los datos del parcial")
 public class Parcial extends CommonData implements Serializable {
-    @ApiModelProperty("Indentificador único del parcial")
+    @ApiModelProperty("Indentificador \u00fanico del parcial")
     private int idParcial;
 
-    @ApiModelProperty("Número de Parcial (1,2 o 3)")
+    @ApiModelProperty("N\u00famero de Parcial (1,2 o 3)")
     private int parcial;
 
     @ApiModelProperty("Nombre del parcial")
@@ -41,13 +41,13 @@ public class Parcial extends CommonData implements Serializable {
     @ApiModelProperty("Clave del periodo")
     private String cvePeriodo;
 
-    @ApiModelProperty("Descripción del periodo")
+    @ApiModelProperty("Descripci\u00f3n del periodo")
     private String descPeriodo;
 
     @ApiModelProperty("Total de horas de biblioteca a cumplir durante el parcial")
     private int totalHorasBiblioteca;
 
-    @ApiModelProperty("Total de asistencias de sala de cómputo a cumplir durante el parcial")
+    @ApiModelProperty("Total de asistencias de sala de c\u00f3mputo a cumplir durante el parcial")
     private int totalAsistenciaSala;
 
     @ApiModelProperty("Total de asistencias a cumplir en actividades extraescolares")

@@ -28,7 +28,7 @@ import static edu.calc.becas.common.utils.Constant.*;
  */
 @RestController
 @RequestMapping("/reporte-becas")
-@Api(description = "Servicios para administración de porcentajes de becas")
+@Api(description = "Servicios para administraci\u00f3n de porcentajes de becas")
 public class ReportPercentBecaAPI {
 
     private UserRequestService userRequestService;
@@ -49,7 +49,7 @@ public class ReportPercentBecaAPI {
     @GetMapping("/detalle/periodo/{cve-periodo}")
     @ApiOperation(value = "Obtiene la propuesta de beca-colegiatura del periodo cve-periodo")
     public WrapperData<AlumnoReporteBecaPeriodo> getAll(
-            @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
+            @ApiParam(value = "P\u00e1gina a recuperar", defaultValue = DEFAULT_PAGE)
             @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
 
             @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)

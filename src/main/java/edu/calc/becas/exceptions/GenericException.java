@@ -1,9 +1,10 @@
 package edu.calc.becas.exceptions;
 
 /**
+ * Exception generica a lanzar al ocurrir error en los servicios
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 5/1/19
  */
 public class GenericException extends Exception {

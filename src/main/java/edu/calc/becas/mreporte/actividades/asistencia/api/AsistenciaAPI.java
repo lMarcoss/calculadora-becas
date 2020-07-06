@@ -46,7 +46,7 @@ public class AsistenciaAPI {
 
 
     @GetMapping("/alumnos-por-fechas-y-horarios/horario/{id-horario}")
-    @ApiOperation(value = "Obtiene la lista de alumnos por horario para alta y edición de asistencia")
+    @ApiOperation(value = "Obtiene la lista de alumnos por horario para alta y edici\u00f3n de asistencia")
     public WrapperAsistenciaAlumno getAlumnosByScheduleAndUser(
             @ApiParam(value = "Identificador-horario", required = true) @PathVariable("id-horario") String idHorario,
             @ApiParam(value = "Fecha inicio", defaultValue = TODAY) @RequestParam(value = "fecha-inicio", defaultValue = TODAY, required = false) String fechaInicio,
