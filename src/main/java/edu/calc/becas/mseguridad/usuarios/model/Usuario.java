@@ -22,7 +22,7 @@ import java.io.Serializable;
 @ApiModel(description = "Entidad con los datos del usuario")
 public class Usuario extends CommonData implements Serializable {
 
-    @ApiModelProperty("Indentificador único del usuario")
+    @ApiModelProperty("Indentificador \u00fanico del usuario")
     private int idUsuario;
     @ApiModelProperty(value = "Nombre (s) del usuario", required = true)
     private String nombres;
@@ -35,12 +35,12 @@ public class Usuario extends CommonData implements Serializable {
     @ApiModelProperty(value = "Rol del usuario")
     private Rol rol;
 
-    @ApiModelProperty(value = "correo del usuario para sesión", required = true)
+    @ApiModelProperty(value = "correo del usuario para sesi\u00f3n", required = true)
     private String username;
-    @ApiModelProperty("Contraseña del usuario")
+    @ApiModelProperty("Contrase\u00f1a del usuario")
     private String password;
 
-    @ApiModelProperty("Días de tolerania para reporte de asistencias")
+    @ApiModelProperty("D\u00edas de tolerania para reporte de asistencias")
     private int diasRetrocesoReporte;
 
     private String commonVal01;

@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur
- * Description: Datos de paginación para consultas
+ * Description: Datos de paginacion para consultas
  * Date: 2019-07-10
  */
 @NoArgsConstructor

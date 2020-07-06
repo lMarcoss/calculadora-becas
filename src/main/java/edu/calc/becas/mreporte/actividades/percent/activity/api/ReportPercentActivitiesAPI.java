@@ -24,7 +24,7 @@ import static edu.calc.becas.common.utils.Constant.*;
  */
 @RestController
 @RequestMapping("/reporte-actividades")
-@Api(description = "Servicios para administración de porcentaje de actividades")
+@Api(description = "Servicios para administraci\u00f3n de porcentaje de actividades")
 public class ReportPercentActivitiesAPI {
 
     private final ReportPercentActivitiesService reportPercentActivitiesService;
@@ -39,7 +39,7 @@ public class ReportPercentActivitiesAPI {
     @GetMapping("/detallado")
     @ApiOperation(value = "Obtiene el reporte detallado de actividades")
     public WrapperData getAll(
-            @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE) @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
+            @ApiParam(value = "P\u00e1gina a recuperar", defaultValue = DEFAULT_PAGE) @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
             @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS) @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,
             @ApiParam(value = "Ciclo escolar a recuperar", defaultValue = ALL_ITEMS) @RequestParam(value = "ciclo-escolar", defaultValue = ALL_ITEMS, required = false) String cicloEscolar,
             @ApiParam(value = "Licenciatura a recuperar", defaultValue = ALL_ITEMS) @RequestParam(value = "licenciatura", defaultValue = ALL_ITEMS, required = false) String licenciatura,

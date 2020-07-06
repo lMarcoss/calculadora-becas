@@ -16,7 +16,7 @@ import static edu.calc.becas.common.utils.Constant.*;
 
 @RestController
 @RequestMapping("/alumnos")
-@Api(description = "Servicios para administración de Inscripcion de alumnos a Actividades ")
+@Api(description = "Servicios para administraci\u00f3n de Inscripcion de alumnos a Actividades ")
 public class AlumnosAPI {
 
     private final AlumnosService alumnosService;
@@ -29,7 +29,7 @@ public class AlumnosAPI {
     @GetMapping
     @ApiOperation(value = "Obtiene el listado de alumnos")
     public WrapperData getAll(
-            @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
+            @ApiParam(value = "P\u00e1gina a recuperar", defaultValue = DEFAULT_PAGE)
             @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
             @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)
             @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,
@@ -62,7 +62,7 @@ public class AlumnosAPI {
     @GetMapping("/cargas")
     @ApiOperation(value = "Obtiene el listado de alumnos")
     public WrapperData getAlumnoCargado(
-            @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE)
+            @ApiParam(value = "P\u00e1gina a recuperar", defaultValue = DEFAULT_PAGE)
             @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
 
             @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS)

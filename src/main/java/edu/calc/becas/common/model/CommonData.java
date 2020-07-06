@@ -20,15 +20,15 @@ import java.io.Serializable;
 public class CommonData implements Serializable {
     @ApiModelProperty(value = "Clave del estatus S/N", required = true)
     private String estatus;
-    @ApiModelProperty("Descripción el estatus (Activo/Inactivo)")
+    @ApiModelProperty("Descripci\u00f3n el estatus (Activo/Inactivo)")
     private String descEstatus;
     @ApiModelProperty("Nombre de usuario creador")
     private String agregadoPor;
-    @ApiModelProperty("Fecha de creación")
+    @ApiModelProperty("Fecha de creaci\u00f3n")
     private String fechaCreacion;
     @ApiModelProperty("Nombre de usuario que edita")
     private String actualizadoPor;
-    @ApiModelProperty("Fecha de actualización")
+    @ApiModelProperty("Fecha de actualizaci\u00f3n")
     private String fechaActualizacion;
 
     public CommonData(String estatus) {

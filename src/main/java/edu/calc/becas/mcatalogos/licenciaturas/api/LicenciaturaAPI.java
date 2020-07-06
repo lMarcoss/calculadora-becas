@@ -21,7 +21,7 @@ import static edu.calc.becas.common.utils.Constant.*;
 
 @RestController
 @RequestMapping("/licenciaturas")
-@Api(description = "Servicios para administración de licienciaturas")
+@Api(description = "Servicios para administraci\u00f3n de licienciaturas")
 public class LicenciaturaAPI {
 
     private final LicenciaturaService licenciaturaService;
@@ -34,7 +34,7 @@ public class LicenciaturaAPI {
     @GetMapping
     @ApiOperation(value = "Obtiene el listado de licenciaturas")
     public WrapperData getAll(
-            @ApiParam(value = "Página a recuperar", defaultValue = DEFAULT_PAGE) @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
+            @ApiParam(value = "P\u00e1gina a recuperar", defaultValue = DEFAULT_PAGE) @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
             @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS) @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,
             @ApiParam(value = "Estatus de los registros a recuperar", defaultValue = DEFAULT_ESTATUS) @RequestParam(value = "status", defaultValue = DEFAULT_ESTATUS, required = false) String status
     ) throws GenericException {

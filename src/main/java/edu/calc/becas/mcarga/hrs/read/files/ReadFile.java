@@ -37,7 +37,7 @@ public class ReadFile {
         System.out.println("SHEETS: " + workbook.getNumberOfSheets());
 
         return workbook;
-        /*// Leer hojas o sábanas del excel
+        /*// Leer hojas del excel
         for (Sheet sheet : workbook) {
             LOG.info("HOJA:  "+ sheet.getSheetName());
         }

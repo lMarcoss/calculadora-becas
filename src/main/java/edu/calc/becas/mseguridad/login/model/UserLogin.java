@@ -21,10 +21,10 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-@ApiModel(description = "Entidad con los datos del usuario en sesión")
+@ApiModel(description = "Entidad con los datos del usuario en sesi\u00f3n")
 public class UserLogin implements Serializable {
 
-    @ApiModelProperty(value = "Días de tolerancia para carga de reporte")
+    @ApiModelProperty(value = "D\u00edas de tolerancia para carga de reporte")
     private int diasTolerancia;
 
     @ApiModelProperty(value = "Nombre del usuario")
@@ -38,10 +38,10 @@ public class UserLogin implements Serializable {
     @ApiModelProperty(value = "correo del usuario", required = true)
     private String username;
 
-    @ApiModelProperty(value = "Contraseña del usuario", required = true)
+    @ApiModelProperty(value = "Contrase\u00f1a del usuario", required = true)
     private String password;
 
-    @ApiModelProperty("token de sesión")
+    @ApiModelProperty("Token de sesi\u00f3n")
     private String token;
 
     @ApiModelProperty("Rol de usuario")
@@ -50,10 +50,10 @@ public class UserLogin implements Serializable {
     @ApiModelProperty("datos de un usuario alumno")
     private Usuario usuarioAlumno;
 
-    @ApiModelProperty("Indica si el usuario en sesión es alumno")
+    @ApiModelProperty("Indica si el usuario en sesi\u00f3n es alumno")
     private boolean esAlumno;
 
-    @ApiModelProperty("Lista de menús del usuario")
+    @ApiModelProperty("Lista de men\u00fas del usuario")
     private List<Menu> menu;
 
     @ApiModelProperty("Periodo actual")

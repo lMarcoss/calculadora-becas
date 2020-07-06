@@ -24,13 +24,13 @@ import lombok.ToString;
 @ToString
 @ApiModel(description = "Entidad con los datos del alumno")
 public class Alumno extends CommonData {
-    @ApiModelProperty("Identificador único del alumno")
+    @ApiModelProperty("Identificador \u00fanico del alumno")
     private String IdAlumno;
 
-    @ApiModelProperty("CURP Clave Unica de Resgistro de Población")
+    @ApiModelProperty("CURP")
     private String curp;
 
-    @ApiModelProperty("Matrícula alumno")
+    @ApiModelProperty("Matr\u00edcula alumno")
     private String matricula;
 
     @ApiModelProperty("Nombre(s) del alumno")
@@ -45,10 +45,10 @@ public class Alumno extends CommonData {
     @ApiModelProperty("Horas de biblioteca cumplidas")
     private Hora hora;
 
-    @ApiModelProperty("Asistencias a sala de cómputo")
+    @ApiModelProperty("Asistencias a sala de c\u00f3mputo")
     private Asistencia asistencia;
 
-    @ApiModelProperty("Actividad en la que está inscripto el alumno")
+    @ApiModelProperty("Actividad extra-escolar")
     private ActividadVo actividad;
 
     public Alumno(String estatus) {

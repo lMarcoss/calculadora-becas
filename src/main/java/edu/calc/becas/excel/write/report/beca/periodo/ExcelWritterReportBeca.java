@@ -320,7 +320,7 @@ public final class ExcelWritterReportBeca {
         pageBecaPercent.addMergedRegion(new CellRangeAddress(1, 1, 10, 14));
 
         Cell cellSalaDeComputo = rowSubtitle.createCell(15);
-        cellSalaDeComputo.setCellValue("Sala de Cómputo (Lic)\nInglés (DEP)");
+        cellSalaDeComputo.setCellValue("Sala de C\u00f3mputo (Lic)\nIngl\u00e9s (DEP)");
         cellSalaDeComputo.setCellStyle(cellStyleHeaderGreen);
         pageBecaPercent.addMergedRegion(new CellRangeAddress(1, 1, 15, 19));
 

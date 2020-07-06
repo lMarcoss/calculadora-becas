@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description: Implementación de servicios para la tabla PARCIAL
+ * Description: Implementacion de servicios para la tabla PARCIAL
  * Date: 4/9/19
  */
 @Service

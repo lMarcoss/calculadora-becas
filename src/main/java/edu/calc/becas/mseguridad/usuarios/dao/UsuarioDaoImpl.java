@@ -22,9 +22,10 @@ import static edu.calc.becas.common.utils.Constant.TIPO_USUARIO_DEFAULT;
 import static edu.calc.becas.mseguridad.usuarios.dao.QueriesUsuario.*;
 
 /**
+ * Repositorio para administracion de usuarios en la Base de Datos
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 4/14/19
  */
 @Repository
@@ -46,6 +47,15 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
         return null;
     }
 
+    /**
+     * Regresa la lista de usuarios de la Base de Datos de forma paginada
+     *
+     * @param page
+     * @param pageSize
+     * @param status
+     * @param tipoUsuario
+     * @return
+     */
     @Override
     public WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String tipoUsuario) {
 
@@ -73,6 +83,13 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
         return new WrapperData(data, page, pageSize, lengthDataTable);
     }
 
+    /**
+     * Inserta un usuario a la Base de Datos
+     *
+     * @param usuario
+     * @return
+     * @throws GenericException
+     */
     @Override
     public Usuario add(Usuario usuario) throws GenericException {
         try {
@@ -80,17 +97,23 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
                     usuario.getNombres().trim(), usuario.getApePaterno().trim(), usuario.getApeMaterno().trim(),
                     usuario.getRol().getIdRol(), usuario.getUsername().trim(),
                     secretKeyStart, usuario.getPassword(), secretKeyEnd,
-                    usuario.getDiasRetrocesoReporte(),usuario.getEstatus().trim(), usuario.getAgregadoPor().trim());
+                    usuario.getDiasRetrocesoReporte(), usuario.getEstatus().trim(), usuario.getAgregadoPor().trim());
             return usuario;
-        }catch (DuplicateKeyException d){
+        } catch (DuplicateKeyException d) {
             log.error(ExceptionUtils.getStackTrace(d));
             throw new GenericException("Usuario duplicado con el correo " + usuario.getUsername());
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(ExceptionUtils.getStackTrace(e));
             throw new GenericException(ExceptionUtils.getStackTrace(e));
         }
     }
 
+    /**
+     * Actualiza los datos de un usuario en la BD
+     *
+     * @param usuario
+     * @return
+     */
     @Override
     public Usuario update(Usuario usuario) {
         String password = usuario.getPassword();
@@ -109,6 +132,13 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
         return usuario;
     }
 
+    /**
+     * Mapea los datos de usuario a objeto
+     *
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
     private Usuario mapperUsuario(ResultSet rs) throws SQLException {
         Usuario usuario = new Usuario(rs.getString("ESTATUS"));
         usuario.setIdUsuario(rs.getInt("ID_USUARIO"));
@@ -124,6 +154,12 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
         return usuario;
     }
 
+    /**
+     * Consulta un usuario por username
+     *
+     * @param username
+     * @return
+     */
     @Override
     public Usuario getByUsername(String username) {
         return this.jdbcTemplate.queryForObject(QRY_GET_ALL.concat(QRY_CONDITION_BY_USERNAME), new Object[]{username}, ((rs, i) -> mapperUsuario(rs)));

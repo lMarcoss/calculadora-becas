@@ -20,7 +20,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ApiModel(description = "Entidad con los datos del Rol")
 public class Rol extends CommonData implements Serializable {
-    @ApiModelProperty("Indentificador único del Rol")
+    @ApiModelProperty("Indentificador \u00fanico del Rol")
     private int idRol;
     @ApiModelProperty(value = "Nombre del rol", required = true)
     private String nombre;

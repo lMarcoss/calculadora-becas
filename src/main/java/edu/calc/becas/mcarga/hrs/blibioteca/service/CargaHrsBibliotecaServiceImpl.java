@@ -95,7 +95,7 @@ public class CargaHrsBibliotecaServiceImpl extends ProcessRow implements Process
                         }
                         alumno.setHora(hora);
                     } catch (Exception e) {
-                        LOG.error("ERROR AL OBTENER NÚMERO DE HORAS");
+                        LOG.error("ERROR AL OBTENER N\u00daMERO DE HORAS");
                         LOG.error(Arrays.toString(e.getStackTrace()));
                     }
                 }
