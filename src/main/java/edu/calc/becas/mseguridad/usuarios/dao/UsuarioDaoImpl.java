@@ -86,8 +86,8 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
     /**
      * Inserta un usuario a la Base de Datos
      *
-     * @param usuario
-     * @return lista de usuarios
+     * @param usuario usuario a registrar
+     * @return usuario
      * @throws GenericException
      */
     @Override
@@ -111,7 +111,7 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
     /**
      * Actualiza los datos de un usuario en la BD
      *
-     * @param usuario
+     * @param usuario usuario a actualizar
      * @return usuario
      */
     @Override
@@ -158,7 +158,7 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
      * Consulta un usuario por username
      *
      * @param username usuario a recuperar
-     * @return usuario recuperado/encontrado
+     * @return usuario
      */
     @Override
     public Usuario getByUsername(String username) {
