@@ -8,9 +8,10 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
+ * Entidad para definir propiedades de usuario de autenticacion
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 05/04/20
  */
 @Getter
@@ -20,6 +21,6 @@ public class DataLogin implements Serializable {
     @ApiModelProperty(value = "correo del usuario", required = true, position = 0)
     private String username;
 
-    @ApiModelProperty(value = "Contrase\u00f1a del usuario", required = true,position = 1)
+    @ApiModelProperty(value = "Contrase\u00f1a del usuario", required = true, position = 1)
     private String password;
 }

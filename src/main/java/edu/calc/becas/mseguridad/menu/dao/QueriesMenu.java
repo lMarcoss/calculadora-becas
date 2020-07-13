@@ -1,5 +1,8 @@
 package edu.calc.becas.mseguridad.menu.dao;
 
+/**
+ * Define las consultas para menu de usuario
+ */
 final class QueriesMenu {
     private QueriesMenu() {
     }

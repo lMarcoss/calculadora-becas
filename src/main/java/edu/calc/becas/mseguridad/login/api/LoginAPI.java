@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Expone Servicios de autenticacion de usuarios
+ *
+ * @author Marcos Santiago Leonardo
+ * Universidad de la Sierra Sur (UNSIS)
  */
 @RestController
 @RequestMapping("/login")
@@ -28,6 +31,13 @@ public class LoginAPI {
     private final JwtTokenProvider jwtTokenProvider;
     private final MenuService menuService;
 
+    /**
+     * Constructor
+     *
+     * @param loginService     servicio de login
+     * @param jwtTokenProvider servicio interceptor de peticiones
+     * @param menuService      Servicio de menus de usuario
+     */
     public LoginAPI(LoginService loginService, JwtTokenProvider jwtTokenProvider, MenuService menuService) {
         this.loginService = loginService;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -36,15 +46,18 @@ public class LoginAPI {
 
 
     /**
-     * @param user: Autentica al usuario en la aplicacion
-     * @return
+     * Autentica al usuario en la aplicacion
+     *
+     * @param user usuario a validar
+     * @return usuario autenticado
      * @throws InvalidJwtAuthenticationException
      * @throws ConnectionJdbcException
      * @throws GenericException
      */
     @PostMapping
     @ApiOperation(value = "Inicia sesi\u00f3n en la aplicaci\u00f3n")
-    public UserLogin login(@ApiParam(value = "usuario") @RequestBody DataLogin user) throws InvalidJwtAuthenticationException, ConnectionJdbcException, GenericException {
+    public UserLogin login(@ApiParam(value = "usuario") @RequestBody DataLogin user)
+            throws InvalidJwtAuthenticationException, ConnectionJdbcException, GenericException {
 
         UserLogin dataUserLogin = new UserLogin();
         dataUserLogin.setUsername(user.getUsername());

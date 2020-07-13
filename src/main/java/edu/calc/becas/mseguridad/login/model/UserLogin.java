@@ -13,9 +13,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * Define las propiedades de un usuario autenticado
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 11/03/20
  */
 @Setter

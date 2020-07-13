@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Implementacion de servicios para obtener menus por usuario
+ */
 @Service
 public class MenuServiceImpl implements MenuService {
     private final MenuDao menuDao;
@@ -15,6 +18,13 @@ public class MenuServiceImpl implements MenuService {
         this.menuDao = menuDao;
     }
 
+    /**
+     * Recupera el menu por usuario
+     *
+     * @param username usuario
+     * @return menu por usuario
+     * @throws GenericException
+     */
     @Override
     public List<Menu> getMenu(String username) throws GenericException {
         return menuDao.getMenu(username);

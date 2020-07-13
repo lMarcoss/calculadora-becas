@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
+ * Implementacion de servicios para recuperar roles de usuarios
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 4/14/19
  */
 @Service
@@ -22,6 +23,14 @@ public class RolServiceImpl implements RolService {
         this.rolDao = rolDao;
     }
 
+    /**
+     * Recupera roles por paginacion y estatus
+     *
+     * @param page     pagina a recuperar
+     * @param pageSize registros a recuperar para una pagina
+     * @param status   estatus de los registros a recuperar
+     * @return
+     */
     @Override
     public WrapperData getAllByStatus(int page, int pageSize, String status) {
         return rolDao.getAllByStatus(page, pageSize, status);

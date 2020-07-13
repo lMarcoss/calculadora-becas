@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 import static edu.calc.becas.mseguridad.menu.dao.QueriesMenu.QRY_GET_CHLIDS_BY_PARENT;
 import static edu.calc.becas.mseguridad.menu.dao.QueriesMenu.QRY_GET_PARENTS_BY_USER;
 
+/**
+ * Repositorio de administracion de menus por usuario con la BD
+ */
 @Repository
 public class MenuDaoImpl extends BaseDao implements MenuDao {
 
@@ -24,6 +27,13 @@ public class MenuDaoImpl extends BaseDao implements MenuDao {
     }
 
 
+    /**
+     * Consulta de menu por usuario
+     *
+     * @param username username del usuario
+     * @return menu del usuario
+     * @throws GenericException
+     */
     @Override
     public List<Menu> getMenu(String username) throws GenericException {
         List<Menu> parents = getParents();
@@ -35,6 +45,22 @@ public class MenuDaoImpl extends BaseDao implements MenuDao {
         return parents;
     }
 
+    /**
+     * Obtienes los menus principales
+     *
+     * @return
+     */
+    private List<Menu> getParents() {
+        return this.jdbcTemplate.query(QRY_GET_PARENTS_BY_USER, ((rs, i) -> mapperMenuParent(rs)));
+
+    }
+
+    /**
+     * Obtienes los submenus del usuario por menu principal
+     *
+     * @param parents  menu principal
+     * @param username usuario
+     */
     private void getChild(List<Menu> parents, String username) {
         for (Menu parent : parents) {
             try {
@@ -51,20 +77,13 @@ public class MenuDaoImpl extends BaseDao implements MenuDao {
         }
     }
 
-    private Menu mapperMenuChild(ResultSet rs) throws SQLException {
-        Menu child = new Menu();
-        child.setIdMenu(rs.getInt("ID_MENU"));
-        child.setIdPadre(rs.getInt("ID_PADRE"));
-        child.setNombre(rs.getString("NOMBRE"));
-        child.setUrl(rs.getString("URL"));
-        return child;
-    }
-
-    private List<Menu> getParents() {
-        return this.jdbcTemplate.query(QRY_GET_PARENTS_BY_USER, ((rs, i) -> mapperMenuParent(rs)));
-
-    }
-
+    /**
+     * Mapea los menus
+     *
+     * @param rs resultado de la consulta
+     * @return menu principal
+     * @throws SQLException
+     */
     private Menu mapperMenuParent(ResultSet rs) throws SQLException {
         Menu menu = new Menu();
         menu.setCollapsed(false);
@@ -75,4 +94,22 @@ public class MenuDaoImpl extends BaseDao implements MenuDao {
         menu.setIcon(rs.getString("ICON"));
         return menu;
     }
+
+    /**
+     * Mapea los submenus del usuario
+     *
+     * @param rs resultado de la consulta
+     * @return submenu
+     * @throws SQLException
+     */
+    private Menu mapperMenuChild(ResultSet rs) throws SQLException {
+        Menu child = new Menu();
+        child.setIdMenu(rs.getInt("ID_MENU"));
+        child.setIdPadre(rs.getInt("ID_PADRE"));
+        child.setNombre(rs.getString("NOMBRE"));
+        child.setUrl(rs.getString("URL"));
+        return child;
+    }
+
+
 }

@@ -11,9 +11,10 @@ import static edu.calc.becas.common.utils.Constant.DEFAULT_ESTATUS;
 import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
 
 /**
+ * Metodos comunes para consulta a la BD
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description: coomon methods for DAO
  * Date: 3/26/19
  */
 @Component
@@ -21,6 +22,10 @@ public class BaseDao {
     protected final JdbcTemplate jdbcTemplate;
     protected final MessageApplicationProperty messageApplicationProperty;
 
+    /**
+     * @param jdbcTemplate
+     * @param messageApplicationProperty
+     */
     public BaseDao(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
         this.jdbcTemplate = jdbcTemplate;
         this.messageApplicationProperty = messageApplicationProperty;

@@ -1,6 +1,9 @@
 package edu.calc.becas.mseguridad.login.dao;
 
-public class QueriesLogin {
+/**
+ * Define las consultas para autenticacion de usuario
+ */
+class QueriesLogin {
 
     static final String QRY_GET_INFO_ALUMNO = "SELECT ID_ALUMNO,NOMBRES, APE_PATERNO, APE_MATERNO, '3' ID_ROL, 'ALUMNO' ROL, AC.MATRICULA as USERNAME, CURP COMMONVAL01, AC.CVE_GRUPO COMMONVAL02,\n" +
             "       AC.DESC_LICENCIATURA COMMONVAL03 FROM ALUMNOS AL, ALUMNOS_DAT_PERIODO AC\n" +

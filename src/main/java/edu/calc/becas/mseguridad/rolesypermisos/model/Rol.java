@@ -10,9 +10,10 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
+ * Define las propiedades del Rol de usuario
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 4/14/19
  */
 @Setter
@@ -25,6 +26,11 @@ public class Rol extends CommonData implements Serializable {
     @ApiModelProperty(value = "Nombre del rol", required = true)
     private String nombre;
 
+    /**
+     * Inicializa el rol con estatus
+     *
+     * @param estatus estatus del Rol
+     */
     public Rol(String estatus) {
         super(estatus);
     }

@@ -20,6 +20,9 @@ import java.sql.SQLException;
 
 import static edu.calc.becas.mseguridad.login.dao.QueriesLogin.*;
 
+/**
+ * Repositorio para consultas a BD para autenticacin de usuario
+ */
 @Repository
 @Slf4j
 public class LoginDaoImpl extends BaseDao implements LoginDao {
@@ -34,24 +37,33 @@ public class LoginDaoImpl extends BaseDao implements LoginDao {
         super(jdbcTemplate, messageApplicationProperty);
     }
 
+    /**
+     * Autentica los usuarios con la BD
+     *
+     * @param usuario usuario a validar
+     * @return usuario validado
+     * @throws InvalidJwtAuthenticationException
+     * @throws ConnectionJdbcException
+     * @throws EmptyResultDataAccessException
+     */
     public UserLogin login(UserLogin usuario) throws InvalidJwtAuthenticationException, ConnectionJdbcException, EmptyResultDataAccessException {
 
         try {
 
             //alumno
             Integer count = null;
-            try {
+            try { // valida si el usuario es alumno
                 count = jdbcTemplate.queryForObject(QRY_VALIDA_ALUMNO,
                         new Object[]{usuario.getUsername()},
                         Integer.class);
-                if(count == null || count == 0){
+                if (count == null || count == 0) {
                     throw new EmptyResultDataAccessException(0);
                 }
 
 
                 usuario.setRol("ALUMNO");
 
-                if(!usuario.getUsername().trim().equalsIgnoreCase(usuario.getPassword())){
+                if (!usuario.getUsername().trim().equalsIgnoreCase(usuario.getPassword())) {
                     throw new EmptyResultDataAccessException(0);
                 }
                 Usuario usuarioAlumno = null;
@@ -114,6 +126,13 @@ public class LoginDaoImpl extends BaseDao implements LoginDao {
         }
     }
 
+    /**
+     * Mapea los datos del usuario
+     *
+     * @param rs resulta de la consulta
+     * @return usuario
+     * @throws SQLException
+     */
     private Usuario mapperUsuarioLogin(ResultSet rs) throws SQLException {
         Usuario usuario = new Usuario();
         Rol rol = new Rol();
@@ -131,6 +150,13 @@ public class LoginDaoImpl extends BaseDao implements LoginDao {
     }
 
 
+    /**
+     * Mapea los datos del usuario - alumno
+     *
+     * @param rs resultado de la consulta
+     * @return usuario
+     * @throws SQLException
+     */
     private Usuario mapperAlumnoLogin(ResultSet rs) throws SQLException {
         Usuario usuario = new Usuario();
         Rol rol = new Rol();

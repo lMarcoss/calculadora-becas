@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import static edu.calc.becas.common.utils.Constant.*;
 
 /**
+ * API para exponer servicios de administracion de roles de usuario
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description: API para exponer servicios de administracion de roles de usuario
  * Date: 4/14/19
  */
 @RestController
@@ -32,6 +33,14 @@ public class RolAPI {
     }
 
 
+    /**
+     * Servicio para obtener el listado de usuarios por paginacion y estatus
+     *
+     * @param page     pagina a recuperar
+     * @param pageSize registros a recuperar por pagina
+     * @param status   estatus de los registros a obtener
+     * @return lista de usuarios
+     */
     @GetMapping
     @ApiOperation(value = "Obtiene el listado de roles")
     public WrapperData getAllRoles(

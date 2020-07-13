@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import static edu.calc.becas.common.utils.Constant.*;
 
 /**
- * Expone servicios para administracion de usuarios
+ * API para exponee servicios de administracion de usuarios
  *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)

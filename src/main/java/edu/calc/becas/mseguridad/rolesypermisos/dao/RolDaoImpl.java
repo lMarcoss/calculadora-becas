@@ -15,21 +15,28 @@ import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
 import static edu.calc.becas.mseguridad.rolesypermisos.dao.QueriesRol.*;
 
 /**
+ * Repositorio para consulta de roles de usuarios en la BD
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 4/14/19
  */
 @Repository
 public class RolDaoImpl extends BaseDao implements RolDao {
 
-    private final String secretKeyStart = "4^%m@=C*&c#L+%";
-    private final String secretKeyEnd = "U$|2AT>30!";
 
     public RolDaoImpl(JdbcTemplate jdbcTemplate, MessageApplicationProperty messageApplicationProperty) {
         super(jdbcTemplate, messageApplicationProperty);
     }
 
+    /**
+     * Consulta los roles por estatus
+     *
+     * @param page     pagina a recuperar
+     * @param pageSize registros por pagina a recuperar
+     * @param status   estatus de los registros a recuperar
+     * @return lista de roles
+     */
     @Override
     public WrapperData getAllByStatus(int page, int pageSize, String status) {
         boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
@@ -67,6 +74,13 @@ public class RolDaoImpl extends BaseDao implements RolDao {
         return null;
     }
 
+    /**
+     * Mapea las propiedades de usuario
+     *
+     * @param rs resultado de la BD
+     * @return usuario mapeado
+     * @throws SQLException
+     */
     private Rol mapperRol(ResultSet rs) throws SQLException {
         Rol rol = new Rol(rs.getString("ESTATUS"));
         rol.setIdRol(rs.getInt("ID_ROL"));

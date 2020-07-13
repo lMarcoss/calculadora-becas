@@ -36,7 +36,7 @@ public class CommonData implements Serializable {
     /**
      * Inicializa el objeto con la propiedad estatus y su descripcion
      *
-     * @param estatus
+     * @param estatus estatus del objeto
      */
     public CommonData(String estatus) {
         this.estatus = estatus;

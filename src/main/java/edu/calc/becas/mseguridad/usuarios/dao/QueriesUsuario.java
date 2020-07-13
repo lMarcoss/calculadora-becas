@@ -1,9 +1,10 @@
 package edu.calc.becas.mseguridad.usuarios.dao;
 
 /**
+ * Se definen las consultas para obtener usuarios
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 4/14/19
  */
 final class QueriesUsuario {

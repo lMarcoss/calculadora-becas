@@ -8,6 +8,9 @@ import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mvc.config.security.InvalidJwtAuthenticationException;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementacion de servicios para autenticacion de usuarios
+ */
 @Service
 public class LoginServiceImpl implements LoginService {
 
@@ -19,6 +22,15 @@ public class LoginServiceImpl implements LoginService {
         this.cicloEscolarService = cicloEscolarService;
     }
 
+    /**
+     * Autentica un usuario
+     *
+     * @param usuario usuario
+     * @return usuario autenticado
+     * @throws InvalidJwtAuthenticationException
+     * @throws ConnectionJdbcException
+     * @throws GenericException
+     */
     @Override
     public UserLogin login(UserLogin usuario) throws InvalidJwtAuthenticationException, ConnectionJdbcException, GenericException {
         UserLogin userLogin = loginAPIDaoImpl.login(usuario);
