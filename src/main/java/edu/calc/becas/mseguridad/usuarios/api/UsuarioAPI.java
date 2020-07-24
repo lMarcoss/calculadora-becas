@@ -79,7 +79,7 @@ public class UsuarioAPI {
      * @param usuario     usuario a registrar
      * @param httpServlet parametros de la peticion
      * @return usuario registrado
-     * @throws GenericException
+     * @throws GenericException lanza error ocurrido al registrar usuario
      */
     @PostMapping
     @ApiOperation(value = "Registra un usuario")
@@ -95,7 +95,7 @@ public class UsuarioAPI {
      * Valida y desenctripta la contrasenia de usuario
      *
      * @param usuario usuario a validar contrasenia
-     * @throws GenericException
+     * @throws GenericException lanza error ocurrido al validar password
      */
     private void validatePassword(Usuario usuario) throws GenericException {
         try {
@@ -116,7 +116,7 @@ public class UsuarioAPI {
      * @param usuario     usuario a modificar
      * @param httpServlet parametros de la peticion
      * @return usuario actualizado
-     * @throws GenericException
+     * @throws GenericException lanza error ocurrido al modificar usuario
      */
     @PatchMapping
     @ApiOperation(value = "Actualiza datos de un usuario")

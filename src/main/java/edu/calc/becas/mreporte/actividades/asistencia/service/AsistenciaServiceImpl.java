@@ -3,8 +3,8 @@ package edu.calc.becas.mreporte.actividades.asistencia.service;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mconfiguracion.parciales.service.ParcialService;
-import edu.calc.becas.mreporte.actividades.asistencia.model.AlumnoAsistenciaSala;
 import edu.calc.becas.mreporte.actividades.asistencia.dao.AsistenciaDao;
+import edu.calc.becas.mreporte.actividades.asistencia.model.AlumnoAsistenciaTaller;
 import edu.calc.becas.mreporte.actividades.asistencia.model.FechaAsistencia;
 import edu.calc.becas.mreporte.actividades.asistencia.model.PaseAsistencia;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
@@ -18,6 +18,12 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Implementa los servicios de administracion de asistencias a talleres
+ *
+ * @author Marcos Santiago Leonardo
+ * Universidad de la Sierra Sur
+ */
 @Service
 @Slf4j
 public class AsistenciaServiceImpl implements AsistenciaService {
@@ -33,7 +39,7 @@ public class AsistenciaServiceImpl implements AsistenciaService {
     }
 
     @Override
-    public List<AlumnoAsistenciaSala> getAlumnosByScheduleAndUser(UserLogin userLogin, String idHorario, List<FechaAsistencia> fechasAsistencia) throws GenericException {
+    public List<AlumnoAsistenciaTaller> getAlumnosByScheduleAndUser(UserLogin userLogin, String idHorario, List<FechaAsistencia> fechasAsistencia) throws GenericException {
         Parcial parcialActual = parcialService.getParcialActual();
         Parcial parcialAnterior = parcialService.getParcialAnterior(parcialActual);
         Usuario usuario = usuarioService.getByUsername(userLogin.getUsername());
@@ -41,6 +47,13 @@ public class AsistenciaServiceImpl implements AsistenciaService {
         return asistenciaDao.getAlumnosByScheduleAndUser(usuario, idHorario, fechasAsistencia, parcialActual, parcialAnterior);
     }
 
+    /**
+     * Define la fecha final en la que se permite editar las asistencias del parcial
+     * de acuerdo a los dias de tolereancia del usuarioo
+     *
+     * @param parcialActual parcial en curso
+     * @param usuario       usuario o encargado de la actividad
+     */
     private void addDateToDateEndParcial(Parcial parcialActual, Usuario usuario) {
 
         try {

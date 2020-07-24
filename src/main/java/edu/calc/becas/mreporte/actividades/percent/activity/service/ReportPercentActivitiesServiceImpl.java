@@ -29,9 +29,10 @@ import static edu.calc.becas.common.utils.Constant.*;
 import static java.math.BigDecimal.ROUND_HALF_UP;
 
 /**
+ * Implementacion de servicios para calcular % de asistencias a talleres
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur
- * Description:
  * Date: 2019-07-10
  */
 @Service
@@ -112,7 +113,7 @@ public class ReportPercentActivitiesServiceImpl implements ReportPercentActiviti
                 BigDecimal percent = multiplica.divide(asistenciaPorParcial, 0, ROUND_HALF_UP);
 
                 // actividad extraescola del alumno
-                ActividadVo actividadExtraEscolar= alumnoActividadDao.getActividadByAlumno(actividad.getMatricula(), cicloEscolarVo);
+                ActividadVo actividadExtraEscolar = alumnoActividadDao.getActividadByAlumno(actividad.getMatricula(), cicloEscolarVo);
                 actividad.setIdActividadAlumno(actividadExtraEscolar.getIdActividadAlumno());
 
                 if (actividad.getActividad().getIdActividad() == 2) {
@@ -137,6 +138,8 @@ public class ReportPercentActivitiesServiceImpl implements ReportPercentActiviti
         CicloEscolarVo periodoActual = cicloEscolarService.getCicloEscolarActual();
         WrapperData<DetalleActividadVo> schedulerActivities = actividadesService.getAllDetalle(0, Integer.parseInt(ITEMS_FOR_PAGE), ALL_ITEMS, periodoActual.getClave(), ESTATUS_ACTIVE, ALL_ITEMS, userLogin);
         List<Parcial> parciales = parcialService.getAllByPeriodo(periodoActual.getClave());
+
+        // para cada horario de actividad - calcula los % de asistencias en cada parcial
         if (schedulerActivities.getData().size() > 0 && parciales.size() > 0) {
             schedulerActivities.getData().forEach(detalleActividadVo -> {
                 parciales.forEach(parcial -> {

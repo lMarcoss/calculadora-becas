@@ -8,9 +8,10 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
+ * Entidad para definir datos del reporte de actividades
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur
- * Description:
  * Date: 2019-07-10
  */
 @NoArgsConstructor

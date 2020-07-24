@@ -27,9 +27,10 @@ import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
 import static edu.calc.becas.mreporte.actividades.percent.activity.dao.QueriesReportPercentActivity.*;
 
 /**
+ * Implementa las operaciones a la BD para administracion de reporte porcentaje de actividade
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 2019-06-16
  */
 @Repository
@@ -83,41 +84,35 @@ public class ReportPercentActivitiesDaoImpl extends BaseDao implements ReportPer
 
     @Override
     public void addPercentActivity(BigDecimal porcentaje, Integer idActividadAlumno, UserLogin userLogin, Parcial parcial) {
-        ActividadVo actividadVo = new ActividadVo();
-        actividadVo.setIdActividadAlumno(idActividadAlumno);
-
-
-        if (actividadAlumnoExists(actividadVo, parcial)) {
-
-            jdbcTemplate.update(QRY_UPDATE_PERCENT_ACTIVIDAD,
-                    porcentaje,
-                    userLogin.getUsername(),
-                    actividadVo.getIdActividadAlumno(),
-                    parcial.getIdParcial());
-        } else {
-            jdbcTemplate.update(QRY_INSERT_PERCENT_ACTIVIDAD,
-                    actividadVo.getIdActividadAlumno(),
-                    porcentaje,
-                    parcial.getIdParcial(),
-                    parcial.getCvePeriodo(),
-                    parcial.getDescPeriodo(),
-                    userLogin.getUsername()
-            );
-        }
+        addPercentActivity(porcentaje, idActividadAlumno, userLogin, parcial, QRY_UPDATE_PERCENT_ACTIVIDAD, QRY_INSERT_PERCENT_ACTIVIDAD);
     }
 
     @Override
     public void addPercentActivitySala(BigDecimal percent, int idActividadAlumno, UserLogin userLogin, Parcial parcial) {
+        addPercentActivity(percent, idActividadAlumno, userLogin, parcial, QRY_UPDATE_PERCENT_SALA, QRY_INSERT_PERCENT_SALA);
+    }
+
+    /**
+     * registra o editar porcentaje de actividad del alumno por query personalizad
+     *
+     * @param percent                  porcentaje
+     * @param idActividadAlumno        actividad del alumno
+     * @param userLogin                usuario
+     * @param parcial                  parcial del porcentaje
+     * @param qryUpdatePercentActivity actualizar
+     * @param qryInsertPercentActivity insertar
+     */
+    private void addPercentActivity(BigDecimal percent, int idActividadAlumno, UserLogin userLogin, Parcial parcial, String qryUpdatePercentActivity, String qryInsertPercentActivity) {
         ActividadVo actividadVo = new ActividadVo();
         actividadVo.setIdActividadAlumno(idActividadAlumno);
         if (actividadAlumnoExists(actividadVo, parcial)) {
-            jdbcTemplate.update(QRY_UPDATE_PERCENT_SALA,
+            jdbcTemplate.update(qryUpdatePercentActivity,
                     percent,
                     userLogin.getUsername(),
                     actividadVo.getIdActividadAlumno(),
                     parcial.getIdParcial());
         } else {
-            jdbcTemplate.update(QRY_INSERT_PERCENT_SALA,
+            jdbcTemplate.update(qryInsertPercentActivity,
                     actividadVo.getIdActividadAlumno(),
                     percent,
                     parcial.getIdParcial(),
@@ -133,6 +128,8 @@ public class ReportPercentActivitiesDaoImpl extends BaseDao implements ReportPer
         String queryGetALl = QRY_SELECT_DATA_REPORT.concat(QRY_FROM_DATA_REPORTE_ACTIVIDADES);
         List<Integer> parciales = Stream.of(1, 2, 3).collect(Collectors.toList());
         List<ReportPercentActivity> listPercent = new ArrayList<>();
+
+        // para cada parcial -consulta porcentaje de actividad del alumno
         parciales.forEach(parcial -> {
             try {
                 String qryAndConditionByParcial = queryGetALl.concat(addConditionParcial(parcial)).concat(addConditionPeriodo(periodo));
@@ -164,6 +161,12 @@ public class ReportPercentActivitiesDaoImpl extends BaseDao implements ReportPer
         return String.format(ADD_CONDITION_CICLO_ESCOLAR, "'" + periodo.getClave() + "'");
     }
 
+    /**
+     * Crea las condiciones de consulta para filtro del reporte
+     *
+     * @param filter valores de filtro
+     * @return condiciones de filtro
+     */
     private String createCondition(ReportPercentActivity filter) {
         String conditions = "";
         if (filter.getIdActividad() != 0) {
@@ -201,10 +204,23 @@ public class ReportPercentActivitiesDaoImpl extends BaseDao implements ReportPer
         return conditions;
     }
 
+    /**
+     * Formatea datos en texto para consulta
+     *
+     * @param valueCondition dato
+     * @return dato formateado
+     */
     private String formatParam(String valueCondition) {
         return "'" + valueCondition + "'";
     }
 
+    /**
+     * Parsea los datos del reporte
+     *
+     * @param rs resultado de la consulta
+     * @return reporte por parcial
+     * @throws SQLException error de parseo
+     */
     private ReportPercentActivity mapperReporteActividad(ResultSet rs) throws SQLException {
         ReportPercentActivity reporte = new ReportPercentActivity();
         reporte.setMatricula(rs.getString("MATRICULA"));

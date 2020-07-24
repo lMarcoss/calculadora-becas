@@ -1,5 +1,8 @@
 package edu.calc.becas.mreporte.actividades.asistencia.dao;
 
+/**
+ * Define las consultas o actualizaciones en la BD
+ */
 final class QueriesAsistenciaSala {
     private QueriesAsistenciaSala() {
     }

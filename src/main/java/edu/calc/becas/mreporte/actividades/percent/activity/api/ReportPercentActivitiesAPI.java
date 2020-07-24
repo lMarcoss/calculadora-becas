@@ -17,9 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import static edu.calc.becas.common.utils.Constant.*;
 
 /**
+ * API para exponer servicios para consultar y calcular los % de asistencias de alumnos a talleres
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description: Servicios para consultar reporte de porcentajes de becas
  * Date: 2019-06-16
  */
 @RestController
@@ -36,6 +37,21 @@ public class ReportPercentActivitiesAPI {
         this.userRequestService = userRequestService;
     }
 
+    /**
+     * Servicio que obtiene el reporte detallado de actividades por condiciones y paginacion
+     *
+     * @param page         pagina a recuperar
+     * @param pageSize     registros por pagina
+     * @param cicloEscolar periodo para el  filtro
+     * @param licenciatura licenciatura para el filtro
+     * @param grupo        grupo para el filtro
+     * @param parcial      parcial para el filtro
+     * @param actividad    actividad para el filtro
+     * @param palabraClave palabraClave para el filtro
+     * @param estatus      estatus para el filtro
+     * @param httpServlet  datos de peticion
+     * @return reporte de % de asistencias
+     */
     @GetMapping("/detallado")
     @ApiOperation(value = "Obtiene el reporte detallado de actividades")
     public WrapperData getAll(
@@ -69,6 +85,19 @@ public class ReportPercentActivitiesAPI {
         return this.reportPercentActivitiesService.getAll(pageable, reporte);
     }
 
+    /**
+     * Define los parametros de consulta
+     *
+     * @param cicloEscolar periodo para el  filtro
+     * @param licenciatura licenciatura para el  filtro
+     * @param grupo        grupo para el  filtro
+     * @param parcial      parcial para el  filtro
+     * @param actividad    actiidad para el  filtro
+     * @param palabraClave palabraclave para el  filtro
+     * @param matricula    matricula
+     * @param estatus      estatus del regitro
+     * @return datos del filtro
+     */
     private ReportPercentActivity defineFilterParam(String cicloEscolar, String licenciatura, String grupo, String parcial,
                                                     String actividad, String palabraClave, String matricula, String estatus) {
         ReportPercentActivity filter = new ReportPercentActivity();
@@ -100,6 +129,13 @@ public class ReportPercentActivitiesAPI {
     }
 
 
+    /**
+     * Servicio para calcular % de asistencias a talleres en el periodo actual
+     *
+     * @param httpServletRequest datos de la peticion
+     * @return resultado
+     * @throws GenericException error en el calculo
+     */
     @PostMapping("/calcula-porcentaje-actividad/periodo-actual")
     @ApiOperation(value = "Calcula porcentaje de actividad extra-escolar de todos los parciales del periodo en curso")
     public String calculatePercentActivityByAllParcialPeriodo(HttpServletRequest httpServletRequest) throws GenericException {
@@ -107,6 +143,15 @@ public class ReportPercentActivitiesAPI {
         return reportPercentActivitiesService.calculatePercentActivityByPeriodo(userLogin);
     }
 
+    /**
+     * Servicio para calcular los % de asistencias a actividades de un horario y parcial en especifico
+     *
+     * @param idHorario          horario
+     * @param idParcial          parcial
+     * @param httpServletRequest datos de la peticion
+     * @return resultado
+     * @throws Exception error en el calculo
+     */
     @PostMapping("/calcula-porcentaje-actividad/horario/{id-horario}/parcial/{parcial}")
     @ApiOperation(value = "Calcula porcentaje de actividad extra-escolar de alumnos por horario de actividad")
     public String calculatePercentActivityBySchedule(

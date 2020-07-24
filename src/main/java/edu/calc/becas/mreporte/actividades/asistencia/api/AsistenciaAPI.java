@@ -1,11 +1,11 @@
 package edu.calc.becas.mreporte.actividades.asistencia.api;
 
 import edu.calc.becas.exceptions.GenericException;
-import edu.calc.becas.mreporte.actividades.asistencia.model.AlumnoAsistenciaSala;
-import edu.calc.becas.mreporte.actividades.asistencia.model.WrapperAsistenciaAlumno;
-import edu.calc.becas.mreporte.actividades.asistencia.service.AsistenciaService;
+import edu.calc.becas.mreporte.actividades.asistencia.model.AlumnoAsistenciaTaller;
 import edu.calc.becas.mreporte.actividades.asistencia.model.FechaAsistencia;
 import edu.calc.becas.mreporte.actividades.asistencia.model.PaseAsistencia;
+import edu.calc.becas.mreporte.actividades.asistencia.model.WrapperAsistenciaAlumno;
+import edu.calc.becas.mreporte.actividades.asistencia.service.AsistenciaService;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.security.user.UserRequestService;
@@ -22,6 +22,9 @@ import java.util.List;
 
 import static edu.calc.becas.common.utils.Constant.TODAY;
 
+/**
+ * Api para exponer servicios de administracion de asistencia a diferentes talleres incluyendo sala de computo
+ */
 @RestController
 @RequestMapping("/asistencias")
 @Api(description = "Servicios para consultar asistencia de alumnos en en diferentes actividades extraescolares")
@@ -30,11 +33,25 @@ public class AsistenciaAPI {
     private final AsistenciaService asistenciaService;
     private final UserRequestService userRequestService;
 
+    /**
+     * Inicializa los servicios
+     *
+     * @param asistenciaService  servicio de asistencias a talleres
+     * @param userRequestService servicio para interceptar peticiones
+     */
     public AsistenciaAPI(AsistenciaService asistenciaService, UserRequestService userRequestService) {
         this.asistenciaService = asistenciaService;
         this.userRequestService = userRequestService;
     }
 
+    /**
+     * Registra una lista de asistencias a talleres
+     *
+     * @param asistencias asistencias a registrar
+     * @param httpServlet datos de la peticion
+     * @return asistencias
+     * @throws GenericException lanza una excepcion con el error ocurrido
+     */
     @PostMapping
     @ApiOperation(value = "Registra una lista de asistencia de alumnos por fecha")
     public List<PaseAsistencia> addPresenceByDate(@RequestBody List<PaseAsistencia> asistencias, HttpServletRequest httpServlet) throws GenericException {
@@ -44,7 +61,16 @@ public class AsistenciaAPI {
         return this.asistenciaService.addPresenceByDate(asistencias, usuario);
     }
 
-
+    /**
+     * Obtiene la lista de alumnos por horario para pase de asistencia - valida la fecha actual
+     *
+     * @param idHorario   horario a recuperar
+     * @param fechaInicio fecha de inicio del rango a recuperar
+     * @param fechaFin    fecha fin del rango a recuperar
+     * @param httpServlet datos de la peticion para obtener usuario
+     * @return lista de asistencias con fechas
+     * @throws Exception lanza el error ocurrido en el proceso
+     */
     @GetMapping("/alumnos-por-fechas-y-horarios/horario/{id-horario}")
     @ApiOperation(value = "Obtiene la lista de alumnos por horario para alta y edici\u00f3n de asistencia")
     public WrapperAsistenciaAlumno getAlumnosByScheduleAndUser(
@@ -70,7 +96,7 @@ public class AsistenciaAPI {
 
 
         List<FechaAsistencia> fechas = this.getFechas(fechaInicio, fechaFin);
-        List<AlumnoAsistenciaSala> alumnos = asistenciaService.getAlumnosByScheduleAndUser(userLogin, idHorario, fechas);
+        List<AlumnoAsistenciaTaller> alumnos = asistenciaService.getAlumnosByScheduleAndUser(userLogin, idHorario, fechas);
         asistenciaAlumno.setAlumnos(alumnos);
         asistenciaAlumno.setFechas(fechas);
 
@@ -78,6 +104,14 @@ public class AsistenciaAPI {
         return asistenciaAlumno;
     }
 
+    /**
+     * Obtiene las fechas en el rango especificado
+     *
+     * @param fechaInicio inicio del rango
+     * @param fechaFin    fin del rango
+     * @return fechas en el rango especificado
+     * @throws Exception lanza error ocurrido
+     */
     private List<FechaAsistencia> getFechas(String fechaInicio,
                                             String fechaFin) throws Exception {
 
@@ -99,6 +133,12 @@ public class AsistenciaAPI {
         return fechas;
     }
 
+    /**
+     * crea una lista de fechas dentro del rango fechaInicial y fechaFinal con la condicion de dias habiles
+     *
+     * @param fechaInicial inicio del rango
+     * @param fechas       fechas obtenidas
+     */
     private void createDate(Date fechaInicial, List<FechaAsistencia> fechas) {
         int day = fechaInicial.getDay();// dias habiles
         if (isDayWeek(day)) {
@@ -111,6 +151,12 @@ public class AsistenciaAPI {
         }
     }
 
+    /**
+     * Valida si la fecha es entre semana
+     *
+     * @param day dia de la semana
+     * @return es dia de la semana o no
+     */
     private boolean isDayWeek(int day) {
         return day >= 1 && day <= 5;
     }

@@ -13,6 +13,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +42,7 @@ public class ReportPercentBecaAPI {
 
     @PostMapping("/calcula-porcentaje-beca/periodo-en-curso")
     @ApiOperation(value = "Calcula porcentaje de beca de alumnos del periodo en curso")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public String calculaPorcentajeBecaPorPeriodo(HttpServletRequest httpServletRequest) throws GenericException {
         UserLogin userLogin = userRequestService.getUserLogin(httpServletRequest);
         return reportPercentBecaService.calculaPorcentajeBecaPorPeriodo(userLogin);

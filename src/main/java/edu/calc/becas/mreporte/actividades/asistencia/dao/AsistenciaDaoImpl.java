@@ -4,10 +4,9 @@ import edu.calc.becas.common.base.dao.BaseDao;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
-import edu.calc.becas.mreporte.actividades.asistencia.model.AlumnoAsistenciaSala;
+import edu.calc.becas.mreporte.actividades.asistencia.model.AlumnoAsistenciaTaller;
 import edu.calc.becas.mreporte.actividades.asistencia.model.FechaAsistencia;
 import edu.calc.becas.mreporte.actividades.asistencia.model.PaseAsistencia;
-import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import edu.calc.becas.utils.UtilDate;
@@ -27,6 +26,9 @@ import java.util.List;
 import static edu.calc.becas.utils.UtilDate.PATTERN_DIAG;
 import static edu.calc.becas.utils.UtilDate.isDateBetween;
 
+/**
+ * Implementa las consultas a la BD para administracion de asistencias
+ */
 @Slf4j
 @Repository
 public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
@@ -40,17 +42,26 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
         super(jdbcTemplate, messageApplicationProperty);
     }
 
+    /**
+     * @param usuario          usuario que consulta
+     * @param idHorario        idHorario a consultar
+     * @param fechasAsistencia fecha de asistencia a consultar
+     * @param parcialActual    indica el parcial actual del periodo en curso
+     * @param parcialAnterior  indica el parcial anterior al actual del periodo en curso
+     * @return
+     * @throws GenericException
+     */
     @Override
-    public List<AlumnoAsistenciaSala> getAlumnosByScheduleAndUser(Usuario usuario, String idHorario,
-                                                                  List<FechaAsistencia> fechasAsistencia,
-                                                                  Parcial parcialActual, Parcial parcialAnterior) throws GenericException {
+    public List<AlumnoAsistenciaTaller> getAlumnosByScheduleAndUser(Usuario usuario, String idHorario,
+                                                                    List<FechaAsistencia> fechasAsistencia,
+                                                                    Parcial parcialActual, Parcial parcialAnterior) throws GenericException {
 
-        List<AlumnoAsistenciaSala> alumnoAsistenciaSalas = jdbcTemplate.query(QueriesAsistenciaSala.GET_ALUMNOS_BY_USER_AND_SCHEDULE,
+        List<AlumnoAsistenciaTaller> alumnoAsistenciaTallers = jdbcTemplate.query(QueriesAsistenciaSala.GET_ALUMNOS_BY_USER_AND_SCHEDULE,
                 new Object[]{idHorario}, ((rs, i) -> mapperAlumnos(rs)));
 
         Date today = defineDateToday();
 
-        alumnoAsistenciaSalas.forEach(alumnoAsistenciaSala -> {
+        alumnoAsistenciaTallers.forEach(alumnoAsistenciaSala -> {
             List<FechaAsistencia> asistencias = new ArrayList<>();
 
             fechasAsistencia.forEach(fecha -> {
@@ -95,9 +106,15 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
             alumnoAsistenciaSala.setAsistencia(asistencias);
         });
 
-        return alumnoAsistenciaSalas;
+        return alumnoAsistenciaTallers;
     }
 
+    /**
+     * defina  fecha actual
+     *
+     * @return fecha actual
+     * @throws GenericException error al parsear fecha
+     */
     private Date defineDateToday() throws GenericException {
         try {
             return UtilDate.getDateToday();
@@ -107,6 +124,16 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
         }
     }
 
+    /**
+     * Valida fecha de asistencia por parcial
+     *
+     * @param parcialActual   parcial en curso
+     * @param fecha           fecha de asistencia
+     * @param parcialAnterior parcial anterior al parcial en curso
+     * @param usuario         usuario o encargado
+     * @param today           fecha en curso
+     * @return fecha es valida para registrar asistencia
+     */
     private boolean validateDatePresenceByParcial(Parcial parcialActual, String fecha,
                                                   Parcial parcialAnterior, Usuario usuario, Date today) {
         try {
@@ -190,19 +217,19 @@ public class AsistenciaDaoImpl extends BaseDao implements AsistenciaDao {
         return null;
     }
 
-    private AlumnoAsistenciaSala mapperAlumnos(ResultSet rs) throws SQLException {
-        AlumnoAsistenciaSala alumnoAsistenciaSala = new AlumnoAsistenciaSala();
+    private AlumnoAsistenciaTaller mapperAlumnos(ResultSet rs) throws SQLException {
+        AlumnoAsistenciaTaller alumnoAsistenciaTaller = new AlumnoAsistenciaTaller();
         Alumno alumno = new Alumno();
         alumno.setNombres(rs.getString("NOMBRES"));
         alumno.setApePaterno(rs.getString("APE_PATERNO"));
         alumno.setApeMaterno(rs.getString("APE_MATERNO"));
 
-        alumnoAsistenciaSala.setAlumno(alumno);
+        alumnoAsistenciaTaller.setAlumno(alumno);
 
-        alumnoAsistenciaSala.setIdActividadAlumno(rs.getInt("ID_ACTIVIDAD_ALUMNO"));
+        alumnoAsistenciaTaller.setIdActividadAlumno(rs.getInt("ID_ACTIVIDAD_ALUMNO"));
 
-        alumnoAsistenciaSala.setIdHorarioActividad(rs.getInt("ID_HORARIO_ACTIVIDAD"));
+        alumnoAsistenciaTaller.setIdHorarioActividad(rs.getInt("ID_HORARIO_ACTIVIDAD"));
         //alumnoAsistenciaSala.setAsistencia(true);
-        return alumnoAsistenciaSala;
+        return alumnoAsistenciaTaller;
     }
 }
