@@ -33,6 +33,9 @@ import static edu.calc.becas.common.utils.Constant.ALL_ITEMS;
 import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
 import static edu.calc.becas.mcatalogos.actividades.dao.QueriesActividades.*;
 
+/**
+ * Implementacion para guardar, recuperar y editar informacion de actividades en la BD
+ */
 @Repository
 public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
     private static final Logger LOG = LoggerFactory.getLogger(ActividadesDaoImpl.class);
@@ -58,6 +61,16 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
         return getAllByAllParam(page, pageSize, status, ALL_ITEMS, ALL_ITEMS);
     }
 
+    /**
+     * recupera las actividades por estatus, tipo de actividad y horario
+     *
+     * @param page
+     * @param pageSize
+     * @param status
+     * @param tipoActividad
+     * @param swHorario
+     * @return
+     */
     private WrapperData<ActividadVo> getAllByAllParam(int page, int pageSize, String status, String tipoActividad, String swHorario) {
         boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
         boolean byTipoActividad = !tipoActividad.equalsIgnoreCase(ALL_ITEMS);
@@ -92,6 +105,17 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
     }
 
 
+    /**
+     * recupera los horarios de actividades
+     *
+     * @param page        pagina
+     * @param pageSize    registros por pagina
+     * @param idActividad actividad
+     * @param ciclo       periodo
+     * @param status      estatus
+     * @param usuario
+     * @return
+     */
     @Override
     public WrapperData<DetalleActividadVo> getAllDetalle(int page, int pageSize, String idActividad, String ciclo, String status, Usuario usuario) {
 
@@ -225,7 +249,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
         detalle.setCicloEscolar(rs.getString("DESC_PERIDODO"));
         detalle.setComentario(rs.getString("COMENTARIO"));
 
-        CicloEscolarVo CicloEscolarVo = new CicloEscolarVo ();
+        CicloEscolarVo CicloEscolarVo = new CicloEscolarVo();
         CicloEscolarVo.setClave("");
         CicloEscolarVo cicloEscolarVo = new CicloEscolarVo();
         cicloEscolarVo.setClave(detalle.getIdCicloEscolar());
@@ -235,7 +259,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
             e.printStackTrace();
         }
 
-        List<AlumnoActividad> alumnos = this.jdbcTemplate.query(QRY_AlUMNOS_ACTIVIDAD, new Object[]{detalle.getIdDetalleActividad()},(rsa, rowNum) -> mapperAlumnosActividades(rsa));
+        List<AlumnoActividad> alumnos = this.jdbcTemplate.query(QRY_AlUMNOS_ACTIVIDAD, new Object[]{detalle.getIdDetalleActividad()}, (rsa, rowNum) -> mapperAlumnosActividades(rsa));
         usuario.setIdUsuario(rs.getInt("ID_USUARIO"));
         usuario.setNombres(rs.getString("NOMBRES"));
         usuario.setApePaterno(rs.getString("APE_PATERNO"));
@@ -252,14 +276,14 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
     }
 
 
-  private AlumnoActividad mapperAlumnosActividades(ResultSet rsa) throws SQLException {
-    AlumnoActividad alumno = new AlumnoActividad();
+    private AlumnoActividad mapperAlumnosActividades(ResultSet rsa) throws SQLException {
+        AlumnoActividad alumno = new AlumnoActividad();
 
-    alumno.setLicenciatura(rsa.getString("CVE_LICENCIATURA"));
-    alumno.setMatricula(rsa.getString("MATRICULA"));
-    alumno.setGrupo(rsa.getString("CVE_GRUPO"));
-    return alumno;
-  }
+        alumno.setLicenciatura(rsa.getString("CVE_LICENCIATURA"));
+        alumno.setMatricula(rsa.getString("MATRICULA"));
+        alumno.setGrupo(rsa.getString("CVE_GRUPO"));
+        return alumno;
+    }
 
 
     //199E2A1EswF5CVrh
@@ -289,7 +313,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
                 ActividadVo actividadVo = alumnoActividadDao.getActividadByAlumno(alumno.getMatricula(), cicloEscolarActual);
                 UserLogin userLogin = new UserLogin();
                 userLogin.setUsername("ADMIN");
-                reportPercentActivitiesDao.addPercentActivity(BigDecimal.valueOf(alumno.getPorcentajeActividad()), actividadVo.getIdActividadAlumno(), userLogin,parcialActual);
+                reportPercentActivitiesDao.addPercentActivity(BigDecimal.valueOf(alumno.getPorcentajeActividad()), actividadVo.getIdActividadAlumno(), userLogin, parcialActual);
 
 
                 count++;

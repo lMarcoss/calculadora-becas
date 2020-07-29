@@ -27,9 +27,12 @@ import static edu.calc.becas.cache.DataScheduleSystem.C_GRUPOS;
 import static edu.calc.becas.common.utils.Constant.LICENCIATURA_DEFAULT;
 
 /**
+ * Implementacion de servicios para consulta de grupos
+ * <p>
+ * se consulta en el sistema de horarios solo si no se tiene en memoria
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 3/26/19
  */
 @Service
@@ -49,6 +52,16 @@ public class GrupoServiceImpl extends RestTemplateService implements GrupoServic
         this.cicloEscolarService = cicloEscolarService;
     }
 
+    /**
+     * Recuperar todos los grupos por licenciatura
+     *
+     * @param page         pagina
+     * @param pageSize     registros por pagina
+     * @param status       estatus
+     * @param licenciatura licenciatura
+     * @return
+     * @throws GenericException
+     */
     @Override
     public WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String licenciatura) throws GenericException {
         CicloEscolarVo cicloEscolarVo = cicloEscolarService.getCicloEscolarActual();
@@ -83,6 +96,12 @@ public class GrupoServiceImpl extends RestTemplateService implements GrupoServic
         }
     }
 
+    /**
+     * Obtiene todos los grupos de un periodo en el sistema de horarios
+     *
+     * @param cicloEscolarVo periodo
+     * @return grupos
+     */
     @Override
     public List<Grupo> getAllAllFromScheduledSystem(CicloEscolarVo cicloEscolarVo) {
         String path = urlSistemaHorarios + pathGrupos + "?periodo=" + cicloEscolarVo.getClave();
@@ -94,6 +113,12 @@ public class GrupoServiceImpl extends RestTemplateService implements GrupoServic
         return grupos;
     }
 
+    /**
+     * obtiene los grupos de un periodo
+     *
+     * @param cicloEscolarVo
+     * @return
+     */
     private List<Grupo> getGrupos(CicloEscolarVo cicloEscolarVo) {
         if (DataScheduleSystem.C_CONSTANT_DATA.get(C_GRUPOS) != null) {
             return (List<Grupo>) DataScheduleSystem.C_CONSTANT_DATA.get(C_GRUPOS);
@@ -102,12 +127,25 @@ public class GrupoServiceImpl extends RestTemplateService implements GrupoServic
         return getAllAllFromScheduledSystem(cicloEscolarVo);
     }
 
+    /**
+     * Se agrega descripcion de la licenciatura por grupo
+     *
+     * @param grupos
+     * @param licenciaturas
+     */
     private void addNameCareerByGroup(List<Grupo> grupos, List<Licenciatura> licenciaturas) {
         for (Grupo grupo : grupos) {
             grupo.setNombreLicenciatura(findNameCarrer(licenciaturas, grupo));
         }
     }
 
+    /**
+     * filtra nombre de una carrera de un grupo
+     *
+     * @param licenciaturas
+     * @param grupo
+     * @return
+     */
     private String findNameCarrer(List<Licenciatura> licenciaturas, Grupo grupo) {
         Licenciatura lic = licenciaturas.stream().filter(licenciatura -> licenciatura.getCveLicenciatura().equalsIgnoreCase(grupo.getCveLicenciatura())).findAny().orElse(null);
         if (lic != null) {
@@ -117,6 +155,13 @@ public class GrupoServiceImpl extends RestTemplateService implements GrupoServic
         }
     }
 
+    /**
+     * Filtra grupos de una licenciatura
+     *
+     * @param grupos
+     * @param licenciatura
+     * @return
+     */
     private List<Grupo> filterGroupsByLicenciatura(List<Grupo> grupos, String licenciatura) {
         List<Grupo> list = new ArrayList<>();
         grupos.forEach(grupo -> {
@@ -127,6 +172,12 @@ public class GrupoServiceImpl extends RestTemplateService implements GrupoServic
         return list;
     }
 
+    /**
+     * Mapero de grupos del sistema de horario en objeto Grupo
+     *
+     * @param grupoDtoSHorarios
+     * @return
+     */
     private List<Grupo> convertGruposDtoToGrupoList(List<GrupoDtoSHorario> grupoDtoSHorarios) {
         List<Grupo> grupos = new ArrayList<>();
         grupoDtoSHorarios.forEach(grupoDtoSHorario -> {
@@ -135,6 +186,12 @@ public class GrupoServiceImpl extends RestTemplateService implements GrupoServic
         return grupos;
     }
 
+    /**
+     * Mapeo del grupodto en objeto Grupo
+     *
+     * @param grupoDtoSHorario
+     * @return
+     */
     private Grupo createGrupo(GrupoDtoSHorario grupoDtoSHorario) {
         Grupo grupo = new Grupo();
         grupo.setCveGrupo(grupoDtoSHorario.getClave());

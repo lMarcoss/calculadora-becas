@@ -7,9 +7,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 /**
+ * Define los metodos comunes para comunicacion con servicios del sistema de horario mediante rest-template
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 09/03/20
  */
 @Component
@@ -23,6 +24,12 @@ public class RestTemplateService {
 
     protected HttpHeaders headers;
 
+    /**
+     * Inicializa rest-template
+     *
+     * @param restTemplate
+     * @param messageApplicationProperty
+     */
     public RestTemplateService(RestTemplate restTemplate, MessageApplicationProperty messageApplicationProperty) {
         this.restTemplate = restTemplate;
         this.messageApplicationProperty = messageApplicationProperty;

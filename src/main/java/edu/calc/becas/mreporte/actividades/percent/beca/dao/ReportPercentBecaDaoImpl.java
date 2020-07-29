@@ -18,9 +18,10 @@ import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
 import static edu.calc.becas.mreporte.actividades.percent.beca.dao.QueriesReportPercentBeca.*;
 
 /**
+ * Implementacion de operaciones de consulta a la BD para generar reporte de % de becas
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 03/05/20
  */
 @Repository
@@ -29,13 +30,21 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
         super(jdbcTemplate, messageApplicationProperty);
     }
 
+    /**
+     * Registra % de beca del alumno
+     *
+     * @param alumnoReporteBecaPeriodo alumno
+     * @param userLogin                usuario
+     */
     @Override
     public void addPercentBecaByAlumno(AlumnoReporteBecaPeriodo alumnoReporteBecaPeriodo, UserLogin userLogin) {
+        // valida si ya esta registrado en el periodo
         Integer countMatricula = this.jdbcTemplate.queryForObject(
                 QRY_VALIDATE_MATRICULA_EXISTS,
                 new Object[]{alumnoReporteBecaPeriodo.getMatricula(), alumnoReporteBecaPeriodo.getCvePeriodo()},
                 Integer.class);
 
+        // registra
         if (countMatricula == null || countMatricula == 0) {
             this.jdbcTemplate.update(QRY_ADD_PERCENT_BECA,
                     alumnoReporteBecaPeriodo.getMatricula(),
@@ -69,12 +78,19 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
 
             );
         } else {
+            // actualiza
             updatePercentBecaByAlumno(alumnoReporteBecaPeriodo, userLogin);
         }
 
 
     }
 
+    /**
+     * Actualiza % de becas del alumno
+     *
+     * @param alumnoReporteBecaPeriodo % de beca por alumno
+     * @param userLogin                usuario
+     */
     @Override
     public void updatePercentBecaByAlumno(AlumnoReporteBecaPeriodo alumnoReporteBecaPeriodo, UserLogin userLogin) {
         this.jdbcTemplate.update(QRY_UPDATE_PERCENT_BECA,
@@ -110,6 +126,15 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
         );
     }
 
+    /**
+     * Consuta reporte de % de becas por filto y por paginacion
+     *
+     * @param page         pagina
+     * @param pageSize     registro por pagina
+     * @param cvePeriodo   periodo
+     * @param palabraClave palabra-clave del para el filtro
+     * @return
+     */
     @Override
     public WrapperData<AlumnoReporteBecaPeriodo> getAllReportByPeriodo(int page, int pageSize, String cvePeriodo, String palabraClave) {
         WrapperData<AlumnoReporteBecaPeriodo> reporteBecaPeriodoWrapperData = new WrapperData<>();
@@ -118,7 +143,7 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
 
         String qryGetAllRow = QRY_GET_ALL_REPORTE_BECA;
 
-        if(StringUtils.isNotBlank(palabraClave)){
+        if (StringUtils.isNotBlank(palabraClave)) {
             // add condition search by word key
             qryGetAllRow = addConditionPalabraClave(qryGetAllRow, palabraClave);
         }
@@ -127,7 +152,7 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
 
             String queryCountAll = QRY_COUNT_ALL_BY_PERIODO;
 
-            if(StringUtils.isNotBlank(palabraClave)){
+            if (StringUtils.isNotBlank(palabraClave)) {
                 // add condition search by word key
                 queryCountAll = addConditionPalabraClave(queryCountAll, palabraClave);
             }
@@ -170,7 +195,14 @@ public class ReportPercentBecaDaoImpl extends BaseDao implements ReportPercentBe
         return this.jdbcTemplate.query(qry, parameters.toArray(), this::mapperReporteBeca);
     }
 
-
+    /**
+     * Mapeo de datos
+     *
+     * @param rs
+     * @param rowNum
+     * @return
+     * @throws SQLException
+     */
     private AlumnoReporteBecaPeriodo mapperReporteBeca(ResultSet rs, int rowNum) throws SQLException {
         AlumnoReporteBecaPeriodo alumnoReporteBecaPeriodo = new AlumnoReporteBecaPeriodo();
         alumnoReporteBecaPeriodo.setIndex(rowNum);

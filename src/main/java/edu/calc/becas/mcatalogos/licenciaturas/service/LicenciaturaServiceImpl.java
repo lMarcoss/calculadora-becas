@@ -22,9 +22,12 @@ import java.util.List;
 import static edu.calc.becas.cache.DataScheduleSystem.C_LICENCIATURA;
 
 /**
+ * Implementacion para consulta de licenciaturas en el sistema de horario,
+ * <p>
+ * se consulta en el sistema de horario solo si no se tiene en memoria
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 3/23/19
  */
 @Service
@@ -49,7 +52,7 @@ public class LicenciaturaServiceImpl extends RestTemplateService implements Lice
 
 
         try {
-
+            // obtiene las licenciaturas
             List<Licenciatura> licenciaturas = getLicenciaturasFromScheduledSystem();
 
             wrapperData.setPage(0);
@@ -66,6 +69,7 @@ public class LicenciaturaServiceImpl extends RestTemplateService implements Lice
 
     private List<Licenciatura> getLicenciaturasFromScheduledSystem() {
 
+        // si ya se tiene localmente se recupera
         if (DataScheduleSystem.C_CONSTANT_DATA.get(C_LICENCIATURA) != null) {
             return (List<Licenciatura>) DataScheduleSystem.C_CONSTANT_DATA.get(C_LICENCIATURA);
         }
@@ -75,7 +79,7 @@ public class LicenciaturaServiceImpl extends RestTemplateService implements Lice
     @Override
     public Licenciatura getDetailByClave(String cveCarrera) throws GenericException {
         // obtiene detalle de carrera
-        String path = urlSistemaHorarios + pathDetalleCarrera + "/clave="+cveCarrera;
+        String path = urlSistemaHorarios + pathDetalleCarrera + "/clave=" + cveCarrera;
         try {
             HttpEntity entity = new HttpEntity(headers);
             HttpEntity<LicenciaturaDtoSHorario> response = restTemplate.exchange(path, HttpMethod.GET, entity, LicenciaturaDtoSHorario.class);
@@ -102,6 +106,12 @@ public class LicenciaturaServiceImpl extends RestTemplateService implements Lice
         return licenciaturas;
     }
 
+    /**
+     * Mapeo de licenciaturass
+     *
+     * @param licenciaturasDto lienciaturas
+     * @return licenciaturas mapeados en objeto local
+     */
     private List<Licenciatura> convertListDtoLicenciaturasToLicenciatura(List<LicenciaturaDtoSHorario> licenciaturasDto) {
         List<Licenciatura> licenciaturas = new ArrayList<>();
         licenciaturasDto.forEach(licenciaturaDto -> {
@@ -111,6 +121,9 @@ public class LicenciaturaServiceImpl extends RestTemplateService implements Lice
         return licenciaturas;
     }
 
+    /**
+     * mapeo de datos a objeto local
+     */
     private Licenciatura createLicenciatura(LicenciaturaDtoSHorario licenciaturaDto) {
         Licenciatura lic = new Licenciatura();
         lic.setCveLicenciatura(licenciaturaDto.getClave());

@@ -22,9 +22,10 @@ import java.io.IOException;
 import static edu.calc.becas.common.utils.Constant.*;
 
 /**
+ * API para exponer servicios de administracion de % de becas
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 01/05/20
  */
 @RestController
@@ -48,6 +49,15 @@ public class ReportPercentBecaAPI {
         return reportPercentBecaService.calculaPorcentajeBecaPorPeriodo(userLogin);
     }
 
+    /**
+     * Obtiene la propuesta de beca-colegiatura de un periodo en especifico
+     *
+     * @param page         pagina a recuperar
+     * @param pageSize     registros por pagina
+     * @param palabraClave palabra clave para filto
+     * @param cvePeriodo   periodo
+     * @return
+     */
     @GetMapping("/detalle/periodo/{cve-periodo}")
     @ApiOperation(value = "Obtiene la propuesta de beca-colegiatura del periodo cve-periodo")
     public WrapperData<AlumnoReporteBecaPeriodo> getAll(
@@ -70,6 +80,13 @@ public class ReportPercentBecaAPI {
         return reportPercentBecaService.getAllReportByPeriodo(Integer.parseInt(page), Integer.parseInt(pageSize), cvePeriodo, palabraClave);
     }
 
+    /**
+     * Descarga reporte de % de beca de un periodo en especifico
+     *
+     * @param cvePeriodo periodo
+     * @return reporte
+     * @throws IOException error al generar reporte
+     */
     @GetMapping("/detalle/periodo/{cve-periodo}/export")
     @ApiOperation(value = "Descargar propuesta de beca-colegiatura del periodo cve-periodo en excel")
     public ResponseEntity<InputStreamResource> exportReportToXLSX(

@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * Define las propiedades de un grupo
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description: model Grupo
  * Date: 3/26/19
  */
 @Getter

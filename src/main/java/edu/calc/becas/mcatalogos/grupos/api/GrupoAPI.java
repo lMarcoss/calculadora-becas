@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import static edu.calc.becas.common.utils.Constant.*;
 
 /**
+ * API para exponer las consultas de grupos
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description: API for groups
  * Date: 3/26/19
  */
 @RestController
@@ -32,6 +33,16 @@ public class GrupoAPI {
         this.grupoService = grupoService;
     }
 
+    /**
+     * Recupera todos los grupos o de una licenciatura
+     *
+     * @param page         pagina
+     * @param pageSize     registros por pagina
+     * @param status       estatus
+     * @param licenciatura licenciatura
+     * @return grupos
+     * @throws GenericException error de consulta
+     */
     @GetMapping
     @ApiOperation(value = "Obtiene el listado de grupos")
     public WrapperData getAll(

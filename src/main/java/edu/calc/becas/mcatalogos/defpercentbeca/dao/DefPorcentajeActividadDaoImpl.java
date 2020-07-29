@@ -14,9 +14,10 @@ import java.sql.SQLException;
 import static edu.calc.becas.mcatalogos.defpercentbeca.dao.QueriesDefPorcentajeActividad.QRY_GET_ACTIVIDAD_POR_TIPO;
 
 /**
+ * Implementa las operaciones de consulta a la BD para definicion de % de becas por taller
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 03/05/20
  */
 @Repository
@@ -25,6 +26,11 @@ public class DefPorcentajeActividadDaoImpl extends BaseDao implements DefPorcent
         super(jdbcTemplate, messageApplicationProperty);
     }
 
+    /**
+     * Recupera las definiciones de % de becas por itpo de taller
+     *
+     * @return
+     */
     @Override
     public DefPorcentajeActividad getDefPorcentajeActividades() {
         DefPorcentajeActividad defPorcentajeActividades = new DefPorcentajeActividad();
@@ -34,10 +40,23 @@ public class DefPorcentajeActividadDaoImpl extends BaseDao implements DefPorcent
         return defPorcentajeActividades;
     }
 
+    /**
+     * Obtiene la definicion del % por actividad
+     *
+     * @param tipoActividad actividad
+     * @return definicion de %
+     */
     private PorcentajeBecaPorActividad getDePorcentajeActividad(String tipoActividad) {
         return this.jdbcTemplate.queryForObject(QRY_GET_ACTIVIDAD_POR_TIPO, new Object[]{tipoActividad}, (rs, i) -> mapperTipoActividad(rs));
     }
 
+    /**
+     * Mapeo de definiciones de % de becas
+     *
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
     private PorcentajeBecaPorActividad mapperTipoActividad(ResultSet rs) throws SQLException {
         PorcentajeBecaPorActividad porcentajeBecaPorActividad = new PorcentajeBecaPorActividad();
         porcentajeBecaPorActividad.setCveActividad(rs.getString("CVE_TIPO_ACTIVIDAD"));

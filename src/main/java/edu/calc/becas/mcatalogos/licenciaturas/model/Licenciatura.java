@@ -9,9 +9,10 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
+ * Define las propiedades de una licenciatura
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 3/23/19
  */
 @Getter
@@ -27,8 +28,8 @@ public class Licenciatura implements Serializable {
     @ApiModelProperty(notes = "Indica si es vigente la licenciatura", required = true)
     private boolean vigente;
 
-  public Licenciatura(String cveLicenciatura, String nombreLicenciatura) {
-    this.cveLicenciatura = cveLicenciatura;
-    this.nombreLicenciatura = nombreLicenciatura;
-  }
+    public Licenciatura(String cveLicenciatura, String nombreLicenciatura) {
+        this.cveLicenciatura = cveLicenciatura;
+        this.nombreLicenciatura = nombreLicenciatura;
+    }
 }

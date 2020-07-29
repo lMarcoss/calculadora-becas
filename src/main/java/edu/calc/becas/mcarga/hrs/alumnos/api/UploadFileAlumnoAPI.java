@@ -63,7 +63,7 @@ public class UploadFileAlumnoAPI extends UploadFileAPI {
 
   @PostMapping("/uploadFile")
   @ApiOperation(value = "Carga de archivo")
-  public ProcessedFile uploadFactura(@RequestParam("file") MultipartFile file,
+  public ProcessedFile uploadFile(@RequestParam("file") MultipartFile file,
                                      @RequestParam("nombreLicenciatura") String nombreLicenciatura,
                                      @RequestParam("cveLicenciatura") String cveLicenciatura,
                                      @RequestParam("cveGrupo") String grupoFilterSelected

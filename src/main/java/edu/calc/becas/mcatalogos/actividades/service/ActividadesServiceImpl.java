@@ -15,8 +15,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static edu.calc.becas.common.utils.Constant.ALL_ITEMS;
-import static edu.calc.becas.utils.Rol.*;
+import static edu.calc.becas.utils.Rol.ROL_ENCARGADO;
 
+/**
+ * Implementacion de servicios para administracion de actividades
+ */
 @Service
 public class ActividadesServiceImpl implements ActividadesService {
 

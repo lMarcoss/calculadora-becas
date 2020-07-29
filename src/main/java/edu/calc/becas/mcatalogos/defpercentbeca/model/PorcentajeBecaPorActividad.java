@@ -7,9 +7,10 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
+ * Define las propiedades de % de becas de un alumno en un tipo de actividad o taller
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 03/05/20
  */
 @Getter

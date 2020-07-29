@@ -51,7 +51,7 @@ public class UploadFileAPI {
 
     @PostMapping("/upload/parcial/{parcial}")
     @ApiOperation(value = "Carga de archivo")
-    public ProcessedFile uploadFactura(@RequestParam("file") MultipartFile file, @PathVariable int parcial) throws GenericException {
+    public ProcessedFile uploadFile(@RequestParam("file") MultipartFile file, @PathVariable int parcial) throws GenericException {
         String pathfile = saveFile(file);
         Workbook pages = ReadFile.pages(pathfile);
         CommonData commonData = new CommonData();

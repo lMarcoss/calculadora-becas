@@ -1,9 +1,10 @@
 package edu.calc.becas.mreporte.actividades.percent.beca.dao;
 
 /**
+ * Define las querys de consulta y operacion a la BD
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 03/05/20
  */
 final class QueriesReportPercentBeca {

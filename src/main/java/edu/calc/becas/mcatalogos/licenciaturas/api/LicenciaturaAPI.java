@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import static edu.calc.becas.common.utils.Constant.*;
 
 /**
+ * API para exponer  licenciaturas
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur
- * Description: implements services licenciaturas
  * Date: 3/23/19
  */
 
@@ -31,6 +32,15 @@ public class LicenciaturaAPI {
         this.licenciaturaService = licenciaturaService;
     }
 
+    /**
+     * Obtiene el listado de licenciaturas
+     *
+     * @param page     pagina
+     * @param pageSize registros por pagina
+     * @param status   estatus
+     * @return licenciaturas
+     * @throws GenericException error de consulta
+     */
     @GetMapping
     @ApiOperation(value = "Obtiene el listado de licenciaturas")
     public WrapperData getAll(
@@ -42,6 +52,13 @@ public class LicenciaturaAPI {
         return licenciaturaService.getAll();
     }
 
+    /**
+     * Obtiene los datos de una licenciatua por clave
+     *
+     * @param claveLicenciatura clave
+     * @return licenciatura
+     * @throws GenericException error de consulta
+     */
     @GetMapping("/detalle-licenciatura/clave/{clave-licenciatura}")
     @ApiOperation(value = "Obtiene detalle de la licenciatura por clave")
     public Licenciatura getDetailByClave(

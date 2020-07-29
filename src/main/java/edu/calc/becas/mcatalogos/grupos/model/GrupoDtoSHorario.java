@@ -6,9 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * dto para la comunicacion con el sistema de horarios del objeto Grupo
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description: dto para la comunicacion con el sistema de horarios del objeto Grupo
  * Date: 08/03/20
  */
 @Getter

@@ -8,9 +8,10 @@ import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import java.util.List;
 
 /**
+ * Servicios para consulta de grupos
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 3/26/19
  */
 public interface GrupoService {

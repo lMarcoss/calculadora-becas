@@ -7,9 +7,10 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
+ * % de becas por tipo de actividad
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 03/05/20
  */
 @Getter

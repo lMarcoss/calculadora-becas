@@ -14,6 +14,9 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * Define las propiedades de un horario de actividad
+ */
 @Getter
 @Setter
 @ToString

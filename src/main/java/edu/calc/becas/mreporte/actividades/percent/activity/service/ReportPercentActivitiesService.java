@@ -23,9 +23,9 @@ public interface ReportPercentActivitiesService {
     /**
      * recuperar los porcentajes de actividades del los alumnos - % de asistencias
      *
-     * @param pageable
-     * @param reportPercentActivity
-     * @return
+     * @param pageable              informacion para generar resulatdo paginado
+     * @param reportPercentActivity filtro para la  consulta
+     * @return lista de % de asistencias por filtro
      */
     WrapperData getAll(Pageable pageable, ReportPercentActivity reportPercentActivity);
 

@@ -7,10 +7,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Define las propiedades de una actividad o taller
+ */
 @Getter
 @Setter
 @ToString
-@ApiModel(value = "Actividad",description = "Entidad con los datos de la actividad")
+@ApiModel(value = "Actividad", description = "Entidad con los datos de la actividad")
 public class ActividadVo extends CommonData {
     private int idActividad;
     private int idActividadAlumno;

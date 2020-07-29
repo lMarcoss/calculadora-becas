@@ -41,6 +41,9 @@ import static edu.calc.becas.common.utils.Message.MESSAGE_ROW_PROCESSED_ROOM_COM
 import static edu.calc.becas.utils.ExtensionFile.XLSX_EXTENSION;
 import static edu.calc.becas.utils.ExtensionFile.XLS_EXTENSION;
 
+/**
+ * API para exponer servcios para administracion de actividades o talleres
+ */
 @RestController
 @RequestMapping("/actividades")
 @Api(description = "Servicios para administraci\u00f3n de Actividades Extracurriculares")
@@ -66,7 +69,16 @@ public class ActividadesAPI {
         this.userRequestService = userRequestService;
     }
 
-
+    /**
+     * Obtiene el listado de Actividades por filtro
+     *
+     * @param page          pagina
+     * @param pageSize      registros por pagina
+     * @param status        estatus
+     * @param tipoActividad tipo de actividad
+     * @param swHorario     horario
+     * @return
+     */
     @GetMapping
     @ApiOperation(value = "Obtiene el listado de Actividades")
     public WrapperData<ActividadVo> getAll(
@@ -87,21 +99,37 @@ public class ActividadesAPI {
         return actividadesService.getAllByStatusAndTipoActividadHorario(Integer.parseInt(page), Integer.parseInt(pageSize), status, tipoActividad, swHorario);
     }
 
-
+    /**
+     * Actualiza los datos de una actividad
+     *
+     * @param actividad actividad
+     * @return
+     */
     @PutMapping
-    public ActividadVo modifyActividad(@ApiParam(value = "Detalle de hora para una actividad", defaultValue = "0") @RequestBody ActividadVo detalle) {
-        detalle.setActualizadoPor("admin");
+    public ActividadVo modifyActividad(@ApiParam(value = "Detalle de hora para una actividad", defaultValue = "0") @RequestBody ActividadVo actividad) {
+        actividad.setActualizadoPor("admin");
         return actividadesService.update(
-                detalle
+                actividad
         );
     }
 
-
+    /**
+     * Recupera una lista de clave-valor de las actividades
+     *
+     * @return
+     */
     @GetMapping("/list")
     public List<LabelValueData> getActividades() {
         return actividadesService.getActividades();
     }
 
+    /**
+     * Registra una nueva Actividad
+     *
+     * @param actividad
+     * @return
+     * @throws GenericException
+     */
     @PostMapping
     @ApiOperation(value = "Registra una nueva Actividad")
     public ActividadVo add(@ApiParam(value = "Actividad a registrar", defaultValue = "0") @RequestBody ActividadVo actividad) throws GenericException {
@@ -109,10 +137,16 @@ public class ActividadesAPI {
         return actividadesService.add(actividad);
     }
 
-
+    /**
+     * Carga una lista de alumnos a un periodo
+     *
+     * @param file
+     * @return
+     * @throws GenericException
+     */
     @PostMapping("/uploadFile")
     @ApiOperation(value = "Carga de archivo")
-    public ProcessedFile uploadFactura(@RequestParam("file") MultipartFile file
+    public ProcessedFile uploadFile(@RequestParam("file") MultipartFile file
     ) throws GenericException {
         String pathfile = saveFile(file);
         Workbook pages = ReadFile.pages(pathfile);
@@ -123,10 +157,7 @@ public class ActividadesAPI {
         Parcial parcialActual = parcialService.getParcialActual();
         CicloEscolarVo cicloEscolarActual = cicloEscolarService.getCicloEscolarActual();
         Licenciatura lic = new Licenciatura();
-    /*lic.setCveLicenciatura(cveLicenciatura);
-    lic.setNombreLicenciatura(nombreLicenciatura);*/
 
-        //int resultProcessed = 0;//cargaAlumnosPeriodosService.processData(pages, commonData, parcialActual, cicloEscolarActual, lic);
         int resultProcessed = cargaAlumnosPeriodosService.processDataPorcentajes(pages, commonData, parcialActual, cicloEscolarActual, lic);
         String message;
         if (resultProcessed == 1) {
@@ -144,6 +175,13 @@ public class ActividadesAPI {
 
     }
 
+    /**
+     * Guarda el archivo en el sistema
+     *
+     * @param file
+     * @return
+     * @throws GenericException
+     */
     private String saveFile(MultipartFile file) throws GenericException {
         String nameFile = createNameFile(file.getOriginalFilename());
         try {
@@ -156,6 +194,12 @@ public class ActividadesAPI {
         }
     }
 
+    /**
+     * Crea un nombre para el archivo
+     *
+     * @param originalFilename
+     * @return
+     */
     private String createNameFile(String originalFilename) {
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd-HH:mm:ss");
