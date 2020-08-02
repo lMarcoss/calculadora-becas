@@ -12,14 +12,21 @@ import java.util.List;
 import static edu.calc.becas.mcarga.hrs.constants.ConstantsProcessedHrs.VALUE_FORMULA;
 
 /**
+ * Lee las filas y columnas del archivo excel
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description: read rows and cell file
  * Date: 6/3/19
  */
 public class ProcessRow {
     private static final Logger LOG = LoggerFactory.getLogger(ProcessRow.class);
 
+    /**
+     * Lee las filas de un archivo - archivo de horas de biblioteca
+     *
+     * @param pages pagina
+     * @return registros
+     */
     protected List<RowFile> readRows(Workbook pages) {
 
         LOG.info("NUMBERS PAGES: " + String.valueOf(pages.getNumberOfSheets()));
@@ -54,98 +61,117 @@ public class ProcessRow {
         return rows;
     }
 
-  protected List<RowFile> readRowsAlumnos(Workbook pages) {
+    /**
+     * Lee las filas de una pagina de excel - archivo horas biblioteca
+     *
+     * @param pages pagina
+     * @return registros
+     * @author Luis Angel Perez
+     */
+    protected List<RowFile> readRowsAlumnos(Workbook pages) {
 
-    LOG.info("NUMBERS PAGES: " + String.valueOf(pages.getNumberOfSheets()));
+        LOG.info("NUMBERS PAGES: " + String.valueOf(pages.getNumberOfSheets()));
 
-    List<RowFile> rows = new ArrayList<>();
-    for (Sheet sheet : pages) {
-      LOG.info("PAGE:  " + sheet.getSheetName());
-      int rowNum =0;
-      for (Row row : sheet) {
-        LOG.info("NUMBERS rows: " + sheet.getLastRowNum());
-        if(sheet.getLastRowNum() > 3){
-        if(rowNum!=0){
-          RowFile rowFile = new RowFile();
+        List<RowFile> rows = new ArrayList<>();
+        for (Sheet sheet : pages) {
+            LOG.info("PAGE:  " + sheet.getSheetName());
+            int rowNum = 0;
+            for (Row row : sheet) {
+                LOG.info("NUMBERS rows: " + sheet.getLastRowNum());
+                if (sheet.getLastRowNum() > 3) {
+                    if (rowNum != 0) {
+                        RowFile rowFile = new RowFile();
 
-          List<CellFile> cells = new ArrayList<>();
+                        List<CellFile> cells = new ArrayList<>();
 
-          CellFile cellFileTmp = new CellFile();
-          cellFileTmp.setValue(
-            sheet.getSheetName()
-          );
-          cells.add(cellFileTmp);
+                        CellFile cellFileTmp = new CellFile();
+                        cellFileTmp.setValue(
+                                sheet.getSheetName()
+                        );
+                        cells.add(cellFileTmp);
 
-          for (Cell cell : row) {
-            CellFile cellFile = new CellFile();
+                        for (Cell cell : row) {
+                            CellFile cellFile = new CellFile();
 
-            cell.setCellType(CellType.forInt(1));
-            String value = readCellByType(cell);
-            if (value != null && !value.trim().equalsIgnoreCase("") && value.length() > 0) {
-              cellFile.setValue(
-                value.trim()
-              );
+                            cell.setCellType(CellType.forInt(1));
+                            String value = readCellByType(cell);
+                            if (value != null && !value.trim().equalsIgnoreCase("") && value.length() > 0) {
+                                cellFile.setValue(
+                                        value.trim()
+                                );
 
-              cells.add(cellFile);
+                                cells.add(cellFile);
+                            }
+                        }
+                        if (!cells.isEmpty() && cells.size() > 5) {
+                            rowFile.setCells(cells);
+                            rows.add(rowFile);
+                        }
+                    }
+                }
+                rowNum++;
             }
-          }
-          if (!cells.isEmpty() && cells.size() > 5) {
-            rowFile.setCells(cells);
-            rows.add(rowFile);
-          }
         }
-      }
-        rowNum++;
-      }
+        return rows;
     }
-    return rows;
-  }
 
-  protected List<RowFile> readRowsAlumnosReportes(Workbook pages) {
+    /**
+     * Lee las filas de una pagina del excel - archivo de alumnos a un periodo
+     *
+     * @param pages pagina
+     * @return registros
+     * @author Luis Angel Perez
+     */
+    protected List<RowFile> readRowsAlumnosReportes(Workbook pages) {
 
-    LOG.info("NUMBERS PAGES: " + String.valueOf(pages.getNumberOfSheets()));
+        LOG.info("NUMBERS PAGES: " + String.valueOf(pages.getNumberOfSheets()));
 
-    List<RowFile> rows = new ArrayList<>();
-    for (Sheet sheet : pages) {
-      LOG.info("PAGE:  " + sheet.getSheetName());
-      int rowNum =0;
-      for (Row row : sheet) {
-        if(rowNum>=9){
-          RowFile rowFile = new RowFile();
+        List<RowFile> rows = new ArrayList<>();
+        for (Sheet sheet : pages) {
+            LOG.info("PAGE:  " + sheet.getSheetName());
+            int rowNum = 0;
+            for (Row row : sheet) {
+                if (rowNum >= 9) {
+                    RowFile rowFile = new RowFile();
 
-          List<CellFile> cells = new ArrayList<>();
+                    List<CellFile> cells = new ArrayList<>();
 
-          CellFile cellFileTmp = new CellFile();
-          cellFileTmp.setValue(
-            sheet.getSheetName()
-          );
-          cells.add(cellFileTmp);
+                    CellFile cellFileTmp = new CellFile();
+                    cellFileTmp.setValue(
+                            sheet.getSheetName()
+                    );
+                    cells.add(cellFileTmp);
 
-          for (Cell cell : row) {
-            CellFile cellFile = new CellFile();
+                    for (Cell cell : row) {
+                        CellFile cellFile = new CellFile();
 
-            cell.setCellType(CellType.forInt(1));
-            String value = readCellByType(cell);
-            if (value != null && !value.trim().equalsIgnoreCase("") && value.length() > 0) {
-              cellFile.setValue(
-                value.trim()
-              );
+                        cell.setCellType(CellType.forInt(1));
+                        String value = readCellByType(cell);
+                        if (value != null && !value.trim().equalsIgnoreCase("") && value.length() > 0) {
+                            cellFile.setValue(
+                                    value.trim()
+                            );
 
-              cells.add(cellFile);
+                            cells.add(cellFile);
+                        }
+                    }
+                    if (!cells.isEmpty()) {
+                        rowFile.setCells(cells);
+                        rows.add(rowFile);
+                    }
+                }
+                rowNum++;
             }
-          }
-          if (!cells.isEmpty()) {
-            rowFile.setCells(cells);
-            rows.add(rowFile);
-          }
         }
-        rowNum++;
-      }
+        return rows;
     }
-    return rows;
-  }
 
-
+    /**
+     * Lee el valor de las celdas por tipo de celda
+     *
+     * @param cell celda
+     * @return valor de la celda
+     */
     private String readCellByType(Cell cell) {
         String value = null;
         try {

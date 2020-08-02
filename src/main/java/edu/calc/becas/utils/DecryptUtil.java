@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Base64;
 
 /**
- * Description: Clase para desencriptar datos
+ * Clase para desencriptar datos
  * Date: 4/29/19
  */
 public final class DecryptUtil {

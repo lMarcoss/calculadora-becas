@@ -20,9 +20,10 @@ import static edu.calc.becas.mcarga.hrs.blibioteca.dao.QueriesCargaHrsBiblioteca
 import static edu.calc.becas.mcarga.hrs.blibioteca.dao.QueriesCargaHrsBiblioteca.QRY_UPDATE_PERCENT_BIBLIOTECA;
 
 /**
+ * Operaciones para guardar horas de biblioteca de los alumnos en la BD
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 6/3/19
  */
 @Repository("cargaHrsBibliotecaRepository")
@@ -41,6 +42,14 @@ public class CargaHrsBibliotecaDaoImpl extends BaseDao implements CargaHrsDao {
         this.alumnoActividadDao = alumnoActividadDao;
     }
 
+    /**
+     * Registra las horas de biblioteca de los alumnos en un parcial
+     *
+     * @param alumnos            lista de alumnnos con sus horas
+     * @param parcial            parcial
+     * @param cicloEscolarActual periodo
+     * @return total  de registros guardados y actualizados
+     */
     @Override
     public int persistenceHours(List<Alumno> alumnos, Parcial parcial, CicloEscolarVo cicloEscolarActual) {
         int count = 0;
@@ -69,7 +78,7 @@ public class CargaHrsBibliotecaDaoImpl extends BaseDao implements CargaHrsDao {
                             alumno.getAgregadoPor()
                     );
                 }
-                if(updated != 0){
+                if (updated != 0) {
                     count++;
                 }
 
@@ -81,6 +90,13 @@ public class CargaHrsBibliotecaDaoImpl extends BaseDao implements CargaHrsDao {
         return count;
     }
 
+    /**
+     * Clcula el % de horas de un alumno en un parcial
+     *
+     * @param alumno
+     * @param parcialActual
+     * @return
+     */
     private int calculatePercentHoursLibrary(Alumno alumno, Parcial parcialActual) {
         int horasParcial = parcialActual.getTotalHorasBiblioteca() * 60;
 

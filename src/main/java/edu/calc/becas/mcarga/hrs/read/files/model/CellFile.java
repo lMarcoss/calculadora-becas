@@ -5,9 +5,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * Define las propiedades de una celda del archivo Excel
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 5/13/19
  */
 @NoArgsConstructor

@@ -1,6 +1,5 @@
 package edu.calc.becas.utils;
 
-import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 
@@ -9,8 +8,9 @@ import java.util.Date;
 import static edu.calc.becas.utils.UtilDate.PATTERN_DIAG;
 
 /**
+ * Valida si un parcil ha finalizado de acuerdo a los dias de tolerancia de cada usuario
+ *
  * @author Marcos Santiago Leonardo
- * Description:
  * Date: 09/04/20
  */
 public final class Util {

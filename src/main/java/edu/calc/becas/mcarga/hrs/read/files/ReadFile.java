@@ -14,15 +14,23 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
+ * Lee archivo de excel
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 5/13/19
  */
 @Slf4j
 public class ReadFile {
     private static final Logger LOG = LoggerFactory.getLogger(ReadFile.class);
 
+    /**
+     * Lee un archivo de excel
+     *
+     * @param pathfile ruta del archivo a leer
+     * @return contenido del archivo
+     * @throws GenericException error de lectura
+     */
     public static Workbook pages(String pathfile) throws GenericException {
         Workbook workbook = null;
         FileInputStream file;
@@ -37,61 +45,6 @@ public class ReadFile {
         System.out.println("SHEETS: " + workbook.getNumberOfSheets());
 
         return workbook;
-        /*// Leer hojas del excel
-        for (Sheet sheet : workbook) {
-            LOG.info("HOJA:  "+ sheet.getSheetName());
-        }
 
-        // leer primer hoja
-        Sheet sheet = workbook.getSheetAt(0);
-
-        // filas de una hola
-        List<RowFile> rows = new ArrayList<>();
-        for (Row row : sheet) {
-
-            RowFile rowFile = new RowFile();
-
-            List<CellFile> cells = new ArrayList<>();
-
-            for (Cell cell : row) {
-                CellFile cellFile = new CellFile();
-                String value = readCellByType(cell);
-                if (value != null && !value.trim().equalsIgnoreCase("") && value.length() > 0) {
-                    cellFile.setValue(
-                            value.trim()
-                    );
-
-                    cells.add(cellFile);
-                }
-
-
-            }
-            if (!cells.isEmpty() && cells.size() > 8) {
-                rowFile.setCells(cells);
-                rows.add(rowFile);
-            }
-
-        }
-
-        List<Alumno> alumnos = new ArrayList<>();
-        for (RowFile row : rows) {
-            Alumno alumno = new Alumno();
-            for (int i = 0; i < posEndCell; i++) {
-                if (i == posMatricula) {
-                    alumno.setMatricula(row.getCells().get(i).getValue());
-                }
-
-                if (i == posNombre) {
-                    alumno.setNombres(row.getCells().get(i).getValue());
-                }
-
-                if (i == posHrs) {
-                    alumno.setHrs(row.getCells().get(i).getValue());
-                }
-            }
-            alumnos.add(alumno);
-        }
-
-        return alumnos;*/
     }
 }

@@ -24,9 +24,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Implementacion de servicios para carga de horas de biblioteca de los alumnos
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 5/13/19
  */
 @Service("cargaHrsBibliotecaService")
@@ -58,6 +59,16 @@ public class CargaHrsBibliotecaServiceImpl extends ProcessRow implements Process
     }
 
 
+    /**
+     * Procesa los datos del excel para obtener las horas de biblioteca
+     *
+     * @param pages              paginas del excel
+     * @param commonData         datos de auditoria
+     * @param parcialCarga       parcial
+     * @param cicloEscolarActual periodo
+     * @return total de registros procesados
+     * @throws GenericException error de lectura de horas de biblioteca
+     */
     @Override
     public int processData(Workbook pages, CommonData commonData, Parcial parcialCarga,
                            CicloEscolarVo cicloEscolarActual) throws GenericException {

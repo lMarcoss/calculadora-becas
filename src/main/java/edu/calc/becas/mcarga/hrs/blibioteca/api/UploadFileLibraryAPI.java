@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * API para exponer servicios de carga de horas de biblioteca
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description: API para exponer servicios de carga de horas de biblioteca
  * Date: 5/4/19
  */
 @RestController

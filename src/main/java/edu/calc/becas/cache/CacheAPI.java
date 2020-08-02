@@ -7,14 +7,15 @@ import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-import springfox.documentation.spring.web.json.Json;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * API para exponer servicios de actualizacion de la lista de grupos, licenciaturas y periodo
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 05/06/20
  */
 @RestController
@@ -34,6 +35,12 @@ public class CacheAPI {
         this.licenciaturaService = licenciaturaService;
     }
 
+    /**
+     * Actualiza las licenciaturas con las licenciaturas que se tiene en el sistema de  horarios
+     *
+     * @return si es exitoso o no
+     * @throws GenericException error al realizar la consulta
+     */
     @GetMapping(value = "/")
     @ApiOperation(value = "Recarga periodo, licenciaturas y grupos")
     public String reloadAllDataFromScheduledSystem() throws GenericException {

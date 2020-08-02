@@ -7,6 +7,9 @@ import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Entidad con lo datos de las actividades con los alumnos
+ */
 @Getter
 @Setter
 @ApiModel(value = "Actividades de alumnos", description = "Entidad con lo datos de las actividades con los alumnos")

@@ -4,9 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Guarda los datos de los servicios del sistema de horarios
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description: Guarda los datos de los servicios del sistema de horarios
  * Date: 05/06/20
  */
 public class DataScheduleSystem {

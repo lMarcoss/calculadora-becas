@@ -26,15 +26,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import static edu.calc.becas.common.utils.Message.MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER;
-import static edu.calc.becas.common.utils.Message.MESSAGE_ROW_PROCESSED_ROOM_COMPUTER;
+import static edu.calc.becas.common.utils.Message.MESSAGE_ROWS_PROCESSED;
+import static edu.calc.becas.common.utils.Message.MESSAGE_ROW_PROCESSED;
 import static edu.calc.becas.utils.ExtensionFile.XLSX_EXTENSION;
 import static edu.calc.becas.utils.ExtensionFile.XLS_EXTENSION;
 
 /**
+ * API generico para cargar y guardar archivo
+ *
  * @author Marcos Santiago Leonardos
  * Universidad de la Sierra Sur (UNSIS)
- * Description: api generico para cargar y guardar archivo
  * Date: 5/4/19
  */
 
@@ -49,6 +50,16 @@ public class UploadFileAPI {
     @Value("${location.file}")
     String locationFile;
 
+    /**
+     * Servicio para subir archivo de horas de biblioteca en un parcial en el periodo en curso,
+     * <p>
+     * Se valida los dias de tolerancia por usuario al subir archivo
+     *
+     * @param file    archivo
+     * @param parcial parcial
+     * @return total de registros procesados
+     * @throws GenericException error al procesar archivo
+     */
     @PostMapping("/upload/parcial/{parcial}")
     @ApiOperation(value = "Carga de archivo")
     public ProcessedFile uploadFile(@RequestParam("file") MultipartFile file, @PathVariable int parcial) throws GenericException {
@@ -65,9 +76,9 @@ public class UploadFileAPI {
         int resultProcessed = processHoursService.processData(pages, commonData, parcialCarga, cicloEscolarActual);
         String message;
         if (resultProcessed == 1) {
-            message = String.format(MESSAGE_ROW_PROCESSED_ROOM_COMPUTER, 1);
+            message = String.format(MESSAGE_ROW_PROCESSED, 1);
         } else {
-            message = String.format(MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER, resultProcessed);
+            message = String.format(MESSAGE_ROWS_PROCESSED, resultProcessed);
         }
         return ProcessedFile.builder()
                 .error(false)
@@ -78,6 +89,13 @@ public class UploadFileAPI {
 
     }
 
+    /**
+     * Guarda el archivo
+     *
+     * @param file archivo
+     * @return ruta del archivo guardado
+     * @throws GenericException error al guardar archivo
+     */
     private String saveFile(MultipartFile file) throws GenericException {
         String nameFile = createNameFile(file.getOriginalFilename());
         try {
@@ -90,6 +108,12 @@ public class UploadFileAPI {
         }
     }
 
+    /**
+     * Crea un nombre para el archivo
+     *
+     * @param originalFilename archivo-cargado
+     * @return nombre archivo
+     */
     private String createNameFile(String originalFilename) {
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd-HH:mm:ss");

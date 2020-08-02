@@ -1,9 +1,10 @@
 package edu.calc.becas.utils;
 
 /**
+ * extension de archivos aceptados en la carga de archivos
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 5/11/19
  */
 public final class ExtensionFile {

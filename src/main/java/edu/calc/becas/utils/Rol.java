@@ -1,9 +1,10 @@
 package edu.calc.becas.utils;
 
 /**
+ * Define los roles de usuarios
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 03/04/20
  */
 public final class Rol {

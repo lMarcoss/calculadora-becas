@@ -36,8 +36,8 @@ import java.util.Date;
 import java.util.List;
 
 import static edu.calc.becas.common.utils.Constant.*;
-import static edu.calc.becas.common.utils.Message.MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER;
-import static edu.calc.becas.common.utils.Message.MESSAGE_ROW_PROCESSED_ROOM_COMPUTER;
+import static edu.calc.becas.common.utils.Message.MESSAGE_ROWS_PROCESSED;
+import static edu.calc.becas.common.utils.Message.MESSAGE_ROW_PROCESSED;
 import static edu.calc.becas.utils.ExtensionFile.XLSX_EXTENSION;
 import static edu.calc.becas.utils.ExtensionFile.XLS_EXTENSION;
 
@@ -161,9 +161,9 @@ public class ActividadesAPI {
         int resultProcessed = cargaAlumnosPeriodosService.processDataPorcentajes(pages, commonData, parcialActual, cicloEscolarActual, lic);
         String message;
         if (resultProcessed == 1) {
-            message = String.format(MESSAGE_ROW_PROCESSED_ROOM_COMPUTER, resultProcessed);
+            message = String.format(MESSAGE_ROW_PROCESSED, resultProcessed);
         } else {
-            message = String.format(MESSAGE_ROWS_PROCESSED_ROOM_COMPUTER, resultProcessed);
+            message = String.format(MESSAGE_ROWS_PROCESSED, resultProcessed);
         }
 
         return ProcessedFile.builder()

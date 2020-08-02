@@ -7,9 +7,10 @@ import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import java.util.List;
 
 /**
+ * Operaciones para registrar horas de biblioteca de los alumnos por parcial en el periodo en curso a la BD
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description:
  * Date: 6/3/19
  */
 public interface CargaHrsDao {

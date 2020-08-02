@@ -10,9 +10,10 @@ import lombok.Setter;
 import java.util.List;
 
 /**
+ * Define la Respuesta del servicio de carga de archivos
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description: Respuesta del servicio de carga de archivos
  * Date: 5/4/19
  */
 @Builder

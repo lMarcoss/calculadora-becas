@@ -31,6 +31,14 @@ public class BaseDao {
         this.messageApplicationProperty = messageApplicationProperty;
     }
 
+    /**
+     * Agrega query de paginacion a la query base de consulta
+     *
+     * @param page        pagina
+     * @param pageSize    registros por pagina
+     * @param queryGetALl query base
+     * @return query paginado
+     */
     protected String addQueryPageable(int page, int pageSize, String queryGetALl) {
 
         boolean pageable = pageSize != Integer.parseInt(ITEMS_FOR_PAGE);
@@ -41,10 +49,25 @@ public class BaseDao {
         return queryGetALl;
     }
 
+    /**
+     * Crea query de paginacion para consultas
+     *
+     * @param page     pagina
+     * @param pageSize registros por pagina
+     * @return query para consultas paginadas
+     */
     private String getQueryPageable(int page, int pageSize) {
         return String.format(QRY_PAGEABLE, pageSize, (page * pageSize));
     }
 
+    /**
+     * Agrega condicion para recuperar registros por estatus
+     *
+     * @param status             estatus
+     * @param queryBase          queryBase
+     * @param qryConditionStatus query con condicion estatus
+     * @return query para obtener registros por estatus
+     */
     protected String addConditionFilterByStatus(String status, String queryBase, String qryConditionStatus) {
         boolean byStatus = !status.equalsIgnoreCase(DEFAULT_ESTATUS);
         if (byStatus) {
@@ -53,6 +76,12 @@ public class BaseDao {
         return queryBase;
     }
 
+    /**
+     * Crea una query para contar elementos en una consulta
+     *
+     * @param queryGetALl queryBase
+     * @return query para contar registros
+     */
     protected String createQueryCountItem(String queryGetALl) {
         int startQryPageable = queryGetALl.indexOf("LIMIT");
         if (startQryPageable >= 0) {

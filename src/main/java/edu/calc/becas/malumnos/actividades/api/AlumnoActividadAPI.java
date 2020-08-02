@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import static edu.calc.becas.common.utils.Constant.*;
 
 /**
+ * Api para exponer servicios de consulta de actividades por alumno(s)
+ *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)
- * Description: Api para exponer servicios de consulta de actividades por alumno(s)
  * Date: 2019-06-16
  */
 @RestController
