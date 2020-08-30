@@ -1,11 +1,10 @@
 package edu.calc.becas.mcatalogos.grupos.service;
 
 import edu.calc.becas.cache.DataScheduleSystem;
+import edu.calc.becas.cache.service.CatalogosSystemaHorarios;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
-import edu.calc.becas.mcatalogos.RestTemplateService;
 import edu.calc.becas.mcatalogos.grupos.model.Grupo;
-import edu.calc.becas.mcatalogos.grupos.model.GrupoDtoSHorario;
 import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
 import edu.calc.becas.mcatalogos.licenciaturas.service.LicenciaturaService;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
@@ -13,14 +12,9 @@ import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static edu.calc.becas.cache.DataScheduleSystem.C_GRUPOS;
@@ -37,19 +31,21 @@ import static edu.calc.becas.common.utils.Constant.LICENCIATURA_DEFAULT;
  */
 @Service
 @Slf4j
-public class GrupoServiceImpl extends RestTemplateService implements GrupoService {
+public class GrupoServiceImpl implements GrupoService {
 
-    @Value("${prop.sistema.horarios.api.grupos}")
-    private String pathGrupos;
 
     private final LicenciaturaService licenciaturaService;
     private final CicloEscolarService cicloEscolarService;
+    private final MessageApplicationProperty messageApplicationProperty;
+    private final CatalogosSystemaHorarios catalogosSystemaHorarios;
 
-    public GrupoServiceImpl(RestTemplate restTemplate, MessageApplicationProperty messageApplicationProperty,
-                            LicenciaturaService licenciaturaService, CicloEscolarService cicloEscolarService) {
-        super(restTemplate, messageApplicationProperty);
+    public GrupoServiceImpl(MessageApplicationProperty messageApplicationProperty,
+                            LicenciaturaService licenciaturaService, CicloEscolarService cicloEscolarService,
+                            CatalogosSystemaHorarios catalogosSystemaHorarios) {
         this.licenciaturaService = licenciaturaService;
         this.cicloEscolarService = cicloEscolarService;
+        this.messageApplicationProperty = messageApplicationProperty;
+        this.catalogosSystemaHorarios = catalogosSystemaHorarios;
     }
 
     /**
@@ -63,7 +59,7 @@ public class GrupoServiceImpl extends RestTemplateService implements GrupoServic
      * @throws GenericException
      */
     @Override
-    public WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String licenciatura) throws GenericException {
+    public WrapperData<Grupo> getAllByStatusAndOneParam(int page, int pageSize, String status, String licenciatura) throws GenericException {
         CicloEscolarVo cicloEscolarVo = cicloEscolarService.getCicloEscolarActual();
 
         try {
@@ -96,22 +92,18 @@ public class GrupoServiceImpl extends RestTemplateService implements GrupoServic
         }
     }
 
-    /**
-     * Obtiene todos los grupos de un periodo en el sistema de horarios
-     *
-     * @param cicloEscolarVo periodo
-     * @return grupos
-     */
     @Override
-    public List<Grupo> getAllAllFromScheduledSystem(CicloEscolarVo cicloEscolarVo) {
-        String path = urlSistemaHorarios + pathGrupos + "?periodo=" + cicloEscolarVo.getClave();
-        HttpEntity entity = new HttpEntity(headers);
-        HttpEntity<GrupoDtoSHorario[]> response = restTemplate.exchange(path, HttpMethod.GET, entity, GrupoDtoSHorario[].class);
-        List<GrupoDtoSHorario> grupoDtoSHorarios = Arrays.asList(response.getBody());
-        List<Grupo> grupos = convertGruposDtoToGrupoList(grupoDtoSHorarios);
-        DataScheduleSystem.C_CONSTANT_DATA.put(C_GRUPOS, grupos);
-        return grupos;
+    public Grupo getGrupoByClave(String cveGrupo) throws GenericException {
+        List<Grupo> grupos = this.getAllByStatusAndOneParam(0, 0, null, null).getData();
+        Grupo grupoFound = null;
+        for (Grupo grupo : grupos) {
+            if (grupo.getCveGrupo().equalsIgnoreCase(cveGrupo)) {
+                grupoFound = grupo;
+            }
+        }
+        return grupoFound;
     }
+
 
     /**
      * obtiene los grupos de un periodo
@@ -124,7 +116,7 @@ public class GrupoServiceImpl extends RestTemplateService implements GrupoServic
             return (List<Grupo>) DataScheduleSystem.C_CONSTANT_DATA.get(C_GRUPOS);
         }
 
-        return getAllAllFromScheduledSystem(cicloEscolarVo);
+        return catalogosSystemaHorarios.getAllAllFromScheduledSystem(cicloEscolarVo);
     }
 
     /**
@@ -172,32 +164,5 @@ public class GrupoServiceImpl extends RestTemplateService implements GrupoServic
         return list;
     }
 
-    /**
-     * Mapero de grupos del sistema de horario en objeto Grupo
-     *
-     * @param grupoDtoSHorarios
-     * @return
-     */
-    private List<Grupo> convertGruposDtoToGrupoList(List<GrupoDtoSHorario> grupoDtoSHorarios) {
-        List<Grupo> grupos = new ArrayList<>();
-        grupoDtoSHorarios.forEach(grupoDtoSHorario -> {
-            grupos.add(createGrupo(grupoDtoSHorario));
-        });
-        return grupos;
-    }
 
-    /**
-     * Mapeo del grupodto en objeto Grupo
-     *
-     * @param grupoDtoSHorario
-     * @return
-     */
-    private Grupo createGrupo(GrupoDtoSHorario grupoDtoSHorario) {
-        Grupo grupo = new Grupo();
-        grupo.setCveGrupo(grupoDtoSHorario.getClave());
-        grupo.setNombreGrupo(grupoDtoSHorario.getNombre());
-        grupo.setCveLicenciatura(grupoDtoSHorario.getCarrera());
-        grupo.setCvePeriodo(grupoDtoSHorario.getPeriodo());
-        return grupo;
-    }
 }

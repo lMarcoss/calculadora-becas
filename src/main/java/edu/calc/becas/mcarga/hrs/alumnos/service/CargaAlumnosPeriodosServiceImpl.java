@@ -73,7 +73,6 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
 
 
     List<Alumno> alumnos = new ArrayList<>();
-    List<Licenciatura> licen = licenciaturaService.getAllFromScheduledSystem();
 
 
     int rowIni = 0;
@@ -90,11 +89,8 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
               String gru = sentences[1];
               alumno.setGrupo(gru);
               alumno.setIdLicenciatura(lic);
-              Licenciatura james = licen.stream()
-                .filter(customer -> lic.equals(customer.getCveLicenciatura()))
-                .findAny()
-                .orElse(null);
-              alumno.setLicenciatura(james.getNombreLicenciatura());
+
+              alumno.setLicenciatura(licenciatura.getNombreLicenciatura());
             }else{
               alumno.setGrupo(grupo);
               alumno.setIdLicenciatura(licenciatura.getCveLicenciatura());

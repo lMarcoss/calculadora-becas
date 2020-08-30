@@ -9,6 +9,7 @@ import edu.calc.becas.mcarga.hrs.alumnos.service.CargaAlumnosPeriodosService;
 import edu.calc.becas.mcarga.hrs.read.files.ReadFile;
 import edu.calc.becas.mcarga.hrs.read.files.model.ProcessedFile;
 import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
+import edu.calc.becas.mcatalogos.licenciaturas.service.LicenciaturaService;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
@@ -43,81 +44,81 @@ import static edu.calc.becas.utils.ExtensionFile.XLS_EXTENSION;
 @Api(description = "Servicios para carga de alumnos en el periodo en curso")
 public class UploadFileAlumnoAPI extends UploadFileAPI {
 
-  protected CargaAlumnosPeriodosService cargaAlumnosPeriodosService;
+    protected CargaAlumnosPeriodosService cargaAlumnosPeriodosService;
 
-  @Autowired
-  private CicloEscolarService cicloEscolarService;
+    private final CicloEscolarService cicloEscolarService;
 
-  @Autowired
-  private ParcialService parcialService;
+    private final ParcialService parcialService;
+    private final LicenciaturaService licenciaturaService;
 
-  @Value("${location.file}")
-  String locationFile;
+    @Value("${location.file}")
+    String locationFile;
 
-  @Autowired
-  public UploadFileAlumnoAPI(@Qualifier("cargaAlumnosPeriodosService") CargaAlumnosPeriodosService cargaAlumnosPeriodosService) {
-      this.cargaAlumnosPeriodosService = cargaAlumnosPeriodosService;
-  }
-
-
-
-  @PostMapping("/uploadFile")
-  @ApiOperation(value = "Carga de archivo")
-  public ProcessedFile uploadFile(@RequestParam("file") MultipartFile file,
-                                     @RequestParam("nombreLicenciatura") String nombreLicenciatura,
-                                     @RequestParam("cveLicenciatura") String cveLicenciatura,
-                                     @RequestParam("cveGrupo") String grupoFilterSelected
-                                     ) throws GenericException {
-    String pathfile = saveFile(file);
-    Workbook pages = ReadFile.pages(pathfile);
-    CommonData commonData = new CommonData();
-
-    commonData.setAgregadoPor("ADMIN");
-    commonData.setActualizadoPor("ADMIN");
-    Parcial parcialActual = parcialService.getParcialActual();
-    CicloEscolarVo cicloEscolarActual = cicloEscolarService.getCicloEscolarActual();
-    Licenciatura lic = new Licenciatura();
-    lic.setCveLicenciatura(cveLicenciatura);
-    lic.setNombreLicenciatura(nombreLicenciatura);
-
-    ProcessAlumnos resultProcessed = cargaAlumnosPeriodosService.processData(pages, commonData, parcialActual, cicloEscolarActual, lic, grupoFilterSelected);
-    return ProcessedFile.builder()
-      .error(false)
-      .file(pathfile)
-      .message(String.format(MESSAGE_ROWS_PROCESSED, resultProcessed.getProcessSuccess()))
-      .idFile(1)
-      .registrosError(resultProcessed.getAlumno())
-      .build();
-
-  }
-
-  private String saveFile(MultipartFile file) throws GenericException {
-    String nameFile = createNameFile(file.getOriginalFilename());
-    try {
-      byte[] bytes = file.getBytes();
-      Path path = Paths.get(locationFile + nameFile);
-      Files.write(path, bytes);
-      return path.toString();
-    } catch (IOException e) {
-      throw new GenericException(e);
-    }
-  }
-
-  private String createNameFile(String originalFilename) {
-    Date date = Calendar.getInstance().getTime();
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd-HH:mm:ss");
-    String strDate = dateFormat.format(date);
-
-    String nameFile;
-
-    if (originalFilename.toUpperCase().endsWith(XLSX_EXTENSION)) {
-      nameFile = originalFilename.toUpperCase().replace(XLSX_EXTENSION, "");
-      return nameFile.replace(" ", "_") + strDate + XLSX_EXTENSION;
-    } else {
-      nameFile = originalFilename.toUpperCase().replace(XLS_EXTENSION, "");
-      return nameFile.replace(" ", "_") + strDate + XLS_EXTENSION;
+    @Autowired
+    public UploadFileAlumnoAPI(@Qualifier("cargaAlumnosPeriodosService") CargaAlumnosPeriodosService cargaAlumnosPeriodosService, CicloEscolarService cicloEscolarService, ParcialService parcialService, LicenciaturaService licenciaturaService) {
+        this.cargaAlumnosPeriodosService = cargaAlumnosPeriodosService;
+      this.cicloEscolarService = cicloEscolarService;
+      this.parcialService = parcialService;
+      this.licenciaturaService = licenciaturaService;
     }
 
-  }
+
+    @PostMapping("/uploadFile")
+    @ApiOperation(value = "Carga de archivo")
+    public ProcessedFile uploadFile(@RequestParam("file") MultipartFile file,
+                                    @RequestParam("nombreLicenciatura") String nombreLicenciatura,
+                                    @RequestParam("cveLicenciatura") String cveLicenciatura,
+                                    @RequestParam("cveGrupo") String grupoFilterSelected
+    ) throws GenericException {
+        String pathfile = saveFile(file);
+        Workbook pages = ReadFile.pages(pathfile);
+        CommonData commonData = new CommonData();
+
+        commonData.setAgregadoPor("ADMIN");
+        commonData.setActualizadoPor("ADMIN");
+        Parcial parcialActual = parcialService.getParcialActual();
+        CicloEscolarVo cicloEscolarActual = cicloEscolarService.getCicloEscolarActual();
+
+        Licenciatura licenciatura = licenciaturaService.getDetailByClave(cveLicenciatura);
+
+        ProcessAlumnos resultProcessed = cargaAlumnosPeriodosService.processData(pages, commonData, parcialActual, cicloEscolarActual, licenciatura, grupoFilterSelected);
+        return ProcessedFile.builder()
+                .error(false)
+                .file(pathfile)
+                .message(String.format(MESSAGE_ROWS_PROCESSED, resultProcessed.getProcessSuccess()))
+                .idFile(1)
+                .registrosError(resultProcessed.getAlumno())
+                .build();
+
+    }
+
+    private String saveFile(MultipartFile file) throws GenericException {
+        String nameFile = createNameFile(file.getOriginalFilename());
+        try {
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(locationFile + nameFile);
+            Files.write(path, bytes);
+            return path.toString();
+        } catch (IOException e) {
+            throw new GenericException(e);
+        }
+    }
+
+    private String createNameFile(String originalFilename) {
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd-HH:mm:ss");
+        String strDate = dateFormat.format(date);
+
+        String nameFile;
+
+        if (originalFilename.toUpperCase().endsWith(XLSX_EXTENSION)) {
+            nameFile = originalFilename.toUpperCase().replace(XLSX_EXTENSION, "");
+            return nameFile.replace(" ", "_") + strDate + XLSX_EXTENSION;
+        } else {
+            nameFile = originalFilename.toUpperCase().replace(XLS_EXTENSION, "");
+            return nameFile.replace(" ", "_") + strDate + XLS_EXTENSION;
+        }
+
+    }
 
 }

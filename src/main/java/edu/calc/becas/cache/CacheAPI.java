@@ -1,10 +1,8 @@
 package edu.calc.becas.cache;
 
+import edu.calc.becas.cache.service.CatalogosSystemaHorarios;
 import edu.calc.becas.exceptions.GenericException;
-import edu.calc.becas.mcatalogos.grupos.service.GrupoService;
-import edu.calc.becas.mcatalogos.licenciaturas.service.LicenciaturaService;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
-import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,16 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(description = "Servicios para recargar la informaci\u00f3n del sistema de horarios")
 public class CacheAPI {
 
-    private final CicloEscolarService cicloEscolarService;
 
-    private final GrupoService grupoService;
+    private final CatalogosSystemaHorarios catalogosSystemaHorarios;
 
-    private final LicenciaturaService licenciaturaService;
-
-    public CacheAPI(CicloEscolarService cicloEscolarService, GrupoService grupoService, LicenciaturaService licenciaturaService) {
-        this.cicloEscolarService = cicloEscolarService;
-        this.grupoService = grupoService;
-        this.licenciaturaService = licenciaturaService;
+    public CacheAPI(CatalogosSystemaHorarios catalogosSystemaHorarios) {
+        this.catalogosSystemaHorarios = catalogosSystemaHorarios;
     }
 
     /**
@@ -45,9 +38,9 @@ public class CacheAPI {
     @ApiOperation(value = "Recarga periodo, licenciaturas y grupos")
     public String reloadAllDataFromScheduledSystem() throws GenericException {
         DataScheduleSystem.C_CONSTANT_DATA.clear();
-        CicloEscolarVo cicloEscolarVo = cicloEscolarService.getCicloEscolarActualFromScheduledSystem();
-        licenciaturaService.getAllFromScheduledSystem();
-        grupoService.getAllAllFromScheduledSystem(cicloEscolarVo);
+        CicloEscolarVo cicloEscolarVo = catalogosSystemaHorarios.getCicloEscolarActualFromScheduledSystem();
+        catalogosSystemaHorarios.getAllFromScheduledSystem();
+        catalogosSystemaHorarios.getAllAllFromScheduledSystem(cicloEscolarVo);
         return "Recarga de datos terminado";
     }
 }

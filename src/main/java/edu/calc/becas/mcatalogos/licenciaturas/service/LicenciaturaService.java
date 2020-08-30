@@ -20,7 +20,7 @@ public interface LicenciaturaService {
      * @return licenciaturas
      * @throws GenericException error en la consulta
      */
-    WrapperData getAll() throws GenericException;
+    WrapperData<Licenciatura> getAll() throws GenericException;
 
     /**
      * Obtiene los datos de una licenciatura por clave
@@ -31,11 +31,5 @@ public interface LicenciaturaService {
      */
     Licenciatura getDetailByClave(String cveCarrera) throws GenericException;
 
-    /**
-     * Consulta las licenciaturas del sitema de horarios
-     *
-     * @return licenciaturas
-     */
-    List<Licenciatura> getAllFromScheduledSystem();
 }
 

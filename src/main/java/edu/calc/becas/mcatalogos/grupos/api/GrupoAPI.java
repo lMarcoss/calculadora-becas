@@ -2,6 +2,7 @@ package edu.calc.becas.mcatalogos.grupos.api;
 
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
+import edu.calc.becas.mcatalogos.grupos.model.Grupo;
 import edu.calc.becas.mcatalogos.grupos.service.GrupoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,7 +46,7 @@ public class GrupoAPI {
      */
     @GetMapping
     @ApiOperation(value = "Obtiene el listado de grupos")
-    public WrapperData getAll(
+    public WrapperData<Grupo> getAll(
             @ApiParam(value = "P\u00e1gina a recuperar", defaultValue = DEFAULT_PAGE) @RequestParam(value = "page", defaultValue = DEFAULT_PAGE, required = false) String page,
             @ApiParam(value = "Registros a recuperar", defaultValue = ALL_ITEMS) @RequestParam(value = "pageSize", defaultValue = ALL_ITEMS, required = false) String pageSize,
             @ApiParam(value = "Estatus de los registros a recuperar", defaultValue = DEFAULT_ESTATUS) @RequestParam(value = "status", defaultValue = DEFAULT_ESTATUS, required = false) String status,

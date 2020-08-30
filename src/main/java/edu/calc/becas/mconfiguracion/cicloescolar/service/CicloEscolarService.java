@@ -8,7 +8,6 @@ public interface CicloEscolarService {
 
     CicloEscolarVo getCicloEscolarActual() throws GenericException;
 
-    CicloEscolarVo getCicloEscolarActualFromScheduledSystem() throws GenericException;
 
     WrapperData<CicloEscolarVo> getAll() throws GenericException;
 }

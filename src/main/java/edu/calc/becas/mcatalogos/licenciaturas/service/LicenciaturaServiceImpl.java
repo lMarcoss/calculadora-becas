@@ -1,22 +1,17 @@
 package edu.calc.becas.mcatalogos.licenciaturas.service;
 
 import edu.calc.becas.cache.DataScheduleSystem;
+import edu.calc.becas.cache.service.CatalogosSystemaHorarios;
 import edu.calc.becas.common.model.WrapperData;
 import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mcatalogos.RestTemplateService;
 import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
-import edu.calc.becas.mcatalogos.licenciaturas.model.LicenciaturaDtoSHorario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static edu.calc.becas.cache.DataScheduleSystem.C_LICENCIATURA;
@@ -34,18 +29,14 @@ import static edu.calc.becas.cache.DataScheduleSystem.C_LICENCIATURA;
 @Slf4j
 public class LicenciaturaServiceImpl extends RestTemplateService implements LicenciaturaService {
 
-    @Value("${prop.sistema.horarios.api.carreras.vigentes}")
-    private String pathCarrerasVigentes;
+    private final CatalogosSystemaHorarios catalogosSystemaHorarios;
 
-    @Value("${prop.sistema.horarios.api.carreras.detallecarrera}")
-    private String pathDetalleCarrera;
-
-
-    public LicenciaturaServiceImpl(RestTemplate restTemplate, MessageApplicationProperty messageApplicationProperty) {
+    public LicenciaturaServiceImpl(RestTemplate restTemplate, MessageApplicationProperty messageApplicationProperty, CatalogosSystemaHorarios catalogosSystemaHorarios) {
         super(restTemplate, messageApplicationProperty);
+        this.catalogosSystemaHorarios = catalogosSystemaHorarios;
     }
 
-    public WrapperData getAll() throws GenericException {
+    public WrapperData<Licenciatura> getAll() throws GenericException {
 
 
         WrapperData<Licenciatura> wrapperData = new WrapperData<>();
@@ -73,65 +64,27 @@ public class LicenciaturaServiceImpl extends RestTemplateService implements Lice
         if (DataScheduleSystem.C_CONSTANT_DATA.get(C_LICENCIATURA) != null) {
             return (List<Licenciatura>) DataScheduleSystem.C_CONSTANT_DATA.get(C_LICENCIATURA);
         }
-        return getAllFromScheduledSystem();
+        return catalogosSystemaHorarios.getAllFromScheduledSystem();
     }
 
     @Override
     public Licenciatura getDetailByClave(String cveCarrera) throws GenericException {
-        // obtiene detalle de carrera
-        String path = urlSistemaHorarios + pathDetalleCarrera + "/clave=" + cveCarrera;
-        try {
-            HttpEntity entity = new HttpEntity(headers);
-            HttpEntity<LicenciaturaDtoSHorario> response = restTemplate.exchange(path, HttpMethod.GET, entity, LicenciaturaDtoSHorario.class);
-            LicenciaturaDtoSHorario licenciaturaDtoSHorario = response.getBody();
-            Licenciatura licenciatura = createLicenciatura(licenciaturaDtoSHorario);
+
+        boolean found = false;
+        Licenciatura licenciatura = null;
+        WrapperData<Licenciatura> licenciaturaWrapperData = this.getAll();
+        for (Licenciatura licenciaturaL : licenciaturaWrapperData.getData()) {
+            if (licenciaturaL.getCveLicenciatura().equalsIgnoreCase(cveCarrera)) {
+                found = true;
+                licenciatura = licenciaturaL;
+            }
+        }
+
+        if (found) {
             return licenciatura;
-        } catch (Exception e) {
-            log.error(ExceptionUtils.getStackTrace(e));
-            throw new GenericException(e, messageApplicationProperty.getErrorObtenerDetalleLicencuaturaSistemaHorario());
+        } else {
+            return catalogosSystemaHorarios.getDetailByClaveFromScheduledSystem(cveCarrera);
         }
-    }
-
-    @Override
-    public List<Licenciatura> getAllFromScheduledSystem() {
-        // obtiene carreras vigentes del sistema de horarios
-        String path = urlSistemaHorarios + pathCarrerasVigentes;
-        HttpEntity entity = new HttpEntity(headers);
-        HttpEntity<LicenciaturaDtoSHorario[]> response = restTemplate.exchange(path, HttpMethod.GET, entity, LicenciaturaDtoSHorario[].class);
-
-        List<LicenciaturaDtoSHorario> licenciaturasDto = Arrays.asList(response.getBody());
-
-        List<Licenciatura> licenciaturas = convertListDtoLicenciaturasToLicenciatura(licenciaturasDto);
-        DataScheduleSystem.C_CONSTANT_DATA.put(C_LICENCIATURA, licenciaturas);
-        return licenciaturas;
-    }
-
-    /**
-     * Mapeo de licenciaturass
-     *
-     * @param licenciaturasDto lienciaturas
-     * @return licenciaturas mapeados en objeto local
-     */
-    private List<Licenciatura> convertListDtoLicenciaturasToLicenciatura(List<LicenciaturaDtoSHorario> licenciaturasDto) {
-        List<Licenciatura> licenciaturas = new ArrayList<>();
-        licenciaturasDto.forEach(licenciaturaDto -> {
-            Licenciatura lic = createLicenciatura(licenciaturaDto);
-            licenciaturas.add(lic);
-        });
-        return licenciaturas;
-    }
-
-    /**
-     * mapeo de datos a objeto local
-     */
-    private Licenciatura createLicenciatura(LicenciaturaDtoSHorario licenciaturaDto) {
-        Licenciatura lic = new Licenciatura();
-        lic.setCveLicenciatura(licenciaturaDto.getClave());
-        lic.setNombreLicenciatura(licenciaturaDto.getNombre());
-        if (licenciaturaDto.getVigente() != null) {
-            lic.setVigente(licenciaturaDto.getVigente());
-        }
-        return lic;
     }
 
 }
