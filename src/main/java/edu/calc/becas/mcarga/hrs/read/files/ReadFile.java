@@ -6,8 +6,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,7 +20,6 @@ import java.io.IOException;
  */
 @Slf4j
 public class ReadFile {
-    private static final Logger LOG = LoggerFactory.getLogger(ReadFile.class);
 
     /**
      * Lee un archivo de excel
@@ -42,7 +39,7 @@ public class ReadFile {
             throw new GenericException(e);
         }
 
-        System.out.println("SHEETS: " + workbook.getNumberOfSheets());
+        log.info("SHEETS: " + workbook.getNumberOfSheets());
 
         return workbook;
 

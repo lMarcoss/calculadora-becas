@@ -8,176 +8,196 @@ import edu.calc.becas.mcarga.hrs.alumnos.dao.CargaAlumnosPeriodosDao;
 import edu.calc.becas.mcarga.hrs.alumnos.model.ProcessAlumnos;
 import edu.calc.becas.mcarga.hrs.read.files.model.RowFile;
 import edu.calc.becas.mcatalogos.actividades.dao.ActividadesDaoImpl;
-import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
+import edu.calc.becas.mcatalogos.grupos.model.Grupo;
+import edu.calc.becas.mcatalogos.grupos.service.GrupoService;
 import edu.calc.becas.mcatalogos.licenciaturas.model.Licenciatura;
 import edu.calc.becas.mcatalogos.licenciaturas.service.LicenciaturaService;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
 import edu.calc.becas.mreporte.actividades.percent.activity.model.ReportPercentActivity;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service("cargaAlumnosPeriodosService")
 public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements CargaAlumnosPeriodosService {
-  private static final Logger LOG = LoggerFactory.getLogger(CargaAlumnosPeriodosServiceImpl.class);
 
-  @Autowired
-  CargaAlumnosPeriodosDao cargaAlumnosPeriodosDao;
+    final
+    CargaAlumnosPeriodosDao cargaAlumnosPeriodosDao;
 
-  @Autowired
-  ActividadesDaoImpl actividadesDaoImpl;
+    final
+    ActividadesDaoImpl actividadesDaoImpl;
 
-  @Autowired
-  LicenciaturaService licenciaturaService;
+    final
+    LicenciaturaService licenciaturaService;
 
-  @Value("${prop.carga.hrs.biblioteca.id}")
-  private int idActividadBiblioteca;
+    final
+    GrupoService grupoService;
 
-  @Value("${prop.carga.alumnos.alumnos.posicion.matricula}")
-  private int posMatricula;
+    @Value("${prop.carga.hrs.biblioteca.id}")
+    private int idActividadBiblioteca;
 
-  @Value("${prop.carga.alumnos.alumnos.posicion.curp}")
-  private int posCurp;
+    @Value("${prop.carga.alumnos.alumnos.posicion.matricula}")
+    private int posMatricula;
 
-  @Value("${prop.carga.alumnos.alumnos.posicion.apePaterno}")
-  private int posApePaterno;
+    @Value("${prop.carga.alumnos.alumnos.posicion.curp}")
+    private int posCurp;
 
-  @Value("${prop.carga.alumnos.alumnos.posicion.apeMaterno}")
-  private int posApeMaterno;
+    @Value("${prop.carga.alumnos.alumnos.posicion.apePaterno}")
+    private int posApePaterno;
 
-  @Value("${prop.carga.alumnos.alumnos.posicion.nombres}")
-  private int posNombres;
+    @Value("${prop.carga.alumnos.alumnos.posicion.apeMaterno}")
+    private int posApeMaterno;
 
-  @Value("${prop.carga.alumnos.alumnos.posicion.grupo}")
-  private int posGrupo;
+    @Value("${prop.carga.alumnos.alumnos.posicion.nombres}")
+    private int posNombres;
 
-  @Value("${prop.carga.alumnos.alumnos.posicion.codigoRFid}")
-  private int posCodigoRFid;
+    @Value("${prop.carga.alumnos.alumnos.posicion.grupo}")
+    private int posGrupo;
 
-  @Value("${prop.carga.alumnos.alumnos.posicion.celda.final}")
-  private int posEndCell = 4;
+    @Value("${prop.carga.alumnos.alumnos.posicion.codigoRFid}")
+    private int posCodigoRFid;
 
+    @Value("${prop.carga.alumnos.alumnos.posicion.celda.final}")
+    private int posEndCell = 4;
 
-
-  @Override
-  public ProcessAlumnos processData(Workbook pages, CommonData commonData, Parcial parcialActual, CicloEscolarVo cicloEscolarActual, Licenciatura licenciatura, String grupo) throws GenericException {
-
-    List<RowFile> rows = readRowsAlumnos(pages);
-
-
-    List<Alumno> alumnos = new ArrayList<>();
-
-
-    int rowIni = 0;
-    for (RowFile row : rows) {
-      if(rowIni!=0){
-        Alumno alumno = new Alumno();
-
-        for (int i = 0; (i < row.getCells().size() && i <= posEndCell); i++) {
-          if (i == posGrupo) {
-            if (licenciatura.getCveLicenciatura().equals("All")){
-              String a = row.getCells().get(i).getValue();
-              String[] sentences = a.split("-");
-              String lic = sentences[0];
-              String gru = sentences[1];
-              alumno.setGrupo(gru);
-              alumno.setIdLicenciatura(lic);
-
-              alumno.setLicenciatura(licenciatura.getNombreLicenciatura());
-            }else{
-              alumno.setGrupo(grupo);
-              alumno.setIdLicenciatura(licenciatura.getCveLicenciatura());
-              alumno.setLicenciatura(licenciatura.getNombreLicenciatura());
-            }
-          }
-          if (i == posMatricula){
-            alumno.setMatricula(row.getCells().get(i).getValue());
-          }
-          if (i == posCurp){
-            alumno.setCurp(row.getCells().get(i).getValue());
-          }
-          if (i == posApePaterno){
-            alumno.setApePaterno(row.getCells().get(i).getValue());
-          }
-          if (i == posApeMaterno){
-            alumno.setApeMaterno(row.getCells().get(i).getValue());
-          }
-          if (i == posNombres){
-            alumno.setNombres(row.getCells().get(i).getValue());
-          }
-          if (i == posCodigoRFid){
-            alumno.setCodigoRFid(row.getCells().get(i).getValue());
-          }
-
-        }
-        // datos de auditoria
-        alumno.setActualizadoPor(commonData.getActualizadoPor());
-        alumno.setAgregadoPor(commonData.getAgregadoPor());
-        if(!alumno.getMatricula().equals("MATRICULA")){
-          alumnos.add(alumno);
-        }
-      }
-      rowIni++;
-
+    public CargaAlumnosPeriodosServiceImpl(CargaAlumnosPeriodosDao cargaAlumnosPeriodosDao,
+                                           ActividadesDaoImpl actividadesDaoImpl,
+                                           LicenciaturaService licenciaturaService,
+                                           GrupoService grupoService) {
+        this.cargaAlumnosPeriodosDao = cargaAlumnosPeriodosDao;
+        this.actividadesDaoImpl = actividadesDaoImpl;
+        this.licenciaturaService = licenciaturaService;
+        this.grupoService = grupoService;
     }
-    return cargaAlumnosPeriodosDao.persistenceAlumnos(alumnos,  parcialActual, cicloEscolarActual, licenciatura);
+
+
+    @Override
+    public ProcessAlumnos processData(Workbook pages, CommonData commonData, Parcial parcialActual, CicloEscolarVo cicloEscolarActual, Licenciatura licenciatura, String grupo) throws GenericException {
+
+        List<RowFile> rows = readRowsAlumnos(pages);
+
+
+        List<Alumno> alumnos = new ArrayList<>();
+
+
+        int rowIni = 0;
+        for (RowFile row : rows) {
+            if (rowIni != 0) {
+                Alumno alumno = new Alumno();
+                alumno.setIdLicenciatura(licenciatura.getCveLicenciatura());
+                alumno.setLicenciatura(licenciatura.getNombreLicenciatura());
+
+                for (int i = 0; (i < row.getCells().size() && i <= posEndCell); i++) {
+                    if (i == posGrupo) {
+                        if (grupo.equals("All")) {
+                            String a = row.getCells().get(i).getValue();
+                            String[] sentences = a.split("-");
+                            String lic;
+                            String gru;
+                            try {
+                                lic = sentences[0];
+                                gru = sentences[1];
+                            } catch (Exception e) {
+                                throw new GenericException("El nombre del grupo es incorrecto, se espera en formato NUM-X, ej: 101-A");
+                            }
+
+
+                            alumno.setGrupo(gru);
+                            Grupo grupo1 = grupoService.getGrupoByClave(gru);
+                            alumno.setGrupo(grupo1.getCveGrupo());
+                            alumno.setDsGrupo(grupo1.getNombreGrupo());
+
+                        } else {
+
+                            Grupo grupo1 = grupoService.getGrupoByClave(grupo);
+
+                            alumno.setGrupo(grupo1.getCveGrupo());
+                            alumno.setDsGrupo(grupo1.getNombreGrupo());
+
+
+                        }
+                    }
+                    if (i == posMatricula) {
+                        alumno.setMatricula(row.getCells().get(i).getValue());
+                    }
+                    if (i == posCurp) {
+                        alumno.setCurp(row.getCells().get(i).getValue());
+                    }
+                    if (i == posApePaterno) {
+                        alumno.setApePaterno(row.getCells().get(i).getValue());
+                    }
+                    if (i == posApeMaterno) {
+                        alumno.setApeMaterno(row.getCells().get(i).getValue());
+                    }
+                    if (i == posNombres) {
+                        alumno.setNombres(row.getCells().get(i).getValue());
+                    }
+                    if (i == posCodigoRFid) {
+                        alumno.setCodigoRFid(row.getCells().get(i).getValue());
+                    }
+
+                }
+                // datos de auditoria
+                alumno.setActualizadoPor(commonData.getActualizadoPor());
+                alumno.setAgregadoPor(commonData.getAgregadoPor());
+                if (!alumno.getMatricula().equals("MATRICULA")) {
+                    alumnos.add(alumno);
+                }
+            }
+            rowIni++;
+
+        }
+        return cargaAlumnosPeriodosDao.persistenceAlumnos(alumnos, parcialActual, cicloEscolarActual, licenciatura);
     }
 
     @Override
-    public int processDataPorcentajes(Workbook pages, CommonData commonData, Parcial parcialActual, CicloEscolarVo cicloEscolarActual, Licenciatura licenciatura) throws GenericException {
+    public int processDataPorcentajes(Workbook pages, CommonData commonData, Parcial parcialActual,
+                                      CicloEscolarVo cicloEscolarActual, Licenciatura licenciatura) throws GenericException {
 
-    List<RowFile> rows = readRowsAlumnosReportes(pages);
-
-
-    List<ReportPercentActivity> alumnosReportes = new ArrayList<>();
-    int rowIni = 0;
-    for (RowFile row : rows) {
-
-        ReportPercentActivity alumno = new ReportPercentActivity();
-        //ActividadVo actividadVo = new ActividadVo("S");
-        //actividadVo.setIdActividad(idActividadBiblioteca);
+        List<RowFile> rows = readRowsAlumnosReportes(pages);
 
 
-        for (int i = 0; (i < row.getCells().size() && i <= 32); i++) {
+        List<ReportPercentActivity> alumnosReportes = new ArrayList<>();
+        int rowIni = 0;
+        for (RowFile row : rows) {
 
-          if (i == 2){
-            alumno.setMatricula(row.getCells().get(i).getValue());
-          }
-          if (i == 31){
-            String valor = row.getCells().get(i).getValue();
-            float tmp = Float.parseFloat(valor)*100;
-            int b=(int)(Math.round(tmp));
-            System.out.println("porcentaje :::::::: " + b);
+            ReportPercentActivity alumno = new ReportPercentActivity();
+            //ActividadVo actividadVo = new ActividadVo("S");
+            //actividadVo.setIdActividad(idActividadBiblioteca);
+
+
+            for (int i = 0; (i < row.getCells().size() && i <= 32); i++) {
+
+                if (i == 2) {
+                    alumno.setMatricula(row.getCells().get(i).getValue());
+                }
+                if (i == 31) {
+                    String valor = row.getCells().get(i).getValue();
+                    float tmp = Float.parseFloat(valor) * 100;
+                    int b = (int) (Math.round(tmp));
+                    log.info("porcentaje :::::::: " + b);
 
             /*String[] arrOfStr = valor.split(".", 2);
             for (String a : arrOfStr)
               System.out.println(a);*/
-            alumno.setPorcentajeActividad(b);
-            //alumno.setPorcentajeActividad(Integer.parseInt(row.getCells().get(i).getValue()));
-          }
+                    alumno.setPorcentajeActividad(b);
+                    //alumno.setPorcentajeActividad(Integer.parseInt(row.getCells().get(i).getValue()));
+                }
+
+            }
+            alumnosReportes.add(alumno);
+
+            rowIni++;
 
         }
-        alumnosReportes.add(alumno);
-
-      rowIni++;
-
-    }
-    LOG.debug(alumnosReportes.toString());
-     return actividadesDaoImpl.persistencePorcentaje(alumnosReportes,  parcialActual, cicloEscolarActual);
+        log.debug(alumnosReportes.toString());
+        return actividadesDaoImpl.persistencePorcentaje(alumnosReportes, parcialActual, cicloEscolarActual);
     }
 
-  public static interface CargaAlumnosPeriodosService {
-    int processData(Workbook pages, CommonData commonData, Parcial parcialActual, CicloEscolarVo cicloEscolarActual) throws GenericException;
-  }
-
-  public void setLicenciaturaService(LicenciaturaService licenciaturaService) {
-    this.licenciaturaService = licenciaturaService;
-  }
 }

@@ -10,6 +10,7 @@ import edu.calc.becas.utils.DecryptUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,11 @@ import static edu.calc.becas.common.utils.Constant.*;
  * Universidad de la Sierra Sur (UNSIS)
  * Date: 4/14/19
  */
+@Slf4j
 @RestController
 @RequestMapping("/usuarios")
 @Api(description = "Servicios para administraci\u00f3n de usuarios")
 public class UsuarioAPI {
-
-    private static final Logger LOG = LoggerFactory.getLogger(UsuarioAPI.class);
 
     @Value("${key.encode.crypto}")
     String secretKeyDecrypt;
@@ -104,7 +104,7 @@ public class UsuarioAPI {
                 usuario.setPassword(DecryptUtil.decrypt(usuario.getPassword(), secretKeyDecrypt, "password"));
             }
         } catch (Exception e) {
-            LOG.error(e.getMessage());
+            log.error(e.getMessage());
             e.printStackTrace();
             throw new GenericException(e.getMessage());
         }

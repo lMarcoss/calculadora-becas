@@ -11,9 +11,8 @@ import edu.calc.becas.mcarga.hrs.read.files.model.RowFile;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,9 +29,9 @@ import java.util.List;
  * Universidad de la Sierra Sur (UNSIS)
  * Date: 5/13/19
  */
+@Slf4j
 @Service("cargaHrsBibliotecaService")
 public class CargaHrsBibliotecaServiceImpl extends ProcessRow implements ProcessHoursService {
-    private static final Logger LOG = LoggerFactory.getLogger(CargaHrsBibliotecaServiceImpl.class);
 
     @Value("${prop.carga.hrs.biblioteca.id}")
     private int idActividadBiblioteca;
@@ -106,8 +105,8 @@ public class CargaHrsBibliotecaServiceImpl extends ProcessRow implements Process
                         }
                         alumno.setHora(hora);
                     } catch (Exception e) {
-                        LOG.error("ERROR AL OBTENER N\u00daMERO DE HORAS");
-                        LOG.error(Arrays.toString(e.getStackTrace()));
+                        log.error("ERROR AL OBTENER N\u00daMERO DE HORAS");
+                        log.error(Arrays.toString(e.getStackTrace()));
                     }
                 }
             }

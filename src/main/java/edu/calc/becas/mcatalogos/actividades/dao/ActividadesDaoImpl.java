@@ -12,13 +12,12 @@ import edu.calc.becas.mcatalogos.actividades.model.DetalleActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.dao.ParcialDao;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
+import edu.calc.becas.mreporte.actividades.percent.activity.dao.ReportPercentActivitiesDao;
+import edu.calc.becas.mreporte.actividades.percent.activity.model.ReportPercentActivity;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
-import edu.calc.becas.mreporte.actividades.percent.activity.dao.ReportPercentActivitiesDao;
-import edu.calc.becas.mreporte.actividades.percent.activity.model.ReportPercentActivity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static edu.calc.becas.common.utils.Constant.ALL_ITEMS;
@@ -36,9 +34,9 @@ import static edu.calc.becas.mcatalogos.actividades.dao.QueriesActividades.*;
 /**
  * Implementacion para guardar, recuperar y editar informacion de actividades en la BD
  */
+@Slf4j
 @Repository
 public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
-    private static final Logger LOG = LoggerFactory.getLogger(ActividadesDaoImpl.class);
 
     private final ReportPercentActivitiesDao reportPercentActivitiesDao;
     private final AlumnoActividadDao alumnoActividadDao;
@@ -318,7 +316,7 @@ public class ActividadesDaoImpl extends BaseDao implements ActividadesDao {
 
                 count++;
             } catch (Exception e) {
-                LOG.error(e.getMessage());
+                log.error(e.getMessage());
             }
 
         }

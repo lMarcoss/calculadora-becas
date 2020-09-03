@@ -2,8 +2,7 @@ package edu.calc.becas.mvc.config.security;
 
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import io.jsonwebtoken.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,10 +25,9 @@ import java.util.Date;
  * Description:
  * Date: 4/16/19
  */
+@Slf4j
 @Component
 public class JwtTokenProvider {
-
-    private static final Logger LOG = LoggerFactory.getLogger(JwtTokenProvider.class);
 
     @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey = "secret";
@@ -92,8 +90,8 @@ public class JwtTokenProvider {
 
             return !claims.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            LOG.error(e.getMessage());
-            LOG.error("Expired or invalid JWT token");
+            log.error(e.getMessage());
+            log.error("Expired or invalid JWT token");
             return false;
 
         }

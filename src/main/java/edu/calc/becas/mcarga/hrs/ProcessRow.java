@@ -2,9 +2,8 @@ package edu.calc.becas.mcarga.hrs;
 
 import edu.calc.becas.mcarga.hrs.read.files.model.CellFile;
 import edu.calc.becas.mcarga.hrs.read.files.model.RowFile;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,22 +17,23 @@ import static edu.calc.becas.mcarga.hrs.constants.ConstantsProcessedHrs.VALUE_FO
  * Universidad de la Sierra Sur (UNSIS)
  * Date: 6/3/19
  */
+@Slf4j
 public class ProcessRow {
-    private static final Logger LOG = LoggerFactory.getLogger(ProcessRow.class);
 
     /**
      * Lee las filas de un archivo - archivo de horas de biblioteca
      *
      * @param pages pagina
      * @return registros
+     * @author Marcos Santiago Leonardo
      */
     protected List<RowFile> readRows(Workbook pages) {
 
-        LOG.info("NUMBERS PAGES: " + String.valueOf(pages.getNumberOfSheets()));
+        log.info("NUMBERS PAGES: " + String.valueOf(pages.getNumberOfSheets()));
 
         List<RowFile> rows = new ArrayList<>();
         for (Sheet sheet : pages) {
-            LOG.info("PAGE:  " + sheet.getSheetName());
+            log.info("PAGE:  " + sheet.getSheetName());
 
             for (Row row : sheet) {
 
@@ -70,14 +70,14 @@ public class ProcessRow {
      */
     protected List<RowFile> readRowsAlumnos(Workbook pages) {
 
-        LOG.info("NUMBERS PAGES: " + String.valueOf(pages.getNumberOfSheets()));
+        log.info("NUMBERS PAGES: " + String.valueOf(pages.getNumberOfSheets()));
 
         List<RowFile> rows = new ArrayList<>();
         for (Sheet sheet : pages) {
-            LOG.info("PAGE:  " + sheet.getSheetName());
+            log.info("PAGE:  " + sheet.getSheetName());
             int rowNum = 0;
             for (Row row : sheet) {
-                LOG.info("NUMBERS rows: " + sheet.getLastRowNum());
+                log.info("NUMBERS rows: " + sheet.getLastRowNum());
                 if (sheet.getLastRowNum() > 3) {
                     if (rowNum != 0) {
                         RowFile rowFile = new RowFile();
@@ -124,11 +124,11 @@ public class ProcessRow {
      */
     protected List<RowFile> readRowsAlumnosReportes(Workbook pages) {
 
-        LOG.info("NUMBERS PAGES: " + String.valueOf(pages.getNumberOfSheets()));
+        log.info("NUMBERS PAGES: " + String.valueOf(pages.getNumberOfSheets()));
 
         List<RowFile> rows = new ArrayList<>();
         for (Sheet sheet : pages) {
-            LOG.info("PAGE:  " + sheet.getSheetName());
+            log.info("PAGE:  " + sheet.getSheetName());
             int rowNum = 0;
             for (Row row : sheet) {
                 if (rowNum >= 9) {

@@ -7,10 +7,9 @@ import edu.calc.becas.mcarga.hrs.CargaHrsDao;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mconfiguracion.cicloescolar.model.CicloEscolarVo;
 import edu.calc.becas.mconfiguracion.parciales.model.Parcial;
-import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import edu.calc.becas.mreporte.actividades.percent.activity.dao.ReportPercentActivitiesDao;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import edu.calc.becas.mvc.config.MessageApplicationProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -26,9 +25,9 @@ import static edu.calc.becas.mcarga.hrs.blibioteca.dao.QueriesCargaHrsBiblioteca
  * Universidad de la Sierra Sur (UNSIS)
  * Date: 6/3/19
  */
+@Slf4j
 @Repository("cargaHrsBibliotecaRepository")
 public class CargaHrsBibliotecaDaoImpl extends BaseDao implements CargaHrsDao {
-    private static final Logger LOG = LoggerFactory.getLogger(CargaHrsBibliotecaDaoImpl.class);
 
 
     private final ReportPercentActivitiesDao reportPercentActivitiesDao;
@@ -83,7 +82,7 @@ public class CargaHrsBibliotecaDaoImpl extends BaseDao implements CargaHrsDao {
                 }
 
             } catch (Exception e) {
-                LOG.error(e.getMessage());
+                log.error(e.getMessage());
             }
 
         }

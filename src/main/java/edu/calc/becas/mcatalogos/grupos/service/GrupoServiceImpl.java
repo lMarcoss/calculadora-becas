@@ -94,7 +94,7 @@ public class GrupoServiceImpl implements GrupoService {
 
     @Override
     public Grupo getGrupoByClave(String cveGrupo) throws GenericException {
-        List<Grupo> grupos = this.getAllByStatusAndOneParam(0, 0, null, null).getData();
+        List<Grupo> grupos = this.getAllByStatusAndOneParam(0, 0, null, LICENCIATURA_DEFAULT).getData();
         Grupo grupoFound = null;
         for (Grupo grupo : grupos) {
             if (grupo.getCveGrupo().equalsIgnoreCase(cveGrupo)) {
