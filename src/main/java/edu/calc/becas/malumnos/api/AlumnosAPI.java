@@ -8,6 +8,7 @@ import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import static edu.calc.becas.common.utils.Constant.*;
 @RestController
 @RequestMapping("/alumnos")
 @Api(description = "Servicios para administraci\u00f3n de Inscripcion de alumnos a Actividades ")
+@Slf4j
 public class AlumnosAPI {
 
     private final AlumnosService alumnosService;
@@ -87,5 +89,9 @@ public class AlumnosAPI {
         return alumnosService.getAllByStatusLoad(Integer.parseInt(page), Integer.parseInt(pageSize), status, cicloEscolar, licenciatura, grupo);
     }
 
-
+    @PutMapping
+    @ApiOperation(value = "Actualiza los datos del alumno")
+    public Alumno updateAlumno(@RequestBody Alumno alumno) {
+        return this.alumnosService.update(alumno);
+    }
 }

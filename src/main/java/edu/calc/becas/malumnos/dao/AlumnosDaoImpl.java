@@ -7,6 +7,7 @@ import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import edu.calc.becas.mseguridad.rolesypermisos.model.Rol;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,7 @@ import static edu.calc.becas.malumnos.dao.QueriesAlumnos.*;
 
 
 @Repository
+@Slf4j
 public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
 
 
@@ -83,17 +85,17 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
                         object.getCicloEscolar());
             }
 
-          int valueAlumnoActividad = this.jdbcTemplate.queryForObject(QRY_EXISTE_ALUMNO_ACTIVIDAD,
-            new Object[]{
-              object.getMatricula()}, Integer.class);
+            int valueAlumnoActividad = this.jdbcTemplate.queryForObject(QRY_EXISTE_ALUMNO_ACTIVIDAD,
+                    new Object[]{
+                            object.getMatricula()}, Integer.class);
 
-          if (valueAlumnoActividad == 0) {
-            this.jdbcTemplate.update(QRY_ADD_ALUMNO_ACTIVIDAD, object.getIdDetalleActividad(),
-              object.getMatricula());
-          }else{
-            this.jdbcTemplate.update(QRY_UPD_ALUMNO_ACTIVIDAD, object.getIdDetalleActividad(),
-              object.getMatricula());
-          }
+            if (valueAlumnoActividad == 0) {
+                this.jdbcTemplate.update(QRY_ADD_ALUMNO_ACTIVIDAD, object.getIdDetalleActividad(),
+                        object.getMatricula());
+            } else {
+                this.jdbcTemplate.update(QRY_UPD_ALUMNO_ACTIVIDAD, object.getIdDetalleActividad(),
+                        object.getMatricula());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,28 +107,28 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
     @Override
     public Usuario getUserInfo(String matricula) {
         String query = "SELECT ID_ALUMNO,ALM.NOMBRES,ALM.APE_PATERNO,ALM.APE_MATERNO, '3' ID_ROL, 'ALUMNO' ROL, ALM.MATRICULA as USERNAME, CURP COMMONVAL01, AL.CVE_GRUPO COMMONVAL02,\n" +
-          "    AL.DESC_LICENCIATURA COMMONVAL03,\n" +
-          "             AT.NOMBRE_ACTIVIDAD COMMONVAL04,\n" +
-          "             Concat ( AC.HORA,':',AC.AM_PM) COMMONVAL05,\n" +
-          "       ALM.CODIGO_RFID COMMONVAL06\n" +
-          "      FROM ALUMNOS ALM, HORARIO_ACTIVIDAD AC, ACTIVIDAD_ALUMNO CAL, ALUMNOS_DAT_PERIODO AL, ACTIVIDADES AT\n" +
-          "      WHERE\n" +
-          "      AC.ID_HORARIO_ACTIVIDAD = CAL.ID_HORARIO_ACTIVIDAD\n" +
-          "      AND CAL.ID_ALUMNO_P = AL.ID_ALUMNOP\n" +
-          "      AND AC.ID_ACTIVIDAD = AT.ID_ACTIVIDAD\n" +
-          "      AND ALM.MATRICULA = AL.MATRICULA\n" +
-          "AND ALM.MATRICULA = ? ORDER BY AL.ID_ALUMNOP";
-      Usuario us = new Usuario();
-      List<Usuario> usr = this.jdbcTemplate.query(query, new Object[]{matricula}, (((rs, i) -> mapperAlumnoLogin(rs))));
+                "    AL.DESC_LICENCIATURA COMMONVAL03,\n" +
+                "             AT.NOMBRE_ACTIVIDAD COMMONVAL04,\n" +
+                "             Concat ( AC.HORA,':',AC.AM_PM) COMMONVAL05,\n" +
+                "       ALM.CODIGO_RFID COMMONVAL06\n" +
+                "      FROM ALUMNOS ALM, HORARIO_ACTIVIDAD AC, ACTIVIDAD_ALUMNO CAL, ALUMNOS_DAT_PERIODO AL, ACTIVIDADES AT\n" +
+                "      WHERE\n" +
+                "      AC.ID_HORARIO_ACTIVIDAD = CAL.ID_HORARIO_ACTIVIDAD\n" +
+                "      AND CAL.ID_ALUMNO_P = AL.ID_ALUMNOP\n" +
+                "      AND AC.ID_ACTIVIDAD = AT.ID_ACTIVIDAD\n" +
+                "      AND ALM.MATRICULA = AL.MATRICULA\n" +
+                "AND ALM.MATRICULA = ? ORDER BY AL.ID_ALUMNOP";
+        Usuario us = new Usuario();
+        List<Usuario> usr = this.jdbcTemplate.query(query, new Object[]{matricula}, (((rs, i) -> mapperAlumnoLogin(rs))));
 
-      if (usr==null || usr.size()==0){
-        String queryTmp = "SELECT ID_ALUMNO,NOMBRES, APE_PATERNO, APE_MATERNO, '3' ID_ROL, 'ALUMNO' ROL, AC.MATRICULA as USERNAME, CURP COMMONVAL01, AC.CVE_GRUPO COMMONVAL02,\n" +
-          "       AC.DESC_LICENCIATURA COMMONVAL03, '' COMMONVAL04, '' COMMONVAL05, AL.CODIGO_RFID COMMONVAL06 FROM ALUMNOS AL, ALUMNOS_DAT_PERIODO AC\n" +
-          "    WHERE AL.MATRICULA = AC.MATRICULA AND AC.MATRICULA = ? and AL.ESTATUS = 'S'";
-        return this.jdbcTemplate.queryForObject(queryTmp, new Object[]{matricula}, (((rs, i) -> mapperAlumnoLogin(rs))));
-      }else{
-        return usr.get(0);
-      }
+        if (usr == null || usr.size() == 0) {
+            String queryTmp = "SELECT ID_ALUMNO,NOMBRES, APE_PATERNO, APE_MATERNO, '3' ID_ROL, 'ALUMNO' ROL, AC.MATRICULA as USERNAME, CURP COMMONVAL01, AC.CVE_GRUPO COMMONVAL02,\n" +
+                    "       AC.DESC_LICENCIATURA COMMONVAL03, '' COMMONVAL04, '' COMMONVAL05, AL.CODIGO_RFID COMMONVAL06 FROM ALUMNOS AL, ALUMNOS_DAT_PERIODO AC\n" +
+                    "    WHERE AL.MATRICULA = AC.MATRICULA AND AC.MATRICULA = ? and AL.ESTATUS = 'S'";
+            return this.jdbcTemplate.queryForObject(queryTmp, new Object[]{matricula}, (((rs, i) -> mapperAlumnoLogin(rs))));
+        } else {
+            return usr.get(0);
+        }
 
     }
 
@@ -164,8 +166,19 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
     }
 
     @Override
-    public Alumno update(Alumno object) {
-        return null;
+    public Alumno update(Alumno alumno) {
+        int i = this.jdbcTemplate
+                .update(QRY_UPDATE_ALUMNO_PERIODO,
+                        alumno.getMatricula(),
+                        alumno.getGrupo(),
+                        alumno.getDsGrupo(),
+                        alumno.getIdLicenciatura(),
+                        alumno.getLicenciatura(),
+                        alumno.getEstatus(),
+                        alumno.getIdAlumnoPeriodo()
+                );
+
+        return alumno;
     }
 
     private Alumno mapperAlumno(ResultSet rs) throws SQLException {
@@ -185,6 +198,7 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
     private Alumno mapperAlumnoCargas(ResultSet rs) throws SQLException {
         Alumno alumno = new Alumno(rs.getString("ESTATUS"));
         alumno.setIdAlumno(rs.getString("ID_ALUMNO"));
+        alumno.setIdAlumnoPeriodo(rs.getLong("ID_ALUMNOP"));
         alumno.setMatricula(rs.getString("MATRICULA"));
         alumno.setCurp(rs.getString("CURP"));
         alumno.setNombres(rs.getString("NOMBRES"));

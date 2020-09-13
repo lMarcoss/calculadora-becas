@@ -5,7 +5,9 @@ import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mconfiguracion.cicloescolar.service.CicloEscolarService;
 import edu.calc.becas.mseguridad.login.dao.LoginDaoImpl;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
+import edu.calc.becas.mseguridad.menu.service.MenuService;
 import edu.calc.becas.mvc.config.security.InvalidJwtAuthenticationException;
+import edu.calc.becas.mvc.config.security.JwtTokenProvider;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,10 +18,14 @@ public class LoginServiceImpl implements LoginService {
 
     private final LoginDaoImpl loginAPIDaoImpl;
     private final CicloEscolarService cicloEscolarService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final MenuService menuService;
 
-    public LoginServiceImpl(LoginDaoImpl loginAPIDaoImpl, CicloEscolarService cicloEscolarService) {
+    public LoginServiceImpl(LoginDaoImpl loginAPIDaoImpl, CicloEscolarService cicloEscolarService, JwtTokenProvider jwtTokenProvider, MenuService menuService) {
         this.loginAPIDaoImpl = loginAPIDaoImpl;
         this.cicloEscolarService = cicloEscolarService;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.menuService = menuService;
     }
 
     /**
@@ -36,6 +42,11 @@ public class LoginServiceImpl implements LoginService {
         UserLogin userLogin = loginAPIDaoImpl.login(usuario);
 
         userLogin.setPeriodoActual(cicloEscolarService.getCicloEscolarActual());
+
+
+        userLogin.setPassword(null);
+        userLogin.setToken(this.jwtTokenProvider.createToken(userLogin));
+        userLogin.setMenu(menuService.getMenu(userLogin.getUsername()));
 
         return userLogin;
     }

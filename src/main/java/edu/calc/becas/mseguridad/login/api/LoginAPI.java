@@ -5,9 +5,7 @@ import edu.calc.becas.exceptions.GenericException;
 import edu.calc.becas.mseguridad.login.model.DataLogin;
 import edu.calc.becas.mseguridad.login.model.UserLogin;
 import edu.calc.becas.mseguridad.login.service.LoginService;
-import edu.calc.becas.mseguridad.menu.service.MenuService;
 import edu.calc.becas.mvc.config.security.InvalidJwtAuthenticationException;
-import edu.calc.becas.mvc.config.security.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,20 +26,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginAPI {
 
     private final LoginService loginService;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final MenuService menuService;
+
 
     /**
      * Constructor
      *
-     * @param loginService     servicio de login
-     * @param jwtTokenProvider servicio interceptor de peticiones
-     * @param menuService      Servicio de menus de usuario
+     * @param loginService servicio de login
      */
-    public LoginAPI(LoginService loginService, JwtTokenProvider jwtTokenProvider, MenuService menuService) {
+    public LoginAPI(LoginService loginService) {
         this.loginService = loginService;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.menuService = menuService;
     }
 
 
@@ -63,10 +56,6 @@ public class LoginAPI {
         dataUserLogin.setUsername(user.getUsername());
         dataUserLogin.setPassword(user.getPassword());
 
-        UserLogin userLogin = loginService.login(dataUserLogin);
-        userLogin.setPassword(null);
-        userLogin.setToken(this.jwtTokenProvider.createToken(userLogin));
-        userLogin.setMenu(menuService.getMenu(userLogin.getUsername()));
-        return userLogin;
+        return loginService.login(dataUserLogin);
     }
 }

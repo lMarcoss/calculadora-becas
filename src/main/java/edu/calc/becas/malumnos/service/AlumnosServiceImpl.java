@@ -39,7 +39,7 @@ public class AlumnosServiceImpl implements AlumnosService {
 
     @Override
     public Alumno update(Alumno alumno) {
-        return null;
+        return alumnosDao.update(alumno);
     }
 
     @Override

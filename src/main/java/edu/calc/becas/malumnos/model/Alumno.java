@@ -7,10 +7,7 @@ import edu.calc.becas.mreporte.actividades.asistencia.model.Asistencia;
 import edu.calc.becas.mcatalogos.actividades.model.ActividadVo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * @author Marcos Santiago Leonardo
@@ -55,17 +52,19 @@ public class Alumno extends CommonData {
         super(estatus);
     }
 
-    public LabelValueData horario;
+    private LabelValueData horario;
 
-    public String grupo;
-    public String dsGrupo;
+    private String grupo;
+    private String dsGrupo;
 
-    public String idDetalleActividad;
+    private String idDetalleActividad;
 
-    public String cicloEscolar;
+    private String cicloEscolar;
 
-    public String licenciatura;
+    private String licenciatura;
 
-    public String codigoRFid;
-    public String IdLicenciatura;
+    private String codigoRFid;
+    private String IdLicenciatura;
+    private long idAlumnoPeriodo;
+
 }
