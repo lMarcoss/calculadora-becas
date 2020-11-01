@@ -51,7 +51,7 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
 
         int lengthDataTable = this.jdbcTemplate.queryForObject(createQueryCountItem(queryGetALl), Integer.class);
 
-        List<Alumno> data = this.jdbcTemplate.query(queryGetALl, (rs, rowNum) -> mapperAlumno(rs));
+        List<Alumno> data = this.jdbcTemplate.query(queryGetALl, (rs, rowNum) -> mapperAlumnoActividad(rs));
 
         if (!pageable) {
             page = 0;
@@ -106,20 +106,9 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
 
     @Override
     public Usuario getUserInfo(String matricula) {
-        String query = "SELECT ID_ALUMNO,ALM.NOMBRES,ALM.APE_PATERNO,ALM.APE_MATERNO, '3' ID_ROL, 'ALUMNO' ROL, ALM.MATRICULA as USERNAME, CURP COMMONVAL01, AL.CVE_GRUPO COMMONVAL02,\n" +
-                "    AL.DESC_LICENCIATURA COMMONVAL03,\n" +
-                "             AT.NOMBRE_ACTIVIDAD COMMONVAL04,\n" +
-                "             Concat ( AC.HORA,':',AC.AM_PM) COMMONVAL05,\n" +
-                "       ALM.CODIGO_RFID COMMONVAL06\n" +
-                "      FROM ALUMNOS ALM, HORARIO_ACTIVIDAD AC, ACTIVIDAD_ALUMNO CAL, ALUMNOS_DAT_PERIODO AL, ACTIVIDADES AT\n" +
-                "      WHERE\n" +
-                "      AC.ID_HORARIO_ACTIVIDAD = CAL.ID_HORARIO_ACTIVIDAD\n" +
-                "      AND CAL.ID_ALUMNO_P = AL.ID_ALUMNOP\n" +
-                "      AND AC.ID_ACTIVIDAD = AT.ID_ACTIVIDAD\n" +
-                "      AND ALM.MATRICULA = AL.MATRICULA\n" +
-                "AND ALM.MATRICULA = ? ORDER BY AL.ID_ALUMNOP";
+        Alumno alumno = this.jdbcTemplate.queryForObject(QRY_GET_ALUMNO_BY_MATRICULA, new Object[]{matricula}, ((rs, i)-> mapperAlumno(rs)));
         Usuario us = new Usuario();
-        List<Usuario> usr = this.jdbcTemplate.query(query, new Object[]{matricula}, (((rs, i) -> mapperAlumnoLogin(rs))));
+        List<Usuario> usr = this.jdbcTemplate.query(QRY_INFO_ALUMNO, new Object[]{matricula}, (((rs, i) -> mapperAlumnoLogin(rs))));
 
         if (usr == null || usr.size() == 0) {
             String queryTmp = "SELECT ID_ALUMNO,NOMBRES, APE_PATERNO, APE_MATERNO, '3' ID_ROL, 'ALUMNO' ROL, AC.MATRICULA as USERNAME, CURP COMMONVAL01, AC.CVE_GRUPO COMMONVAL02,\n" +
@@ -130,6 +119,16 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
             return usr.get(0);
         }
 
+    }
+
+    private Alumno mapperAlumno(ResultSet rs) throws SQLException {
+        Alumno alumno = new Alumno(rs.getString("ESTATUS"));
+        alumno.setIdAlumno(rs.getString("ID_ALUMNO"));
+        alumno.setMatricula(rs.getString("MATRICULA"));
+        alumno.setNombres(rs.getString("NOMBRES"));
+        alumno.setApePaterno(rs.getString("APE_PATERNO"));
+        alumno.setApeMaterno(rs.getString("APE_MATERNO"));
+        return alumno;
     }
 
     private Usuario mapperAlumnoLogin(ResultSet rs) throws SQLException {
@@ -167,9 +166,20 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
 
     @Override
     public Alumno update(Alumno alumno) {
-        int i = this.jdbcTemplate
+
+
+        int updated = this.jdbcTemplate.update(QRY_UPDATE_DATOS_ALUMNO,
+                alumno.getMatricula(),
+                alumno.getCodigoRFid(),
+                alumno.getCurp(),
+                alumno.getNombres(),
+                alumno.getApePaterno(),
+                alumno.getApeMaterno(),
+                alumno.getActualizadoPor(),
+                alumno.getIdAlumno()
+        );
+        this.jdbcTemplate
                 .update(QRY_UPDATE_ALUMNO_PERIODO,
-                        alumno.getMatricula(),
                         alumno.getGrupo(),
                         alumno.getDsGrupo(),
                         alumno.getIdLicenciatura(),
@@ -179,9 +189,10 @@ public class AlumnosDaoImpl extends BaseDao implements AlumnosDao {
                 );
 
         return alumno;
+
     }
 
-    private Alumno mapperAlumno(ResultSet rs) throws SQLException {
+    private Alumno mapperAlumnoActividad(ResultSet rs) throws SQLException {
         Alumno alumno = new Alumno(rs.getString("ESTATUS"));
         ActividadVo actividadVo = new ActividadVo();
         alumno.setIdAlumno(rs.getString("ID_ALUMNO"));

@@ -15,6 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import static edu.calc.becas.common.utils.Constant.*;
 
 
+/**
+ * Api para exponer servicios de consulta de alumnos
+ *
+ * @author Luis Angel Perez Herrera
+ * Universidad de la Sierra Sur (UNSIS)
+ * Date: 2019-06-16
+ */
 @RestController
 @RequestMapping("/alumnos")
 @Api(description = "Servicios para administraci\u00f3n de Inscripcion de alumnos a Actividades ")

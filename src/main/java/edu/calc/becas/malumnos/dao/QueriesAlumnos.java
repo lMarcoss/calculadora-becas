@@ -64,5 +64,43 @@ interface QueriesAlumnos {
 
     String QRY_UPD_ALUMNO_ACTIVIDAD = "UPDATE ACTIVIDAD_ALUMNO SET ID_HORARIO_ACTIVIDAD = ? WHERE ID_ALUMNO_P = (SELECT ID_ALUMNOP FROM ALUMNOS_DAT_PERIODO WHERE MATRICULA = ?)";
 
-    String QRY_UPDATE_ALUMNO_PERIODO = "UPDATE ALUMNOS_DAT_PERIODO SET MATRICULA = ?, CVE_GRUPO = ?, DESC_GRUPO = ?, CVE_LICENCIATURA = ?, DESC_LICENCIATURA = ?, ESTATUS = ? WHERE ID_ALUMNOP = ?";
+    String QRY_UPDATE_ALUMNO_PERIODO =
+            "UPDATE ALUMNOS_DAT_PERIODO\n" +
+                    "SET CVE_GRUPO         = ?,\n" +
+                    "    DESC_GRUPO        = ?,\n" +
+                    "    CVE_LICENCIATURA  = ?,\n" +
+                    "    DESC_LICENCIATURA = ?,\n" +
+                    "    ESTATUS           = ?\n" +
+                    "WHERE ID_ALUMNOP = ?";
+
+    String QRY_UPDATE_DATOS_ALUMNO =
+            "UPDATE ALUMNOS\n" +
+                    "SET MATRICULA           = ?,\n" +
+                    "    CODIGO_RFID         = ?,\n" +
+                    "    CURP                = ?,\n" +
+                    "    NOMBRES             = ?,\n" +
+                    "    APE_PATERNO         = ?,\n" +
+                    "    APE_MATERNO         = ?,\n" +
+                    "    ACTUALIZADO_POR     =?,\n" +
+                    "    FECHA_ACTUALIZACION = NOW()\n" +
+                    "WHERE ID_ALUMNO = ?";
+
+    String QRY_INFO_ALUMNO =
+            "SELECT ID_ALUMNO,ALM.NOMBRES,ALM.APE_PATERNO,ALM.APE_MATERNO, '3' ID_ROL, 'ALUMNO' ROL, ALM.MATRICULA as USERNAME, CURP COMMONVAL01, AL.CVE_GRUPO COMMONVAL02,\n" +
+                    "    AL.DESC_LICENCIATURA COMMONVAL03,\n" +
+                    "             AT.NOMBRE_ACTIVIDAD COMMONVAL04,\n" +
+                    "             Concat ( AC.HORA,':',AC.AM_PM) COMMONVAL05,\n" +
+                    "       ALM.CODIGO_RFID COMMONVAL06\n" +
+                    "      FROM ALUMNOS ALM, HORARIO_ACTIVIDAD AC, ACTIVIDAD_ALUMNO CAL, ALUMNOS_DAT_PERIODO AL, ACTIVIDADES AT\n" +
+                    "      WHERE\n" +
+                    "      AC.ID_HORARIO_ACTIVIDAD = CAL.ID_HORARIO_ACTIVIDAD\n" +
+                    "      AND CAL.ID_ALUMNO_P = AL.ID_ALUMNOP\n" +
+                    "      AND AC.ID_ACTIVIDAD = AT.ID_ACTIVIDAD\n" +
+                    "      AND ALM.MATRICULA = AL.MATRICULA\n" +
+                    "AND ALM.MATRICULA = ? ORDER BY AL.ID_ALUMNOP";
+
+    String QRY_GET_ALUMNO_BY_MATRICULA =
+            "SELECT ID_ALUMNO, MATRICULA, NOMBRES, APE_PATERNO, APE_MATERNO, ESTATUS\n" +
+                    "FROM ALUMNOS\n" +
+                    "WHERE MATRICULA = ?";
 }
