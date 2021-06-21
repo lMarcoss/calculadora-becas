@@ -2,6 +2,7 @@ package edu.calc.becas.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,6 +27,15 @@ public final class UtilDate {
         c.setTime(fecha);
         c.add(Calendar.DATE, daysSum);
         return (Date) c.getTime().clone();
+    }
+
+    /**
+     * @param fecha   fecha
+     * @param daysSum dias a sumar a la fecha
+     * @return nueva fecha obtenida al sumar a la fecha daysSum
+     */
+    public static LocalDateTime getDateSumDay(LocalDateTime fecha, int daysSum) {
+        return fecha.plusDays(daysSum);
     }
 
     /**

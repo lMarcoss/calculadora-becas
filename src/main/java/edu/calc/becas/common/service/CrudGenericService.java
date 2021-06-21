@@ -19,18 +19,18 @@ public interface CrudGenericService<T> {
      * @param status   estatus de los registros a recuperar
      * @return envoltura de objetos T paginado por estatus
      */
-    WrapperData getAllByStatus(int page, int pageSize, String status);
+    WrapperData<T> getAllByStatus(int page, int pageSize, String status);
 
     /**
      * Obtener todos los registros por status y por param1
      *
-     * @param page     pagina a recuperar
-     * @param pageSize registros a recuperar para una pagina
+     * @param page     pagina a recuperar (0 para obtener una pagina)
+     * @param pageSize registros a recuperar para una pagina (-1 para obtener todos)
      * @param status   estatus de los registros a recuperar
      * @param param1   dato extra a considerar al obtener los registros
      * @return envoultura de objetos T paginado, por estatus y por param1
      */
-    WrapperData getAllByStatusAndOneParam(int page, int pageSize, String status, String param1);
+    WrapperData<T> getAllByStatusAndOneParam(int page, int pageSize, String status, String param1);
 
     /**
      * Registra un objeto (registro) T

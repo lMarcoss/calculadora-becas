@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Guarda los datos de los servicios del sistema de horarios
+ * Guarda los datos de los servicios del sistema de horarios (simula un servicio de cache)
  *
  * @author Marcos Santiago Leonardo
  * Universidad de la Sierra Sur (UNSIS)

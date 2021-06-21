@@ -6,6 +6,7 @@ import edu.calc.becas.malumnos.model.Alumno;
 import edu.calc.becas.mcarga.hrs.ProcessRow;
 import edu.calc.becas.mcarga.hrs.alumnos.dao.CargaAlumnosPeriodosDao;
 import edu.calc.becas.mcarga.hrs.alumnos.model.ProcessAlumnos;
+import edu.calc.becas.mcarga.hrs.read.files.model.CellFile;
 import edu.calc.becas.mcarga.hrs.read.files.model.RowFile;
 import edu.calc.becas.mcatalogos.actividades.dao.ActividadesDaoImpl;
 import edu.calc.becas.mcatalogos.grupos.model.Grupo;
@@ -85,44 +86,86 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
 
         List<Alumno> alumnos = new ArrayList<>();
 
+        Grupo grupoAlumno;
 
-        int rowIni = 0;
+        // obtiene el  grupo
+        if (grupo.equalsIgnoreCase("All")) {
+            String cveGrupo = obtieneClaveGrupo(rows.get(0), posGrupo);
+
+            grupoAlumno = grupoService.getGrupoByClave(cveGrupo);
+
+            if (grupoAlumno == null) {
+                throw new GenericException(String.format("El grupo %s no está definido", cveGrupo));
+            }
+        } else {
+            grupoAlumno = grupoService.getGrupoByClave(grupo);
+
+        }
+
+
+        rows.forEach(row -> {
+            Alumno alumno = new Alumno();
+            alumno.setIdLicenciatura(licenciatura.getCveLicenciatura());
+            alumno.setLicenciatura(licenciatura.getNombreLicenciatura());
+
+
+            alumno.setGrupo(grupoAlumno.getCveGrupo());
+            alumno.setDsGrupo(grupoAlumno.getNombreGrupo());
+
+            try {
+                alumno.setMatricula(row.getCells().get(posMatricula).getValue());
+                alumno.setCurp(row.getCells().get(posCurp).getValue());
+                alumno.setApePaterno(row.getCells().get(posApePaterno).getValue());
+                alumno.setApeMaterno(row.getCells().get(posApeMaterno).getValue());
+                alumno.setNombres(row.getCells().get(posNombres).getValue());
+                alumno.setCodigoRFid(row.getCells().get(posCodigoRFid).getValue());
+            } catch (IndexOutOfBoundsException e) {
+                //error al obtener los datos del alumno
+                log.error("Error al  obtener los datos del alumno " + e.getMessage());
+            }
+
+
+            // datos de auditoria
+            alumno.setActualizadoPor(commonData.getActualizadoPor());
+            alumno.setAgregadoPor(commonData.getAgregadoPor());
+            if (!alumno.getMatricula().equals("MATRICULA")) {
+                alumnos.add(alumno);
+            }
+        });
+
+
+        /*int rowIni = 0;
         for (RowFile row : rows) {
-            if (rowIni != 0) {
+
+            try {
                 Alumno alumno = new Alumno();
                 alumno.setIdLicenciatura(licenciatura.getCveLicenciatura());
                 alumno.setLicenciatura(licenciatura.getNombreLicenciatura());
 
-                for (int i = 0; (i < row.getCells().size() && i <= posEndCell); i++) {
-                    if (i == posGrupo) {
-                        if (grupo.equals("All")) {
-                            String a = row.getCells().get(i).getValue();
-                            String[] sentences = a.split("-");
-                            String lic;
-                            String gru;
-                            try {
-                                lic = sentences[0];
-                                gru = sentences[1];
-                            } catch (Exception e) {
-                                throw new GenericException("El nombre del grupo es incorrecto, se espera en formato NUM-X, ej: 101-A");
-                            }
+
+                alumno.setGrupo(grupoAlumno.getCveGrupo());
+                alumno.setDsGrupo(grupoAlumno.getNombreGrupo());
+
+                try {
+                    alumno.setMatricula(row.getCells().get(posMatricula).getValue());
+                    alumno.setCurp(row.getCells().get(posCurp).getValue());
+                    alumno.setApePaterno(row.getCells().get(posApePaterno).getValue());
+                    alumno.setApeMaterno(row.getCells().get(posApeMaterno).getValue());
+                    alumno.setNombres(row.getCells().get(posNombres).getValue());
+                    alumno.setCodigoRFid(row.getCells().get(posCodigoRFid).getValue());
+                } catch (IndexOutOfBoundsException e) {
+                    log.error("Error al  obtener los datos del alumno " + e.getMessage());
+                }
 
 
-                            alumno.setGrupo(gru);
-                            Grupo grupo1 = grupoService.getGrupoByClave(gru);
-                            alumno.setGrupo(grupo1.getCveGrupo());
-                            alumno.setDsGrupo(grupo1.getNombreGrupo());
-
-                        } else {
-
-                            Grupo grupo1 = grupoService.getGrupoByClave(grupo);
-
-                            alumno.setGrupo(grupo1.getCveGrupo());
-                            alumno.setDsGrupo(grupo1.getNombreGrupo());
 
 
-                        }
-                    }
+                *//*for (int i = 0; (i < row.getCells().size() && i <= posEndCell); i++) {
+
+                    alumno.setGrupo(grupoAlumno.getCveGrupo());
+                    alumno.setDsGrupo(grupoAlumno.getNombreGrupo());
+
+
                     if (i == posMatricula) {
                         alumno.setMatricula(row.getCells().get(i).getValue());
                     }
@@ -142,18 +185,41 @@ public class CargaAlumnosPeriodosServiceImpl extends ProcessRow implements Carga
                         alumno.setCodigoRFid(row.getCells().get(i).getValue());
                     }
 
-                }
+                }*//*
+
                 // datos de auditoria
                 alumno.setActualizadoPor(commonData.getActualizadoPor());
                 alumno.setAgregadoPor(commonData.getAgregadoPor());
                 if (!alumno.getMatricula().equals("MATRICULA")) {
                     alumnos.add(alumno);
                 }
+            } catch (Exception e) {
+                log.error("Error  al obtener registro de la fila " + rowIni + " " + e.getMessage());
             }
+
+
             rowIni++;
 
-        }
+        }*/
         return cargaAlumnosPeriodosDao.persistenceAlumnos(alumnos, parcialActual, cicloEscolarActual, licenciatura);
+    }
+
+    private String obtieneClaveGrupo(RowFile registroAlumno, int columnaConClaveGrupo) throws GenericException {
+        String cveGrupo = null;
+        String[] datosGrupo = registroAlumno.getCells().get(columnaConClaveGrupo).getValue().split("-");
+
+        if (datosGrupo.length > 1) {
+            cveGrupo = datosGrupo[1].trim();
+        } else if (datosGrupo.length == 1) {
+            cveGrupo = datosGrupo[0].trim();
+        }
+
+        if (cveGrupo == null) {
+            throw new GenericException("Error al obtener clave del grupo");
+        }
+
+        return cveGrupo;
+
     }
 
     @Override

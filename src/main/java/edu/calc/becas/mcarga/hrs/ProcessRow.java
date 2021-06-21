@@ -62,7 +62,7 @@ public class ProcessRow {
     }
 
     /**
-     * Lee las filas de una pagina de excel - archivo horas biblioteca
+     * Lee las filas de una pagina de excel - archivo Alumnos Periodo
      *
      * @param pages pagina
      * @return registros

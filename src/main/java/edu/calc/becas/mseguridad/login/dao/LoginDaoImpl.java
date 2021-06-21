@@ -142,7 +142,7 @@ public class LoginDaoImpl extends BaseDao implements LoginDao {
         usuario.setNombres(rs.getString("NOMBRES"));
         usuario.setApePaterno(rs.getString("APE_PATERNO"));
         usuario.setApeMaterno(rs.getString("APE_MATERNO"));
-        usuario.setDiasRetrocesoReporte(rs.getInt("DIAS_RETROCESO_REPORTE"));
+        usuario.setDiasRetrocesoReporte(rs.getInt("D_TOLERANCIA_REP"));
 
         rol.setNombre(rs.getString("NOMBRE_ROL"));
         usuario.setRol(rol);

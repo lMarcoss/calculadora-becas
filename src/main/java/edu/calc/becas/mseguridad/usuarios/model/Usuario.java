@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * propiedades de un usuario
@@ -43,6 +45,8 @@ public class Usuario extends CommonData implements Serializable {
 
     @ApiModelProperty("D\u00edas de tolerania para reporte de asistencias")
     private int diasRetrocesoReporte;
+    @ApiModelProperty("Fecha que fue registrada/actualizada D\u00edas de tolerania para reporte de asistencias")
+    private LocalDateTime fechaRegistroDiasRetroceso;
 
     private String commonVal01;
     private String commonVal02;

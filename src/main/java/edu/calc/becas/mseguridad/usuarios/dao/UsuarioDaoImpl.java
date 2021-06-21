@@ -7,6 +7,7 @@ import edu.calc.becas.mseguridad.rolesypermisos.model.Rol;
 import edu.calc.becas.mseguridad.usuarios.model.Usuario;
 import edu.calc.becas.mvc.config.MessageApplicationProperty;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import static edu.calc.becas.common.utils.Constant.ITEMS_FOR_PAGE;
@@ -116,8 +119,7 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
      */
     @Override
     public Usuario update(Usuario usuario) {
-        String password = usuario.getPassword();
-        if (password != null && !password.equalsIgnoreCase("")) {
+        if (StringUtils.isNotBlank(usuario.getPassword())) {
             this.jdbcTemplate.update(QRY_UPDATE_WITH_PASSWORD, usuario.getNombres().trim(), usuario.getApePaterno().trim(),
                     usuario.getApeMaterno().trim(), usuario.getRol().getIdRol(), usuario.getUsername().trim(),
                     secretKeyStart, usuario.getPassword(), secretKeyEnd, usuario.getDiasRetrocesoReporte(),
@@ -150,7 +152,9 @@ public class UsuarioDaoImpl extends BaseDao implements UsuarioDao {
         rol.setNombre(rs.getString("TIPO_USUARIO"));
         usuario.setRol(rol);
         usuario.setUsername(rs.getString("USERNAME"));
-        usuario.setDiasRetrocesoReporte(rs.getInt("DIAS_RETROCESO_REPORTE"));
+        usuario.setDiasRetrocesoReporte(rs.getInt("D_TOLERANCIA_REP"));
+        usuario.setFechaRegistroDiasRetroceso(rs.getTimestamp("FECHA_REG_TOLERANCIA").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        //usuario.setFechaRegistroDiasRetroceso(rs.getDate("FECHA_REG_TOLERANCIA"));
         return usuario;
     }
 

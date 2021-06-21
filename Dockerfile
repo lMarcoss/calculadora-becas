@@ -41,6 +41,7 @@ ARG DEPENDENCY=/app/target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
-
+#fecha
+ENV TZ America/Mexico_City
 # Run the Spring boot application
 ENTRYPOINT ["java", "-cp", "app:app/lib/*","edu.calc.becas.BecasApplication"]
